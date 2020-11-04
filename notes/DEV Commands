@@ -1,0 +1,18 @@
+Python Virtual Environment
+Commands used:
+> pip install virtualenv
+> mkdir my_project
+> cd my_project
+> virtualenv env
+> env\Scripts\activate.bat ( need this)
+> deactivate (need this)
+> pip install virtualenvwrapper-win
+
+Save and loadding all packages in file with
+> p freeze > requirements.txt
+> pip install -r requirements.txt
+
+Flask Set Envirment
+> set FLASK_APP=filename.py
+> set FLASK_ENV=development
+> flask run
