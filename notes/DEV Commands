@@ -1,4 +1,7 @@
 # Python Virtual Environment
+powershell:
+> env\Scripts\activate.ps1 ( need this)
+
 Commands used:
 > pip install virtualenv
 > mkdir my_project
