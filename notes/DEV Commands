@@ -1,6 +1,10 @@
 # Python Virtual Environment
 powershell:
+set up ENV
 > env\Scripts\activate.ps1 ( need this)
+> $env:FLASK_APP = "hello"
+> $env:FLASK_ENV = "development"
+> flask run
 
 Commands used:
 > pip install virtualenv
