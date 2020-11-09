@@ -63,7 +63,10 @@ def dashboard():
 
 @app.route("/user/profile")
 def profile():
-	return "<h1 style = 'color: red'>User profile</h1>"
+	if "username" in session:
+		return render_template("user/profile.html", username=session["username"])
+	flash("Please login")
+	return redirect(url_for("login"))
 
 # ------ public -----
 @app.route("/")
