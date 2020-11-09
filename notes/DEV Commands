@@ -23,3 +23,8 @@ Commands used:
 > set FLASK_APP=filename.py
 > set FLASK_ENV=development
 > flask run
+
+
+Resource:
+database:
+https://hackersandslackers.com/flask-sqlalchemy-database-models
