@@ -12,7 +12,7 @@ class Config(object):
     SESSION_COOKIE_SECURE = True
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = "sqlite:///db/pet.sqlite3"
+    SQLALCHEMY_DATABASE_URI ="mysql://user:''@localhost:3306/competdium" 
 
 class ProductionConfig(Config):
     pass
@@ -21,14 +21,15 @@ class DevelopmentConfig(Config):
     DEBUG = True
 
     DB_NAME = "development-db"
-    DB_USERNAME = "admin"
-    DB_PASSWORD = "example"
 
     IMAGE_UPLOADS = "/home/username/projects/my_app/app/static/images/uploads"
 
     SESSION_COOKIE_SECURE = False
 
-    SQLALCHEMY_DATABASE_URI = "sqlite:///db/pet.sqlite3"
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_DATABASE_URI ="sqlite:///./database.sqlite3"
+    SQLALCHEMY_ECHO = False
+
 
 class TestingConfig(Config):
     TESTING = True

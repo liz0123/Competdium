@@ -1,6 +1,7 @@
-from app import *
-#from flask import render_template, redirect, request, url_for
-
+from flask import request, render_template, make_response
+from datetime import datetime as dt
+from flask import current_app as app
+from .models import db, User
 
 @app.route("/")
 def index():
@@ -24,3 +25,11 @@ def addPet():
 		print("adding pet")
 
 	return render_template("public/adoptionPage.html")
+
+@app.route("/signup")
+def signup():
+	return render_template("user/signup.html")
+
+@app.route("/login" )
+def login():
+	return render_template("user/login.html")
