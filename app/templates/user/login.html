@@ -7,16 +7,25 @@
 	<h2> Login </h2>
 	<div class ="row">
 		<div class ="col">
-			<form action="{{ url_for('signIn') }}" method="POST" enctype="multipart/form-data">
+			<form action="{{ url_for('login') }}" method="POST" enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="exampleInputEmail1">Email address</label>
 					<input type="email" class="form-control" name ="email" id="exampleInputEmail1" aria-describedby="emailHelp">
 				</div>
 				<div class="form-group">
 					<label for="exampleInputPassword1">Password</label>
-
 					<input type="password" class="form-control" name="password" id="exampleInputPassword1">
 				</div>
+				<div class="form-group">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" name="keep_login" value="True" id="defaultCheck1">
+						<label class="form-check-label" for="defaultCheck1">
+							Keep me logged in
+						</label>
+						<a class="nav-link" href="/signup" style="float: right;">Sign Up</a>
+					</div>
+				</div>
+
 				<button type="submit" class="btn btn-primary">Login</button>
 			</form>
 		</div>

@@ -19,9 +19,6 @@ def create_app():
 	db.init_app(app)
 
 	with app.app_context():
-		# get rountes
-		from . import views
-		from . import user_views
 		from . import routes
 
 		db.create_all()
