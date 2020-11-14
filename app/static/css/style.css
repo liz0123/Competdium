@@ -14,3 +14,48 @@ body{
 .header h1 {
   font-size: 40px;
 }
+/* Post container */
+.col-8 {
+  background-color: white;
+}
+
+
+/* Individual Post*/
+#module a.collapsed:after {
+	content: '+ Show More';
+}
+
+#module a:not(.collapsed):after {
+	content: '- Show Less';
+}
+
+#module #collapseExample.collapse:not(.show) {
+  display: block;
+  /* height = lineheight * no of lines to display */
+  height: 1.5em;
+  overflow: hidden;
+}
+
+#module #collapseExample.collapsing {
+  height: 1.5em;
+}
+
+
+/* 
+-----------------------
+ */
+main {
+  padding: 16px;
+}
+
+/* The sticky class is added to the navbar with JS when it reaches its scroll position */
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+/* Add some top padding to the page content to prevent sudden quick movement (as the navigation bar gets a new position at the top of the page (position:fixed and top:0) */
+.sticky + main {
+  padding-top: 60px;
+}

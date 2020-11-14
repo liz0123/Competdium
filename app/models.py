@@ -1,6 +1,7 @@
 # Data Models
 from . import db
 from datetime import datetime
+from flask_login import UserMixin
 
 # Create db model
 class Pet(db.Model):
@@ -33,7 +34,7 @@ class Post(db.Model):
 	def __repr__(self):
 		return f"Post('{self.title}', '{self.date_created}' )"
 
-class User(db.Model):
+class User(UserMixin, db.Model):
 	__tablename__="user"
 	id = db.Column(db.Integer, primary_key = True)
 	username = db.Column(db.String(255), unique = True, nullable = False)
@@ -44,7 +45,3 @@ class User(db.Model):
 
 	def __repr__(self):
 		return f"User('{self.username}', '{self.email}', '{self.image_file}')"
-
-
-
-

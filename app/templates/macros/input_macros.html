@@ -4,3 +4,47 @@
 	<input class="form-control" type="{{ type }}" name="{{ name }}" id="{{ id }}" placeholder="{{ placeholder }}">
 </div>
 {%- endmacro %}
+
+
+{% macro postCardImage(title, post, image) -%}
+<div class="card mb-3">
+	<div class="card-header"> 
+		<h3> {{ title }} </h3> 
+	</div>
+
+	<div class="card-body" id="module">
+		<p class="collapse" id="collapseExample" aria-expanded="false">
+			{{ post }}
+		</p>
+
+		<a role="button" class="collapsed float-right" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"></a>
+
+		<div>
+			<img src="{{ image }}" class="rounded mx-auto d-block" alt="...">
+		</div>
+	
+		<p class="card-text">
+			<small class="text-muted">Last updated 3 mins ago</small>
+		</p>
+	</div>
+</div>
+{%- endmacro%}
+
+
+{% macro postCard(title, post) -%}
+<div class="card mb-3">
+	<div class="card-header"> <h3> {{ title }} </h3> </div>
+
+	<div class="card-body" id="module">
+		<p class="collapse" id="collapseExample" aria-expanded="false">
+			{{ post }}
+		</p>
+
+		<a role="button" class="collapsed float-right" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"></a>
+		<p class="card-text">
+			<small class="text-muted">Last updated 3 mins ago</small>
+		</p>
+	</div>
+</div>
+
+{%- endmacro%}

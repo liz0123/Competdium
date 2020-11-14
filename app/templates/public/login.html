@@ -1,12 +1,14 @@
-{% extends "public/templates/public_template.html" %}
+{% extends "index_template.html" %}
 
-{% block title%} User  dashboard {% endblock%}
+{% block title%} Login {% endblock%}
 
 {% block main %} 
-<div class ="container">
-	<h2> Login </h2>
+<div class ="login_page">
 	<div class ="row">
 		<div class ="col">
+		</div>
+		<div class="col-8">
+			<h2> Login </h2>
 			<form action="{{ url_for('login') }}" method="POST" enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="exampleInputEmail1">Email address</label>
@@ -20,16 +22,20 @@
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" name="keep_login" value="True" id="defaultCheck1">
 						<label class="form-check-label" for="defaultCheck1">
-							Keep me logged in
+						Keep me logged in
 						</label>
 						<a class="nav-link" href="/signup" style="float: right;">Sign Up</a>
 					</div>
 				</div>
-
 				<button type="submit" class="btn btn-primary">Login</button>
 			</form>
 		</div>
+
+		<div class ="col">
+		</div>
+
 	</div>
 </div>
+
 
 {% endblock %}

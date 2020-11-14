@@ -1,13 +1,14 @@
-{% extends "public/templates/public_template.html" %}
+{% extends "index_template.html" %}
 
-{% block title%} User  dashboard {% endblock%}
+{% block title%} SignUp {% endblock%}
 
 {% block main %}
-<div class ="container">
-	<h2> Sign Up </h2>
-
-	<div class ="row" >
+<div class ="signup_page">
+	<div class ="row">
 		<div class ="col">
+		</div>
+		<div class="col-8">
+			<h2> Sign up </h2>
 			<form action="{{ url_for('signup') }}" method="POST" enctype="multipart/form-data">
 				<div class="form-group row">
 					<label for="formGroupExampleInput" class="col-sm-2 col-form-label">Username</label>
@@ -33,6 +34,9 @@
 					</div>
 				</div>
 			</form>
+		</div>
+
+		<div class ="col">
 		</div>
 	</div>
 </div>

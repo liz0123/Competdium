@@ -5,52 +5,9 @@ from .models import db, User
 
 #app.permanent_session_lifetime = timedelta(hours=1)
 
-# Database
-@app.route("/logout")
-def logout():
-	if 'username' in session:
-		session.pop("username")
-		flash("Loggout successful!", "info")
-	return render_template("public/index.html")
-
-@app.route("/login", methods=["POST","GET"])
-def login():
-	if request.method =='POST':
-		password = request.form.get("password")
-		email = request.form.get("email")
-		if email and password:
-			existing_user = User.query.filter(User.email == email and User.password == password).first()
-			session["username"] = existing_user.username
-			if request.form.get("keep_login"):
-				session.permanent = True
-			flash("Login Succesful!")
-			return redirect(url_for("dashboard"))
-
-	return render_template("user/login.html")
-
-@app.route("/signup", methods = ["POST","GET"])
-def signup():
-	if request.method =='POST':
-		username = request.form.get("username")
-		password = request.form.get("password")
-		email = request.form.get("email")
-		if username and email:
-			existing_user = User.query.filter(User.username == username or User.email == email
-        ).first()
-			if existing_user:
-				flash("Email or username already exist")
-				return redirect(url_for("signup"))
-				
-			new_user = User(username=username, password=password, email=email)
-			db.session.add(new_user)
-			db.session.commit() 
-
-			session["username"] = new_user.username
-			
-			flash("Account was created")
-			return redirect(url_for("dashboard"))
-	
-	return render_template("user/signup.html")
+@app.route("/")
+def index():
+	return render_template("public/home.html")
 
 # ------ user -------
 @app.route("/user/dashboard")
@@ -66,23 +23,22 @@ def profile():
 	if "username" in session:
 		return render_template("user/profile.html", username=session["username"])
 	flash("Please login")
-	return redirect(url_for("login"))
+	return render_template("user/profile.html")
 
 # ------ public -----
-@app.route("/")
-def index():
-
-	return render_template("public/index.html")
 
 @app.route("/adoption")
 def adoption():
-	return render_template("public/adoptionPage.html")
+	username = True if "username" in session else False
+
+	return render_template("public/adoptionPage.html", username= username)
 
 @app.route("/adoptPet")
 def adoptPet():
+	username = True if "username" in session else False
 	# get images form folder as list and pass list to imageDisplay.html
 	imagePaths ={'1': '1.png'}
-	return render_template("public/imageDisplay.html", imagePaths=imagePaths)
+	return render_template("public/imageDisplay.html", imagePaths=imagePaths, username=username)
 
 @app.route("/addPet", methods = ["POST"])
 def addPet():

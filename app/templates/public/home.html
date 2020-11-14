@@ -1,0 +1,38 @@
+{% extends "index_template.html" %}
+
+{% import "macros/input_macros.html" as im %}
+
+{% block title%} Home {% endblock%}
+
+{% block main %}
+<div class ="home_page">
+	<div class ="row">
+		<div class ="col">
+		</div>
+		<div class="col-8">
+			<h1> Home </h1>
+			<div class="post-galary">
+				{{ im.postCardImage(
+					title ="card 1", 
+					image="./static/img/default.jpg", 
+					post="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer. I love cakes and strawberries. I need to call my parents tomorrow. I don't want to get bannanans. I like cakes and soup. ") }}
+
+				{{ im.postCardImage(
+					title ="card 2",
+					image="./static/img/LabradorRetriever/10.png", 
+					post ="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer. I love cakes and strawberries. I need to call my parents tomorrow. I don't want to get bannanans. I like cakes and soup. ") }}
+
+				{{ im.postCard(title="card 3", post="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer. I love cakes and strawberries. I need to call my parents tomorrow. I don't want to get bannanans. I like cakes and soup. ") }}
+
+
+			</div>
+		</div>
+
+		<div class ="col">
+			
+		</div>
+
+	</div>
+</div>
+
+{% endblock %}
