@@ -1,4 +1,5 @@
 from flask import flash, request, redirect, render_template, make_response, session, url_for
+from flask_login import login_required, current_user
 from datetime import datetime, timedelta 
 from flask import current_app as app
 from .models import db, User
@@ -19,10 +20,8 @@ def dashboard():
 	return render_template("user/dashboard.html", username=session["username"])
 
 @app.route("/user/profile")
+@login_required
 def profile():
-	if "username" in session:
-		return render_template("user/profile.html", username=session["username"])
-	flash("Please login")
 	return render_template("user/profile.html")
 
 # ------ public -----

@@ -40,18 +40,24 @@
 
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-link" href="/adoptPet"> Adopt Pet</a>
+                <a class="nav-link" href="/adoptPet"> Seach Pet</a>
+
+                {% if current_user.is_authenticated %}
                 <a class="nav-link" href="/adoption">Adoption Form</a>
                 <a class="nav-link" href="/user/profile"> Profile </a>
+                {% endif %}
 
             </div>
         </div>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 
             <div class="navbar-nav ml-auto">
-                <a class="nav-link" href="/signup"> sign up </a>
+                {% if not current_user.is_authenticated %}
                 <a class="nav-link" href="/login">login</a>
+                {% endif %}
+                {% if current_user.is_authenticated %}
                 <a class="nav-link" href="/logout">logout</a>
+                {% endif %}
             </div>
 
         </div>
