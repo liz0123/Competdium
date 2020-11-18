@@ -19,10 +19,12 @@ def dashboard():
 
 	return render_template("user/dashboard.html", username=session["username"])
 
-@app.route("/user/profile")
+@app.route("/profile/<username>")
 @login_required
-def profile():
-	return render_template("user/profile.html")
+def profile(username):
+	user = User.query.filter_by(id=current_user.get_id()).first()
+	
+	return render_template("user/profile.html", username=user.username,email=user.email)
 
 # ------ public -----
 

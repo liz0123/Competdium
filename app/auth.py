@@ -3,49 +3,60 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required
 from flask import current_app as app
 from .models import db, User
+from .forms import LoginForm, RegisterForm
 
 
 @app.route("/login", methods=["POST","GET"])
 def login():
+	form = LoginForm()
+	if form.validate_on_submit():
+		print("INFORM")
+		username = form.username.data
+		password = form.password.data
+		remember = True if form.remember.data else False
+		user = User.query.filter_by(username=username).first()
 
-	if request.method == "POST":
-		email = request.form.get('email')
-		password = request.form.get('password')
-		remember = True if request.form.get('remember') else False
-
-		user = User.query.filter_by(email=email).first()
-		
 		if not user and not check_password_hash(user.password, password):
 			flash('Please check your login details and try again.')
 			return redirect(url_for('login'))
 		
 		login_user(user, remember=remember)
-		return redirect(url_for('profile'))
+		return redirect(url_for("profile",username=username))
 	
-	return render_template("public/login.html")
+	return render_template("public/login.html",form=form)
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+	reg = RegisterForm()
+	
+	if reg.validate_on_submit():
+		print("making user")
+		email = reg.email.data
+		username = reg.username.data
+		user_email = User.query.filter_by(email=email).first()
+		user_name = User.query.filter_by(username=username).first()
 
-@app.route("/signup", methods=["POST", "GET"])
-def signup():
-	if request.method == "POST":
-		email = request.form.get('email')
-		name = request.form.get('username')
-		password = request.form.get('password')
-		
-		user = User.query.filter_by(email=email).first()
-		
-		if user:
-			flash('Email address already exists.')
-			return redirect(url_for('signup'))
-		
-		new_user = User(email=email, username=name, password=generate_password_hash(password, method='sha256'))
-		db.session.add(new_user)
-		db.session.commit()
-		return redirect(url_for('profile'))
+		if user_email and user_name:
+			flash("Account already exist. Try logging in.")
 
-	return render_template("public/signup.html")
+		elif user_email:
+			flash("Email already exist!")
+
+		elif user_name:
+			flash("Username already exist!")
+
+		else:
+			flash('Thanks for registering')
+			new_user = User(email=email, username=username, password=generate_password_hash(reg.password.data, method='sha256'))
+			db.session.add(new_user)
+			db.session.commit()
+			login_user(new_user)
+			return redirect(url_for("profile/"+ username))
+
+	return render_template('public/signup.html', form=reg)
 
 @app.route("/logout")
+@login_required
 def logout():
 	logout_user()
 	return redirect(url_for("index"))

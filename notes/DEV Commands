@@ -28,3 +28,6 @@ Commands used:
 Resource:
 database:
 https://hackersandslackers.com/flask-sqlalchemy-database-models
+
+WTForms:
+https://hackersandslackers.com/flask-wtforms-forms/ 

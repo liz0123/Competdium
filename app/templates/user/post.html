@@ -1,0 +1,32 @@
+{% extends "index_template.html" %}
+
+{% block title%} Post {% endblock%}
+
+{% block main %}
+<div class="post_page">
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-6">
+            <div class="form-popup" id="myForm">
+                <form action="/action_page.php" class="form-container">
+                  <h1>Post</h1>
+              
+                  <label><b>Title</b></label>
+                  <input type="text" placeholder="Enter Email" name="title" required>
+              
+                  <label><b>Contect</b></label>
+                  <input type="text" placeholder="Enter text here" name="contect" required>
+
+                  <label><b>Contect</b></label>
+                  <input type="text" placeholder="Enter text here" name="contect" required>
+              
+                  <button type="submit" class="btn">Login</button>
+                  <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+                </form>
+              </div>
+        </div>
+        <div class="col"></div>
+    </div>
+
+</div>
+{% endmain%}
