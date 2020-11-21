@@ -15,7 +15,7 @@ body{
   font-size: 40px;
 }
 /* Post container */
-.col-8 {
+.col-6 {
   background-color: white;
 }
 
@@ -42,5 +42,8 @@ body{
 
 
 /* 
------------------------
+----Profile Page --------------
  */
+#userInfo{
+  background-color: white;
+}

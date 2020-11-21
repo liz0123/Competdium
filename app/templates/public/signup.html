@@ -7,18 +7,18 @@
 	<div class ="row">
 		<div class ="col">
 		</div>
+		
 		<div class="col-8">
 			<h2> Sign up </h2>
-			<form method="POST" action="{{ url_for('register') }}">
+			<form method="POST" action="{{ url_for('register') }}" enctype="multipart/form-data">
 				{{ form.csrf_token }}
-				<div class="form-field"> {{ form.username.label}} <br> {{ form.username()}} </div>
-				<div class="form-field"> {{ form.email.label}} <br> {{ form.email()}} </div>
-				<div class="form-field"> {{ form.password.label}} <br> {{ form.password()}} </div>
-				<div class="form-field"> {{ form.confirm.label}} <br> {{ form.confirm()}} </div>
+				<div class="form-field"> {{ form.username.label }} 	{{ form.username(class ="form-control") }} </div>
+				<div class="form-field"> {{ form.email.label }} 	{{ form.email(class ="form-control") 	}} </div>
+				<div class="form-field"> {{ form.password.label }} 	{{ form.password(class ="form-control") }} </div>
+				<div class="form-field"> {{ form.confirm.label }} 	{{ form.confirm(class ="form-control") 	}} </div>
 				<div class="form-field">
-					<button type="submit" class="btn btn-primary">Register</button>
-					<a class="nav-link" href="/login" style="float: right;">login</a> 
-
+					<button type="submit" class="btn btn-primary"> Register </button>
+					<a class="nav-link" href="/login" style="float: right;"> login </a> 
 				</div>	
 			</form>
 			

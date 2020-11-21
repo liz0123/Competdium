@@ -1,30 +1,52 @@
-from flask import flash, request, redirect, render_template, make_response, session, url_for
-from flask_login import login_required, current_user
-from datetime import datetime, timedelta 
+import os
+from flask import flash, request, redirect, render_template, make_response, session, url_for, send_from_directory
 from flask import current_app as app
-from .models import db, User
+from flask_login import login_required, current_user
+from werkzeug.utils import secure_filename
+from datetime import datetime, timedelta 
+from .forms import PostForm
+from .models import db, User, Post
+from .functions import formateImage
 
 #app.permanent_session_lifetime = timedelta(hours=1)
-
-@app.route("/")
+@app.route("/", methods=["POST","GET"])
 def index():
-	return render_template("public/home.html")
+	form = PostForm()
+	posts = None
+	if  form.validate_on_submit():
+		user_id = current_user.get_id()
+		user = User.query.filter_by(id=user_id).first()
+		if form.img.data:
+			img_name = secure_filename(form.img.data.filename)
+			form.img.data.save(os.path.join(app.config['POST_UPLOADS'], img_name))
+			post = Post(title=form.title.data, content=form.content.data, image_file=img_name, user_id=user_id)	
+		else:
+			post = Post(title=form.title.data, content=form.content.data, user_id=user_id)
+		db.session.add(post)
+		db.session.commit()
+
+		# Standerize image 
+		if form.img.data:
+			post.image_file = formateImage(user=user.username,postID=post.id, imageName=img_name )
+			db.session.commit()
+		
+		return redirect(url_for("index"))
+	else:
+		# get post form db
+		posts = Post.query.order_by(Post.id.desc()).all()
+	
+	return render_template("public/home.html", posts=posts, form=form, img_folder=app.config['POST_FOLDER'])
+
 
 # ------ user -------
-@app.route("/user/dashboard")
-def dashboard():
-	if "username" not in session:
-		flash("Please login")
-		return redirect(url_for("login"))
-
-	return render_template("user/dashboard.html", username=session["username"])
-
-@app.route("/profile/<username>")
+@app.route("/profile")
 @login_required
-def profile(username):
+def profile():
 	user = User.query.filter_by(id=current_user.get_id()).first()
+	posts = Post.query.filter_by(user_id=current_user.get_id()).all()
+
 	
-	return render_template("user/profile.html", username=user.username,email=user.email)
+	return render_template("user/profile.html", user=user, posts=posts)
 
 # ------ public -----
 

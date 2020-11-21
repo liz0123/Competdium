@@ -1,24 +1,50 @@
 {% extends "index_template.html" %}
+{% import "macros/input_macros.html" as im %}
 
 {% block title%} Profile {% endblock%}
 
 {% block main %}
 <div class="profile_page">
-  <div class="row">
+  <div class="row" id="userInfo">
     <div class="col">
 
     	<div class="text-center">
-    		<img src="{{url_for('static', filename='/img/default.jpg' )}}" alt="..." class="rounded mx-auto d-block">
+    		<img src="{{url_for('static', filename='/img/' ~ user.image_file )}}" alt="..." class="rounded mx-auto d-block">
     	</div>
 
     </div>
     <div class="col-6">
-    	<h5> Name: {{username}} </h5>
-    	<h5> Email: {{ email }}</h5> 
+    	<h5> Name: {{user.username}} </h5>
+      <h5> Email: {{ user.email }}</h5> 
+      <br>
     </div>
-    <div class="col">
-      3 of 3
-    </div>
+
+    <div class="col"> </div>
+  </div>
+  <br>
+  <div class="container">
+    <h3> My Post</h3>
+    <div class="row row-cols-1 row-cols-md-2">
+    {% for post in posts %}
+    <div class="col mb-4">
+      {% if post.image_file == "default.jpg" %}
+        {{ im.postCard(
+          title=post.title, 
+          post = post.content,
+          date = post.date_created )
+        }}
+      {% else %}
+        {{ im.postCardImage(
+          title=post.title,
+          post = post.content,
+          image = url_for('static', filename="img/posts/" ~ post.image_file),
+          date = post.date_created )
+        }}
+      {% endif %}
+      </div>
+    {% endfor %}
+
+  </div>
   </div>
 </div>
 

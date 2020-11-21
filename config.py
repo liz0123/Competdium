@@ -22,12 +22,14 @@ class DevelopmentConfig(Config):
 
     DB_NAME = "development-db"
 
-    IMAGE_UPLOADS = "/home/username/projects/my_app/app/static/images/uploads"
+    POST_UPLOADS = "C:/Users/isabe/Projects/Competdium/app/static/img/posts/"
+    POST_FOLDER = "../static/img/posts/"
+    PROFILE_IMAGES_UPLOADS = "/static/img/users/"
 
     SESSION_COOKIE_SECURE = False
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI ="sqlite:///./database.sqlite3"
+    SQLALCHEMY_DATABASE_URI ="sqlite:///./dbs.sqlite3"
     SQLALCHEMY_ECHO = False
 
 

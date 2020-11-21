@@ -6,7 +6,7 @@
 {%- endmacro %}
 
 
-{% macro postCardImage(title, post, image) -%}
+{% macro postCardImage(title, post, image, date) -%}
 <div class="card mb-3">
 	<div class="card-header"> 
 		<h3> {{ title }} </h3> 
@@ -24,14 +24,14 @@
 		</div>
 	
 		<p class="card-text">
-			<small class="text-muted">Last updated 3 mins ago</small>
+			<small class="text-muted">Created {{ date }}</small>
 		</p>
 	</div>
 </div>
 {%- endmacro%}
 
 
-{% macro postCard(title, post) -%}
+{% macro postCard(title, post, date ) -%}
 <div class="card mb-3">
 	<div class="card-header"> <h3> {{ title }} </h3> </div>
 
@@ -42,7 +42,7 @@
 
 		<a role="button" class="collapsed float-right" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"></a>
 		<p class="card-text">
-			<small class="text-muted">Last updated 3 mins ago</small>
+			<small class="text-muted">Created {{ date }}</small>
 		</p>
 	</div>
 </div>

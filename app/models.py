@@ -29,8 +29,9 @@ class Post(db.Model):
 	title = db.Column(db.String(100), nullable = False)
 	content =db.Column(db.Text, nullable = False)
 	date_created = db.Column(db.DateTime, default = datetime.utcnow)
+	image_file = db.Column(db.String(255), nullable = False, default = "default.jpg")
 	user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-
+	 
 	def __repr__(self):
 		return f"Post('{self.title}', '{self.date_created}' )"
 
@@ -40,7 +41,7 @@ class User(UserMixin, db.Model):
 	username = db.Column(db.String(255), unique = True, nullable = False)
 	email = db.Column(db.String(255), unique = True, nullable = False)
 	password = db.Column(db.String(255), nullable =False)
-	#image_file = db.Column(db.String(255), nullable = False, default = "default.jpg")
+	image_file = db.Column(db.String(255), nullable = False, default = "default_profile.png")
 	post = db.relationship('Post', backref = 'auther', lazy = True)
 
 	def __repr__(self):

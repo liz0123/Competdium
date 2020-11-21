@@ -10,7 +10,6 @@ from .forms import LoginForm, RegisterForm
 def login():
 	form = LoginForm()
 	if form.validate_on_submit():
-		print("INFORM")
 		username = form.username.data
 		password = form.password.data
 		remember = True if form.remember.data else False
@@ -21,16 +20,14 @@ def login():
 			return redirect(url_for('login'))
 		
 		login_user(user, remember=remember)
-		return redirect(url_for("profile",username=username))
+		return redirect(url_for("index"))
 	
 	return render_template("public/login.html",form=form)
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/register', methods=['POST', 'GET'])
 def register():
 	reg = RegisterForm()
-	
 	if reg.validate_on_submit():
-		print("making user")
 		email = reg.email.data
 		username = reg.username.data
 		user_email = User.query.filter_by(email=email).first()
@@ -51,7 +48,7 @@ def register():
 			db.session.add(new_user)
 			db.session.commit()
 			login_user(new_user)
-			return redirect(url_for("profile/"+ username))
+			return redirect(url_for("profile",username=username))
 
 	return render_template('public/signup.html', form=reg)
 
