@@ -1,10 +1,10 @@
 
 body{
-	background-color: #f1f1f1
+	background-color: whitesmoke
 }
 
 .header {
-  padding: 80px;
+  padding: 40px;
   text-align: center;
   background: #1abc9c;
   color: white;
@@ -18,28 +18,21 @@ body{
 .col-6 {
   background-color: white;
 }
-
-
-/* Individual Post*/
-#module a.collapsed:after {
-	content: '+ Show More';
+.signup_page{
+  padding-bottom: 300px;
 }
-
-#module a:not(.collapsed):after {
-	content: '- Show Less';
+.col-8 {
+  background-color: white;
 }
-
-#module #collapseExample.collapse:not(.show) {
-  display: block;
-  /* height = lineheight * no of lines to display */
-  height: 1.5em;
-  overflow: hidden;
+.scroll{
+  height:90%; 
+  overflow:hidden; 
+  overflow-y:scroll;
 }
-
-#module #collapseExample.collapsing {
-  height: 1.5em;
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* make scrollbar transparent */
 }
-
 
 /* 
 ----Profile Page --------------
@@ -47,3 +40,4 @@ body{
 #userInfo{
   background-color: white;
 }
+

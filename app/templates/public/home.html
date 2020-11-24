@@ -9,10 +9,17 @@
 	<div class ="row">
 		<div class ="col">
 		</div>
-		<div class="col-6 ">
+		<div class="col-7">
+			
+			{% if current_user.is_authenticated %}
+			<!-- Button trigger modal -->
+			<button type="button" class="btn btn-dark btn-circle btn-xl float-right" data-toggle="modal" data-target="#postModal">
+				add Post
+			</button>
 			<br>
-			<div class="post-galary">
-
+			{% endif %}
+			<br>
+			<div class="container scroll">
 				{% for post in posts %}
 					{% if post.image_file == "default.jpg" %}
 						{{ im.postCard(
@@ -29,17 +36,10 @@
 						}}
 					{% endif %}
 				{% endfor %}
-
 			</div>
 		</div>
 
 		<div class ="col">
-			{% if current_user.is_authenticated %}
-			<!-- Button trigger modal -->
-			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#postModal">
-				add Post
-			  </button>
-			  
 			<div id="postModal" class="modal fade">
 				<div class="modal-dialog modal-dialog-centered">
 				  <div class="modal-content">
@@ -68,8 +68,6 @@
 				  </div>
 				</div>
 			  </div>
-			  {% endif %}
-
 		</div>
 	</div>
 </div>

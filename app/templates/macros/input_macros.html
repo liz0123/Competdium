@@ -8,16 +8,11 @@
 
 {% macro postCardImage(title, post, image, date) -%}
 <div class="card mb-3">
-	<div class="card-header"> 
-		<h3> {{ title }} </h3> 
-	</div>
-
 	<div class="card-body" id="module">
+		<h5  class="card-title" > {{ title }} </h5> 
 		<p class="collapse" id="collapseExample" aria-expanded="false">
 			{{ post }}
 		</p>
-
-		<a role="button" class="collapsed float-right" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"></a>
 
 		<div>
 			<img src="{{ image }}" class="rounded mx-auto d-block" alt="...">
@@ -33,18 +28,41 @@
 
 {% macro postCard(title, post, date ) -%}
 <div class="card mb-3">
-	<div class="card-header"> <h3> {{ title }} </h3> </div>
-
 	<div class="card-body" id="module">
+
+		<h5  class="card-title"> {{ title }} </h5> 
 		<p class="collapse" id="collapseExample" aria-expanded="false">
 			{{ post }}
 		</p>
-
-		<a role="button" class="collapsed float-right" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"></a>
+		
 		<p class="card-text">
 			<small class="text-muted">Created {{ date }}</small>
 		</p>
 	</div>
 </div>
-
 {%- endmacro%}
+
+
+{% macro petCard(pet) -%}
+<div class="card">
+	<img src="{{url_for('static',filename= 'img/pets/'~ pet.image_file )}}" class="card-img-top" alt="...">
+	<div class="card-body">
+		<h5 class="card-title">{{ pet.name }}</h5>
+		<p class="card-text">{{ pet.description }}</p>
+		<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+	</div>
+</div>
+{%- endmacro%}
+
+{% macro petForm(form) -%}
+<div class="container">
+
+	<div class="form-group"> <p>Upload pet image: </p>{{ form.img() }}</div>
+	<div class="form-group"> {{ form.gender.label }} {{ form.gender(class="custom-select my-1 mr-sm-2")}} </div>
+	<div class="form-group"> {{ form.size.label }} {{ form.size(class="custom-select my-1 mr-sm-2")}} </div>
+	<div class="form-group"> {{ form.name.label }} {{ form.name(class ="form-control")}} </div>
+	<div class="form-group"> {{ form.age.label }} {{ form.age(class ="form-control")}} </div>
+	<div class="form-group"> {{ form.description.label }} {{ form.description(class ="form-control") }}</div>
+
+</div>
+{%- endmacro %}

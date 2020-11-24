@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, PasswordField, TextAreaField, FileField, validators
+from wtforms import StringField, SelectField, IntegerField, BooleanField, PasswordField, TextAreaField, FileField, validators
 from wtforms.validators import DataRequired
 
 class LoginForm(FlaskForm):
@@ -16,4 +16,13 @@ class RegisterForm(FlaskForm):
 class PostForm(FlaskForm):
     title = StringField("Title",[DataRequired()])
     content = TextAreaField("Content", [DataRequired() ])
-    img = FileField() 
+    img = FileField()
+
+class PetForm(FlaskForm):
+    name = StringField("Name", [DataRequired()] )
+    gender = SelectField("Gender", choices=[('female', 'Female'),('male', 'Male')])
+    age = IntegerField("Age", [DataRequired()] )
+    description= TextAreaField("Additional Information", [ ])
+    size = SelectField("Size", choices=[("small","Small"), ("medium","Medium"),("large","Large")])
+    img = FileField("Select Image", [DataRequired()]) 
+

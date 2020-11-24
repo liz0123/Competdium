@@ -40,7 +40,7 @@
 
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-link" href="/adoptPet"> Seach Pet</a>
+                <a class="nav-link" href="/searchPets"> Seach Pet</a>
 
                 {% if current_user.is_authenticated %}
                 <a class="nav-link" href="/adoption">Adoption Form</a>
@@ -61,6 +61,7 @@
             </div>
 
         </div>
+        
     </nav>
 
     <main> {% block main %}{% endblock %} </main>

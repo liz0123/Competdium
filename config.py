@@ -7,7 +7,7 @@ class Config(object):
     DB_USERNAME = "admin"
     DB_PASSWORD = "example"
 
-    IMAGE_UPLOADS = "/home/username/app/app/static/images/uploads"
+    IMAGE_UPLOADS = "/home/username/app/app/static/images/uploads" 
 
     SESSION_COOKIE_SECURE = True
 
@@ -23,7 +23,7 @@ class DevelopmentConfig(Config):
     DB_NAME = "development-db"
 
     POST_UPLOADS = "C:/Users/isabe/Projects/Competdium/app/static/img/posts/"
-    POST_FOLDER = "../static/img/posts/"
+    PET_UPLOADS = "C:/Users/isabe/Projects/Competdium/app/static/img/pets/"
     PROFILE_IMAGES_UPLOADS = "/static/img/users/"
 
     SESSION_COOKIE_SECURE = False
