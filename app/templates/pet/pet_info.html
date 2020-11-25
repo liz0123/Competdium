@@ -1,0 +1,34 @@
+<div class="row">
+    <div class="col">
+        <img src="{{url_for('static',filename= 'img/pets/'~ pet.image_file )}}" class="card-img-top" alt="...">
+    </div>
+    <div class="col">
+        <table class="table table-borderless">
+            <thead>
+              <tr>
+                <th scope="col">{{pet.name}}o</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Age</th>
+                <td>{{pet.age}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Weight</th>
+                <td>{{ pet.size }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Gender</th>
+                <td> {{ pet.gender}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Breed</th>
+                <td> {{ pet.breed }}</td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+</div>
+

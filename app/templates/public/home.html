@@ -10,15 +10,7 @@
 		<div class ="col">
 		</div>
 		<div class="col-7">
-			
-			{% if current_user.is_authenticated %}
-			<!-- Button trigger modal -->
-			<button type="button" class="btn btn-dark btn-circle btn-xl float-right" data-toggle="modal" data-target="#postModal">
-				add Post
-			</button>
-			<br>
-			{% endif %}
-			<br>
+
 			<div class="container scroll">
 				{% for post in posts %}
 					{% if post.image_file == "default.jpg" %}
@@ -39,7 +31,12 @@
 			</div>
 		</div>
 
-		<div class ="col">
+		<div class ="col" >
+			{% if current_user.is_authenticated %}
+			<!-- Button trigger modal -->
+			<button type="button" id="addPost" class="w3-button w3-xlarge w3-circle w3-teal" data-toggle="modal" data-target="#postModal">+</button>
+			{% endif %}
+
 			<div id="postModal" class="modal fade">
 				<div class="modal-dialog modal-dialog-centered">
 				  <div class="modal-content">

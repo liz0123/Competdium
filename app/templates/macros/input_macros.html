@@ -9,18 +9,13 @@
 {% macro postCardImage(title, post, image, date) -%}
 <div class="card mb-3">
 	<div class="card-body" id="module">
-		<h5  class="card-title" > {{ title }} </h5> 
-		<p class="collapse" id="collapseExample" aria-expanded="false">
-			{{ post }}
-		</p>
-
+		<h4  class="card-title font-weight-bold" > {{ title }} </h4> 
+		<p class="card-text"> {{ post }} </p>
 		<div>
 			<img src="{{ image }}" class="rounded mx-auto d-block" alt="...">
 		</div>
 	
-		<p class="card-text">
-			<small class="text-muted">Created {{ date }}</small>
-		</p>
+		<p class="card-text"> <small class="text-muted">Uploaded: {{ date }}</small> </p>
 	</div>
 </div>
 {%- endmacro%}
@@ -30,13 +25,13 @@
 <div class="card mb-3">
 	<div class="card-body" id="module">
 
-		<h5  class="card-title"> {{ title }} </h5> 
-		<p class="collapse" id="collapseExample" aria-expanded="false">
+		<h5  class="card-title font-weight-bold"> {{ title }} </h5> 
+		<p class="card-text">
 			{{ post }}
 		</p>
 		
 		<p class="card-text">
-			<small class="text-muted">Created {{ date }}</small>
+			<small class="text-muted">Uploaded: {{ date }}</small>
 		</p>
 	</div>
 </div>
@@ -50,6 +45,7 @@
 		<h5 class="card-title">{{ pet.name }}</h5>
 		<p class="card-text">{{ pet.description }}</p>
 		<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+		<a href="/searchPets/info%{{pet.id}}" class="stretched-link"></a>
 	</div>
 </div>
 {%- endmacro%}

@@ -72,6 +72,13 @@ def searchPets():
 	pets = Pet.query.order_by(Pet.id.desc()).all()
 	return render_template("public/searchPets.html", pets=pets, form=form)
 
+@app.route("/searchPets/info%<petID>")
+def showPet(petID):
+	pet = Pet.query.filter_by(id=petID).first()
+
+	return render_template("pet/pet_info.html", pet=pet)
+
+
 @app.route("/addPet", methods = ["POST"])
 def addPet():
 	if request.method =='POST':

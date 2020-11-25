@@ -35,7 +35,26 @@ body{
 }
 
 /* 
-----Profile Page --------------
+--- HOME Page --------------
+ */
+ #addPost{
+  position: fixed;
+  bottom: 10px;
+  right: 23%;
+
+ }
+
+ /* 
+--- HOME Page --------------
+ */
+ #addPet{
+   position: fixed;
+   bottom:10px;
+   right:5%;
+ }
+
+/* 
+----PROFILE Page --------------
  */
 #userInfo{
   background-color: white;
