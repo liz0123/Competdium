@@ -5,7 +5,6 @@ from flask import current_app as app
 from .models import db, User
 from .forms import LoginForm, RegisterForm
 
-
 @app.route("/login", methods=["POST","GET"])
 def login():
 	form = LoginForm()
@@ -14,14 +13,12 @@ def login():
 		password = form.password.data
 		remember = True if form.remember.data else False
 		user = User.query.filter_by(username=username).first()
-
-		if not user and not check_password_hash(user.password, password):
-			flash('Please check your login details and try again.')
-			return redirect(url_for('login'))
 		
-		login_user(user, remember=remember)
-		return redirect(url_for("index"))
-	
+		if user and check_password_hash(user.password, password):
+			login_user(user, remember=remember)
+			return redirect(url_for("feed"))
+		
+		flash('Please check your login details and try again.')
 	return render_template("public/login.html",form=form)
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -48,7 +45,7 @@ def register():
 			db.session.add(new_user)
 			db.session.commit()
 			login_user(new_user)
-			return redirect(url_for("profile",username=username))
+			return redirect(url_for("feed",username=username))
 
 	return render_template('public/signup.html', form=reg)
 
@@ -56,4 +53,4 @@ def register():
 @login_required
 def logout():
 	logout_user()
-	return redirect(url_for("index"))
+	return redirect(url_for("feed"))

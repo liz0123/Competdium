@@ -23,6 +23,6 @@ class PetForm(FlaskForm):
     gender = SelectField("Gender", choices=[('female', 'Female'),('male', 'Male')])
     age = IntegerField("Age", [DataRequired()] )
     description= TextAreaField("Additional Information", [ ])
-    size = SelectField("Size", choices=[("small","Small"), ("medium","Medium"),("large","Large")])
+    weight = IntegerField("Weight", [DataRequired()] )
     img = FileField("Select Image", [DataRequired()]) 
 

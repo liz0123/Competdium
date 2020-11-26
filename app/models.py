@@ -11,10 +11,11 @@ class Pet(db.Model):
 	petType= db.Column(db.String(50))
 	gender = db.Column(db.String(50))
 	name = db.Column(db.String(50))
-	size = db.Column(db.String(50))
+	weight = db.Column(db.String(50))
 	age = db.Column(db.Integer)
 	description =db.Column(db.Text)
-	image_file= db.Column(db.String(255), default = "default.jpg")
+	original_image= db.Column(db.String(255), default = "default.jpg")
+	thumbnail = db.Column(db.String(255), default = "default.jpg")
 	user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 	date_created = db.Column(db.DateTime, default = datetime.utcnow)
 
@@ -28,7 +29,8 @@ class Post(db.Model):
 	title = db.Column(db.String(100), nullable = False)
 	content =db.Column(db.Text, nullable = False)
 	date_created = db.Column(db.DateTime, default = datetime.utcnow)
-	image_file = db.Column(db.String(255), nullable = False, default = "default.jpg")
+	original_image = db.Column(db.String(255), nullable = False, default = "default.jpg")
+	thumbnail = db.Column(db.String(255), nullable = False, default = "default.jpg")
 	user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 	 
 	def __repr__(self):

@@ -1,12 +1,20 @@
+{% extends "index_template.html" %}
+
+{% import "macros/input_macros.html" as im %}
+
+{% block title%} Feed {% endblock%}
+
+{% block main %}
+<div class="container">
 <div class="row">
     <div class="col">
-        <img src="{{url_for('static',filename= 'img/pets/'~ pet.image_file )}}" class="card-img-top" alt="...">
+        <img src="{{url_for('static',filename= 'img/pets/'~ pet.original_image )}}" class="card-img-top" alt="...">
     </div>
     <div class="col">
         <table class="table table-borderless">
             <thead>
               <tr>
-                <th scope="col">{{pet.name}}o</th>
+                <th scope="col">{{pet.name}}</th>
 
               </tr>
             </thead>
@@ -31,4 +39,5 @@
           </table>
     </div>
 </div>
-
+</div>
+{% endblock %}
