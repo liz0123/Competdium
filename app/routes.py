@@ -92,8 +92,9 @@ def searchPets():
 @app.route("/searchPets/info_petID=<petID>")
 def showPet(petID):
 	pet = Pet.query.filter_by(id=petID).first()
+	owner= User.query.filter_by(id=pet.user_id).first()
 
-	return render_template("pet/pet_info.html", pet=pet)
+	return render_template("pet/pet_info.html", pet=pet, owner=owner.username)
 
 
 @app.route("/addPet", methods = ["POST"])
