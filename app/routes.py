@@ -4,7 +4,7 @@ from flask import current_app as app
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta 
-from .forms import PostForm, PetForm
+from .forms import PostForm, PetForm, SearchPetForm
 from .models import db, User, Post, Pet
 from .functions import *
 
@@ -61,6 +61,24 @@ def profile():
 
 	return render_template("user/profile.html", user=user, posts=posts, pets=pets)
 
+@app.route("/profile/delete:<type>_<ID>")
+@login_required
+def delete(type,ID):
+	print("type: ", type)
+	print("id ", int(ID))
+	id = int(ID)
+	if type == "post":
+		print("in Post")
+		Post.query.filter_by(id=id).delete()
+	else:
+		Pet.query.filter_by(id=ID).delete()
+	db.session.commit()
+	
+
+	return redirect(url_for("profile"))
+	
+
+
 # ------ public -----
 @app.route("/adoption")
 def adoption():
@@ -71,6 +89,7 @@ def adoption():
 @app.route("/searchPets", methods=["POST","GET"])
 def searchPets():
 	form = PetForm()
+	searchForm = SearchPetForm()
 	if form.validate_on_submit():
 		# get image
 		# casifly image
@@ -87,7 +106,7 @@ def searchPets():
 		return redirect(url_for("searchPets"))
 
 	pets = Pet.query.order_by(Pet.id.desc()).all()
-	return render_template("public/searchPets.html", pets=pets, form=form)
+	return render_template("public/searchPets.html", pets=pets, form=form, searchForm=searchForm)
 
 @app.route("/searchPets/info_petID=<petID>")
 def showPet(petID):
@@ -103,5 +122,6 @@ def addPet():
 		print("adding pet")
 
 	return render_template("public/adoptionPage.html")
+
 
 

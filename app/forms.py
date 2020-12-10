@@ -17,6 +17,7 @@ class PostForm(FlaskForm):
     title = StringField("Title",[DataRequired()])
     content = TextAreaField("Content", [DataRequired() ])
     img = FileField()
+    # Catagory
 
 class PetForm(FlaskForm):
     name = StringField("Name", [DataRequired()] )
@@ -24,5 +25,11 @@ class PetForm(FlaskForm):
     age = IntegerField("Age", [DataRequired()] )
     description= TextAreaField("Additional Information", [ ])
     weight = IntegerField("Weight", [DataRequired()] )
-    img = FileField("Select Image", [DataRequired()]) 
+    img = FileField("Select Image", [DataRequired()])
+
+class SearchPetForm(FlaskForm):
+    breed = SelectField('Breed ', choices=["Chihuahua", "French Bulldog", "Labrador Retriever", "Standard Poodle", "Terrior Pet Mix"] )
+    age = SelectField('Age ', choices=["Young", "Adult", "Senior"])
+    size = SelectField('Size ', choices=["S", " M", "L","XL"])
+    img = FileField("Select ideal pet ") 
 

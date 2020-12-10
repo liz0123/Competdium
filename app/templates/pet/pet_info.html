@@ -7,36 +7,38 @@
 {% block main %}
 <div class="container">
 <div class="row">
-    <div class="col">
+    <div class="col-7">
         <img src="{{url_for('static',filename= 'img/pets/'~ pet.original_image )}}" class="card-img-top" alt="...">
     </div>
-    <div class="col">
+    <div class="col-2">
         <table class="table table-borderless">
             <thead>
               <tr>
-                <th scope="col">{{pet.name}}</th>
-
               </tr>
             </thead>
             <tbody>
               <tr>
-                <th scope="row">Age</th>
+                <th scope="row">Name:</th>
+                <td>{{pet.name}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Age:</th>
                 <td>{{pet.age}}</td>
               </tr>
               <tr>
-                <th scope="row">Weight</th>
+                <th scope="row">Weight:</th>
                 <td>{{ pet.weight }}</td>
               </tr>
               <tr>
-                <th scope="row">Gender</th>
+                <th scope="row">Gender:</th>
                 <td> {{ pet.gender}}</td>
               </tr>
               <tr>
-                <th scope="row">Breed</th>
+                <th scope="row">Breed:</th>
                 <td> {{ pet.breed }}</td>
               </tr>
               <tr>
-                <th scope="row">Owner</th>
+                <th scope="row">Owner:</th>
                 <td> <a href="/profile_username={{ owner }}" class="stretched-link">{{owner}}</a></td>
               </tr>
             </tbody>

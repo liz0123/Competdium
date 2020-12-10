@@ -45,12 +45,16 @@ body{
  }
 
  /* 
---- HOME Page --------------
+--- SEARCH PET Page --------------
  */
  #addPet{
    position: fixed;
    bottom:10px;
    right:5%;
+ }
+
+ .btn-like{
+   background-color: #ffffff;
  }
 
 /* 
