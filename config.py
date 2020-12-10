@@ -9,6 +9,8 @@ class Config(object):
 
     IMAGE_UPLOADS = "/home/username/app/app/static/images/uploads" 
 
+    PET_MODEL= "./image_classifier/pet_model/"
+
     SESSION_COOKIE_SECURE = True
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -22,8 +24,8 @@ class DevelopmentConfig(Config):
 
     DB_NAME = "development-db"
 
-    POST_UPLOADS = "C:/Users/isabe/Projects/Competdium/app/static/img/posts/"
-    PET_UPLOADS = "C:/Users/isabe/Projects/Competdium/app/static/img/pets/"
+    POST_UPLOADS = "./competdium_app/static/img/posts/"
+    PET_UPLOADS = "./competdium_app/static/img/pets/"
     PROFILE_IMAGES_UPLOADS = "/static/img/users/"
 
     SESSION_COOKIE_SECURE = False
