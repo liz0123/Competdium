@@ -21,10 +21,9 @@ def formateImage(user, data, maxsize, uploads):
     #Rename images
     original_image_name ="user_"+str(user)+"pet"+str(data.id)+"_original_"+data.original_image
     original_image_name = original_image_name[:-3]+"jpg"
-    thumbnail_name = original_image_name
-    
     if uploads == "POST_UPLOADS":
         original_image_name = original_image_name.replace("pet","post")
+    thumbnail_name = original_image_name
 
     if height > maxsize:
         thumbnail_name = original_image_name.replace("original", "px"+str(maxsize))

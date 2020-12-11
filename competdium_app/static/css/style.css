@@ -64,3 +64,10 @@ body{
   background-color: white;
 }
 
+.btn-delete{
+  position: absolute;
+  top: 10px;
+  right: 25px;
+}
+
+

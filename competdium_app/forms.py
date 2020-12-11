@@ -16,7 +16,7 @@ class RegisterForm(FlaskForm):
 
 class PostForm(FlaskForm):
     title = StringField("Title",[DataRequired()])
-    content = TextAreaField("Content", [DataRequired() ])
+    content = TextAreaField("Content")
     img = FileField()
     # Catagory
 
@@ -24,9 +24,8 @@ class PetForm(FlaskForm):
     today = datetime.today()
     name = StringField("Name", [DataRequired()] )
     gender = SelectField("Gender", choices=[('female', 'Female'),('male', 'Male')])
-    month = SelectField("Month", choices=["January","February","March","April","May","June","July","August","September", "October", "November", "December"])
-    year = IntegerField("Year", [DataRequired(), NumberRange(min=1900, max=today.year, message='Something')])
-    age = IntegerField("Age", [DataRequired()] )
+    month = SelectField("Month", choices=[(1,"January"),(2,"February"),(3,"March"),(4,"April"),(5,"May"),(6,"June"),(7,"July"),(8,"August"),(9,"September"), (10,"October"), (11,"November"), (12,"December")])
+    year = IntegerField("Year", [DataRequired(), NumberRange(min=1900, max=today.year, message='Please check the year submitted')])
     description= TextAreaField("Additional Information",)
     weight = IntegerField("Weight", [DataRequired()] )
     img = FileField("Select Image", [DataRequired()])

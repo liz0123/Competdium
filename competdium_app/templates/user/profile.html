@@ -37,9 +37,14 @@
             <h3> My Post</h3>
             <div class="row row-cols-1 row-cols-md-2">
               {% for post in posts %}
-              <div class="col mb-4"> 
-                <a href="/profile/delete:POST_UPLOADS_{{post.id}}" >X </a> 
+              <div class=" col mb-4"> 
                 {{ im.postCard(post ) }} 
+                <a href="/profile/delete:POST_UPLOADS_{{post.id}}" class="btn-delete">
+                  <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </a>
+
               </div>
               {% endfor %}
             </div>
@@ -54,6 +59,7 @@
               <div class="col mb-4">
                 <a href="/profile/delete:PET_UPLOADS_{{pet.id}}" >X </a> 
                 {{ im.petCard(pet) }} </div>
+                
               {% endfor %}
             </div>
           </div> 

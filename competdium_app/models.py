@@ -12,7 +12,7 @@ class Pet(db.Model):
 	gender = db.Column(db.String(50))
 	name = db.Column(db.String(50))
 	weight = db.Column(db.String(50))
-	age = db.Column(db.Integer)
+	birth = db.Column(db.DateTime)
 	description = db.Column(db.Text)
 	original_image= db.Column(db.String(255), default = "default.jpg")
 	thumbnail = db.Column(db.String(255), default = "default.jpg")

@@ -98,7 +98,9 @@ def searchPets():
 	searchForm = SearchPetForm()
 	if form.validate_on_submit():
 		path = form.img.data.save(os.path.join(app.config['PET_UPLOADS'], form.img.data.filename))
-		pet = Pet(petType="OTHER", user_id=current_user.get_id(), status="ADOPTION", gender=form.gender.data, name=form.name.data, age=form.age.data, description=form.description.data, original_image=form.img.data.filename, weight=form.weight.data)
+		birth = datetime(int(form.year.data), int(form.month.data),1)
+		
+		pet = Pet(petType="OTHER", user_id=current_user.get_id(), status="ADOPTION", gender=form.gender.data, name=form.name.data,birth =birth, description=form.description.data, original_image=form.img.data.filename, weight=form.weight.data)
 		db.session.add(pet)
 		db.session.commit()
 

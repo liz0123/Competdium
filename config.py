@@ -31,7 +31,7 @@ class DevelopmentConfig(Config):
     SESSION_COOKIE_SECURE = False
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI ="sqlite:///./dbs.sqlite3"
+    SQLALCHEMY_DATABASE_URI ="sqlite:///./db.sqlite3"
     SQLALCHEMY_ECHO = False
 
 
