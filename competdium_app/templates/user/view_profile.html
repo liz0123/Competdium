@@ -39,11 +39,6 @@
               {% for post in posts %}
               <div class=" col mb-4"> 
                 {{ im.postCard(post ) }} 
-                <a href="/myprofile/delete:POST_UPLOADS_{{post.id}}" class="btn-delete">
-                  <button type="button" class="close" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </a>
               </div>
               {% endfor %}
             </div>
@@ -56,15 +51,7 @@
             <div class="row row-cols-1 row-cols-md-2">
               {% for pet in pets%}
               <div class="col mb-4">
-                <div class="user-pet card-body" id="module" >
-                {{ im.petCard(pet) }} 
-                <a href="/myprofile/delete:PET_UPLOADS_{{pet.id}}" class="btn-delete">
-                  <button type="button" class="close" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </a>
-                </div>
-                </div>
+                {{ im.petCard(pet) }} </div>
               {% endfor %}
             </div>
           </div> 

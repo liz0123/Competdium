@@ -42,26 +42,27 @@ def feed():
 # ------ user -------
 @app.route("/profile_username=<username>")
 @login_required
-def usr(username):
+def profile(username):
 	user = User.query.filter_by(username=username).first()
-	if not user:
-		flash("User not found")
-		return redirect(url_for("feed"))
 	posts = Post.query.filter_by(user_id=user.id).all()
 	pets = Pet.query.filter_by(user_id=user.id).all()
+	
+	if not user:
+		flash("User not found")
+		return redirect(url_for("searchPets"))
+	
+	return render_template("user/view_profile.html", user=user, posts=posts, pets=pets)
 
-	return render_template("user/profile.html", user=user, posts=posts, pets=pets)
-
-@app.route("/profile")
+@app.route("/myprofile")
 @login_required
-def profile():
+def my_profile():
 	user = User.query.filter_by(id=current_user.get_id()).first()
 	posts = Post.query.filter_by(user_id=current_user.get_id()).all()
 	pets = Pet.query.filter_by(user_id=current_user.get_id()).all()
 
 	return render_template("user/profile.html", user=user, posts=posts, pets=pets)
 
-@app.route("/profile/delete:<UPLOAD>_<ID>")
+@app.route("/myprofile/delete:<UPLOAD>_<ID>")
 @login_required
 def delete(UPLOAD,ID):
 	id = int(ID)
@@ -73,7 +74,7 @@ def delete(UPLOAD,ID):
 		Post.query.filter_by(id=id).delete()
 		if "default.jpg" == original_image:
 			db.session.commit()	
-			return redirect(url_for("profile"))
+			return redirect(url_for("my_profile"))
 	else:
 		original_image = Pet.query.filter_by(id=id).first().original_image
 		thumbnail = Pet.query.filter_by(id=id).first().thumbnail
@@ -84,7 +85,7 @@ def delete(UPLOAD,ID):
 	os.remove( app.config[UPLOAD]+original_image)
 	db.session.commit()	
 
-	return redirect(url_for("profile"))
+	return redirect(url_for("my_profile"))
 
 # ------ public -----
 @app.route("/adoption")

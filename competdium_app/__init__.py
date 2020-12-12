@@ -2,11 +2,12 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-
+from flask_mail import Mail
 db = SQLAlchemy()
 
 def create_app():
 	app = Flask(__name__, instance_relative_config=False)
+	
 
 	if app.config["ENV"] == "production":
 		app.config.from_object("config.ProductionConfig")
@@ -19,6 +20,7 @@ def create_app():
 		print("ENV: Development")
 	
 	db.init_app(app)
+	mail= Mail(app)
 	
 	login_manager = LoginManager()
 	login_manager.login_view = 'login'
