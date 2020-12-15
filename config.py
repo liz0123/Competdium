@@ -16,6 +16,16 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI ="mysql://user:''@localhost:3306/competdium" 
 
+    MAIL_SERVER ='smtp.gmail.com'
+    MAIL_PORT = 465
+    MAIL_USERNAME = 'valdezi1997@gmail.com'
+    MAIL_PASSWORD = "Awsedrf0192!"
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+
+
+    
+
 class ProductionConfig(Config):
     pass
 

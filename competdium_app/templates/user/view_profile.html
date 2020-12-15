@@ -14,9 +14,12 @@
     </div>
     <div class="col-4">
       <div class="container">
-        <div class="btn float-right"><i class='far fa-edit'></i></div>
         <h5> Username: {{user.username}} </h5>
         <h5> bio: {{ user.bio }}</h5> 
+        <form action="{{ url_for('email',username=user.username) }}" method="POST" enctype="multipart/form-data">
+          {% set title = "Email: ", user,username%}
+          {{ im.modal(icon="fa fa-envelope", title=('Email: ',user.username)|join() )}} 
+        </form>
       </div>
     </div>
 

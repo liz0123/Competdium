@@ -2,11 +2,13 @@ import os
 from flask import flash, request, redirect, render_template, make_response, session, url_for, send_from_directory
 from flask import current_app as app
 from flask_login import login_required, current_user
+from flask_mail import Message
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta 
 from .forms import PostForm, PetForm, SearchPetForm
 from .models import db, User, Post, Pet
 from .functions import *
+from . import mail
 
 #app.permanent_session_lifetime = timedelta(hours=1)
 @app.route("/", methods=["POST","GET"])
@@ -40,13 +42,25 @@ def feed():
 	return render_template("public/feed.html", posts=posts, form=form)
 
 # ------ user -------
-@app.route("/profile_username=<username>")
+@app.route("/profiles/user<username>/email",methods=["POST","GET"])
 @login_required
+def email(username):
+	reciever = User.query.filter_by( username=username ).first()
+	sender = User.query.filter_by(id=current_user.get_id()).first()
+	if request.method =="POST":
+		subject = "Hi "+reciever.username+"! You got a messaga from "+sender.username
+		msg = Message(subject,sender=app.config["MAIL_USERNAME"], recipients=[reciever.email])
+		msg.body = request.form.get("emailContect")
+		print("email: ", request.form.get("emailContect"))
+		mail.send(msg)
+		flash("Email send!")
+	return redirect(url_for("profile",username=username))
+	
+@app.route("/profiles/user=<username>")
 def profile(username):
 	user = User.query.filter_by(username=username).first()
-	posts = Post.query.filter_by(user_id=user.id).all()
-	pets = Pet.query.filter_by(user_id=user.id).all()
-	
+	posts = Post.query.filter_by(user_id=user.id).order_by(Post.id.desc()).all()
+	pets = Pet.query.filter_by(user_id=user.id).order_by(Pet.id.desc()).all()
 	if not user:
 		flash("User not found")
 		return redirect(url_for("searchPets"))
@@ -57,8 +71,8 @@ def profile(username):
 @login_required
 def my_profile():
 	user = User.query.filter_by(id=current_user.get_id()).first()
-	posts = Post.query.filter_by(user_id=current_user.get_id()).all()
-	pets = Pet.query.filter_by(user_id=current_user.get_id()).all()
+	posts = Post.query.filter_by(user_id=current_user.get_id()).order_by(Post.id.desc()).all()
+	pets = Pet.query.filter_by(user_id=current_user.get_id()).order_by(Pet.id.desc()).all()
 
 	return render_template("user/profile.html", user=user, posts=posts, pets=pets)
 

@@ -7,6 +7,33 @@ import numpy as np
 from tensorflow import keras
 
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
+def formateImagePIL(user, data, maxsize, uploads):
+    #Get Image
+    imgPath = app.config[uploads]+data.original_image
+    # get pet type
+    petType = classifyPet(imgPath)
+    print("pet: ", petType)
+    #
+    img = Image.open(imgPath)
+    width, height= img.size
+
+    #Rename images
+    original_image_name ="user_"+str(user)+"pet"+str(data.id)+"_original_"+data.original_image
+    original_image_name = original_image_name[:-3]+"jpg"
+    if uploads == "POST_UPLOADS":
+        original_image_name = original_image_name.replace("pet","post")
+    thumbnail_name = original_image_name
+
+    #thumbnail
+    img.save(original_image_name)
+    if height > maxsize:
+        thumbnail_name = original_image_name.replace("original", "px"+str(maxsize))
+        img.thumbnail((maxsize,maxsize))
+        img.save(thumbnail_name)
+    
+    # Delect user image
+    os.remove(imgPath)  
+    return (original_image_name,thumbnail_name,petType)
 
 def formateImage(user, data, maxsize, uploads):
     #Get Image
@@ -77,3 +104,7 @@ def classifyPet(filename):
     if acc <0.7:
         return "OTHER"
     return pet
+
+
+
+
