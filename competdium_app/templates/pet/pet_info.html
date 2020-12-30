@@ -10,7 +10,7 @@
     <div class="col-7">
         <img src="{{url_for('static',filename= 'img/pets/'~ pet.original_image )}}" class="card-img-top" alt="...">
     </div>
-    <div class="col-2">
+    <div class="col-3">
         <table class="table table-borderless">
             <thead>
               <tr>
@@ -22,12 +22,14 @@
                 <td>{{pet.name}}</td>
               </tr>
               <tr>
-                <th scope="row">Age:</th>
-                <td>{{pet.age}}</td>
+                <th scope="row">Birthdate:</th>
+                {% set m = pet.birth.month %}
+                {% set months =[" ", "Jan", "Feb","Mar","Apr","May", "Jun", "Jul","Aug","Sep","Oct","Nov","Dec"]%}
+                <td>{{months[m]}} {{pet.birth.year}}</td>
               </tr>
               <tr>
                 <th scope="row">Weight:</th>
-                <td>{{ pet.weight }}</td>
+                <td>{{ pet.weight }} lbs</td>
               </tr>
               <tr>
                 <th scope="row">Gender:</th>

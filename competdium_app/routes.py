@@ -4,8 +4,7 @@ from flask import current_app as app
 from flask_login import login_required, current_user
 from flask_mail import Message
 from werkzeug.utils import secure_filename
-from datetime import datetime, timedelta 
-from .forms import PostForm, PetForm, SearchPetForm
+from .forms import PostForm, PetForm, SearchPetForm, UserForm
 from .models import db, User, Post, Pet
 from .functions import *
 from . import mail
@@ -67,14 +66,27 @@ def profile(username):
 	
 	return render_template("user/view_profile.html", user=user, posts=posts, pets=pets)
 
-@app.route("/myprofile")
+@app.route("/myprofile", methods=["POST","GET"])
 @login_required
 def my_profile():
+	form = UserForm()
 	user = User.query.filter_by(id=current_user.get_id()).first()
 	posts = Post.query.filter_by(user_id=current_user.get_id()).order_by(Post.id.desc()).all()
 	pets = Pet.query.filter_by(user_id=current_user.get_id()).order_by(Pet.id.desc()).all()
 
-	return render_template("user/profile.html", user=user, posts=posts, pets=pets)
+	if form.validate_on_submit():
+		user.username = form.username.data
+		user.email = form.email.data
+		user.bio = form.bio.data
+		if not (form.img.data.filename =="" or "default" in form.img.data.filename):
+			img_name = secure_filename(form.img.data.filename)
+			form.img.data.save(os.path.join(app.config['PROFILE_UPLOADS'], img_name))
+			img_names = saveThumbnail(user.id, form.img.data.filename, 100,"PROFILE_UPLOADS" )
+			user.image_file = img_names
+		db.session.commit()
+
+	return render_template("user/profile.html", user=user, posts=posts, pets=pets,form=form)
+
 
 @app.route("/myprofile/delete:<UPLOAD>_<ID>")
 @login_required
@@ -134,6 +146,10 @@ def searchPets():
 def showPet(petID):
 	pet = Pet.query.filter_by(id=petID).first()
 	owner= User.query.filter_by(id=pet.user_id).first()
+#date="2018-01-01 00:00:00"    
+#tdate= datetime.strptime(date,'%Y-%m-%d %H:%M:%S')
+#print(tdate.minute)        
+
 
 	return render_template("pet/pet_info.html", pet=pet, owner=owner.username)
 

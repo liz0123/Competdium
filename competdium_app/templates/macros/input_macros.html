@@ -84,7 +84,17 @@
   </form>
 {%- endmacro %}
 
-{% macro modal(icon, title) -%}
+{% macro editProfile(user, form) -%}
+<div class="form-field"> {{ form.img.label}} {{ form.img(class ="form-control") }} </div>
+<div class="form-field"> {{ form.username.label}} {{ form.username(class ="form-control", value=user.username) }} </div>
+<div class="form-field"> {{ form.email.label }} 	{{ form.email(class ="form-control", value=user.email ) 	}} </div>
+<!-- <div class="form-field"> {{ form.password.label }} 	{{ form.password(class ="form-control") }} </div>
+<div class="form-field"> {{ form.confirm.label }} 	{{ form.confirm(class ="form-control") 	}} </div> -->	
+<div class="form-field"> {{ form.bio.label }} 	{{ form.bio(class ="form-control", value=user.bio) }} </div>
+
+{%- endmacro %}
+
+{% macro modal(icon, title, form, user) -%}
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
 	<i class='{{ icon }}'></i>
@@ -102,6 +112,8 @@
 			<div class="modal-body">
 				{% if "Email" in title %}
 				<textarea class="form-control" name="emailContect" rows="5" placeholder="What would you like to say?" required></textarea>
+				{% elif "profile" in title %}
+				{{ editProfile(user, form) }}
 				{% endif %}
 			</div>
 			
@@ -109,6 +121,8 @@
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 				{% if "Email" in title %}
 				<button type="submit" class="btn btn-primary">send</button>
+				{% elif "profile" in title %}
+				<button type="submit" class="btn btn-primary">save</button>
 				{% endif %}
 			</div>
 		</div>

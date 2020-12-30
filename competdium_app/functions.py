@@ -5,6 +5,7 @@ import os
 import cv2 as cv
 import numpy as np
 from tensorflow import keras
+from datetime import datetime, timedelta
 
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
 def formateImagePIL(user, data, maxsize, uploads):
@@ -61,6 +62,23 @@ def formateImage(user, data, maxsize, uploads):
     os.remove(imgPath)  
     return (original_image_name,thumbnail_name,petType)
 
+def saveThumbnail(user, filename, maxsize, uploads):
+    #Get Image
+    imgPath = app.config[uploads]+filename
+    img = cv.imread(imgPath, cv.IMREAD_UNCHANGED )
+    height, width, channels = img.shape
+
+    thumbnail_name ="user_"+str(user)+"profile_"+ filename
+    if height > maxsize:
+        thumbnail= cv.resize(img, (maxsize, maxsize), interpolation=cv.INTER_AREA)
+    cv.imwrite(app.config[uploads]+thumbnail_name, thumbnail)
+
+    os.remove(imgPath)  
+    return thumbnail_name
+
+
+
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -104,6 +122,8 @@ def classifyPet(filename):
     if acc <0.7:
         return "OTHER"
     return pet
+
+
 
 
 

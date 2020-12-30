@@ -36,6 +36,7 @@ class DevelopmentConfig(Config):
 
     POST_UPLOADS = "./competdium_app/static/img/posts/"
     PET_UPLOADS = "./competdium_app/static/img/pets/"
+    PROFILE_UPLOADS = "./competdium_app/static/img/profiles/"
     PROFILE_IMAGES_UPLOADS = "/static/img/users/"
 
     SESSION_COOKIE_SECURE = False

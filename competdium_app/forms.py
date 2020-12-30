@@ -36,4 +36,10 @@ class SearchPetForm(FlaskForm):
     size = SelectField('Size ', choices=["S", " M", "L","XL"])
     img = FileField("Select ideal pet ") 
 
-
+class UserForm(FlaskForm):
+    username = StringField('Username', [validators.Length(min=4, max=25)] )
+    email = StringField('Email Address', [validators.Length(min=6, max=35)] )
+    password = PasswordField('New Password', [validators.EqualTo('confirm', message='Passwords must match') ])
+    confirm = PasswordField('Repeat Password')
+    bio = TextAreaField("BIO",)
+    img = FileField("Select a profile image( 200x200 px ideal)")
