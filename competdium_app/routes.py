@@ -1,5 +1,5 @@
 import os
-from flask import flash, request, redirect, render_template, make_response, session, url_for, send_from_directory
+from flask import flash, request, redirect, render_template, make_response, session, url_for, send_from_directory, jsonify
 from flask import current_app as app
 from flask_login import login_required, current_user
 from flask_mail import Message
@@ -84,6 +84,7 @@ def my_profile():
 			img_names = saveThumbnail(user.id, form.img.data.filename, 100,"PROFILE_UPLOADS" )
 			user.image_file = img_names
 		db.session.commit()
+		return jsonify({"results":'Success'})
 
 	return render_template("user/profile.html", user=user, posts=posts, pets=pets,form=form)
 

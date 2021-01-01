@@ -1,0 +1,41 @@
+{% import "input_macros.html" as im %}
+
+{% macro profilePostCards(posts) -%}
+<div class="container">
+    <h3>My Posts </h3>
+    <div class="row row-cols-1 row-cols-md-2">
+      {% for post in posts %}
+      <div class=" col mb-4"> 
+        {{ im.postCard(post ) }} 
+        <a href="/myprofile/delete:POST_UPLOADS_{{post.id}}" class="btn-delete">
+          <button type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div> 
+{%- endmacro %}
+
+{% macro profilePetCards(Pets) -%}
+<div class="container">
+    <h3> My Pets</h3>
+    <div class="row row-cols-1 row-cols-md-2">
+      {% for pet in pets%}
+      <div class="col mb-4">
+        <div class="user-pet card-body" id="module" >
+        {{ im.petCard(pet) }} 
+        <a href="/myprofile/delete:PET_UPLOADS_{{pet.id}}" class="btn-delete">
+          <button type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </a>
+        </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+{%- endmacro %}
+

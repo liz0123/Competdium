@@ -21,9 +21,7 @@ body{
 .signup_page{
   padding-bottom: 300px;
 }
-.col-8 {
-  background-color: white;
-}
+
 .scroll{
   height:90%; 
   overflow:hidden; 
@@ -57,12 +55,44 @@ body{
    background-color: #ffffff;
  }
 
+
+/* 
+---- LOGIN Page --------------
+ */
+.login{
+  top: 30%;
+  border-radius: 25px;
+  background-color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.underline{
+  text-decoration: underline;
+}
+
+/* unvisited link */
+.underline:link {
+  color:blue;
+}
+
+/* visited link */
+.underline:visited {
+  color:rgb(72, 72, 253);
+}
+
+/* mouse over link */
+.underline:hover {
+  color:rgb(43, 233, 43);
+}
+
+/* selected link */
+.underline:active {
+  color:green;
+}
+
 /* 
 ----PROFILE Page --------------
  */
-#userInfo{
-  background-color: white;
-}
 
 .btn-delete{
   position: absolute;
@@ -72,5 +102,3 @@ body{
 .user-pet{
   background-color: white;
 }
-
-

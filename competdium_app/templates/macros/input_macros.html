@@ -1,3 +1,5 @@
+
+
 {% macro input( label, type="text", name = "", id="", placeholder = "") -%}
 <div class = 'form-group'>
 	<label for="formGroupExampleInput">{{ label }}</label>
@@ -85,12 +87,10 @@
 {%- endmacro %}
 
 {% macro editProfile(user, form) -%}
-<div class="form-field"> {{ form.img.label}} {{ form.img(class ="form-control") }} </div>
-<div class="form-field"> {{ form.username.label}} {{ form.username(class ="form-control", value=user.username) }} </div>
-<div class="form-field"> {{ form.email.label }} 	{{ form.email(class ="form-control", value=user.email ) 	}} </div>
-<!-- <div class="form-field"> {{ form.password.label }} 	{{ form.password(class ="form-control") }} </div>
-<div class="form-field"> {{ form.confirm.label }} 	{{ form.confirm(class ="form-control") 	}} </div> -->	
-<div class="form-field"> {{ form.bio.label }} 	{{ form.bio(class ="form-control", value=user.bio) }} </div>
+<div class="form-field"> {{ form.img.label}} {{ form.img(class ="form-control", id="profileImagInput"~user.id) }} </div>
+<div class="form-field"> {{ form.username.label}} {{ form.username(class ="form-control", id="profileUsernameInput"~user.id ,value=user.username,) }} </div>
+<div class="form-field"> {{ form.email.label }} 	{{ form.email(class ="form-control", id="profileEmailInput"~user.id ,value=user.email ) 	}} </div>
+<div class="form-field"> {{ form.bio.label }} 	{{ form.bio(class ="form-control", id="profileBioInput"~user.id ,value=user.bio) }} </div>
 
 {%- endmacro %}
 
@@ -122,7 +122,7 @@
 				{% if "Email" in title %}
 				<button type="submit" class="btn btn-primary">send</button>
 				{% elif "profile" in title %}
-				<button type="submit" class="btn btn-primary">save</button>
+				<button type="submit" class="btn btn-primary updateProfile" member_id="{{user.id}}">save</button>
 				{% endif %}
 			</div>
 		</div>
