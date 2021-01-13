@@ -42,4 +42,4 @@ class UserForm(FlaskForm):
     password = PasswordField('New Password', [validators.EqualTo('confirm', message='Passwords must match') ])
     confirm = PasswordField('Repeat Password')
     bio = TextAreaField("BIO",)
-    img = FileField("Select a profile image( 200x200 px ideal)")
+    img = FileField("Select a profile image (400x400) ")

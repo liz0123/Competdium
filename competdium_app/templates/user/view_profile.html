@@ -1,66 +1,37 @@
-{% extends "index_template.html" %}
-{% import "macros/input_macros.html" as im %}
+{% extends "user/profile_temp.html" %}
+{% block title %} {{user.username}} {% endblock %}
 
-{% block title%} Profile {% endblock%}
 
-{% block main %}
-<div class="profile_page">
-  <div class="row" id="userInfo">
-    <div class="col-1">
-    	<div class="text-center">
-    		<img src="{{url_for('static', filename='/img/' ~ user.image_file )}}" alt="..." class="rounded mx-auto d-block">
-    	</div>
-
-    </div>
-    <div class="col-4">
-      <div class="container">
-        <h5> Username: {{user.username}} </h5>
-        <h5> bio: {{ user.bio }}</h5> 
-        <form action="{{ url_for('email',username=user.username) }}" method="POST" enctype="multipart/form-data">
-          {% set title = "Email: ", user,username%}
-          {{ im.modal(icon="fa fa-envelope", title=('Email: ',user.username)|join() )}} 
-        </form>
-      </div>
-    </div>
-
-  </div>
+{% block tabs%}
   <br>
+  <h1 class="profileTitle">Posts</h1>
+  <hr>
+  
+  <!--- USER POSTS, PETS, and SETTINGS -->
   <div class="row">
     <div class="col-2">
       <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-        <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Posts</a>
-        <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Pets</a>
+
+        <a class="nav-link active profileTitleBtn"  title="Posts" id="v-pills-posts-tab" data-toggle="pill" href="#v-pills-posts" role="tab" aria-controls="v-pills-posts" aria-selected="true"><i class="fa fa-edit"></i> Posts</a>
+        <a class="nav-link profileTitleBtn"  title="Pets" id="v-pills-pets-tab" data-toggle="pill" href="#v-pills-pets" role="tab" aria-controls="v-pills-pets" aria-selected="false"><i class="fas fa-paw"></i> Pets</a>
+        <a class="nav-link profileTitleBtn"  title="Message" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="fas fa-comment-alt"></i> Message</a>
+
       </div>
     </div>
     <div class="col">
       <div class="tab-content" id="v-pills-tabContent">
-
-        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-          <div class="container">
-            <h3> My Post</h3>
-            <div class="row row-cols-1 row-cols-md-2">
-              {% for post in posts %}
-              <div class=" col mb-4"> 
-                {{ im.postCard(post ) }} 
-              </div>
-              {% endfor %}
-            </div>
-          </div> 
-        </div>
-        
-        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-          <div class="container">
-            <h3> My Pets</h3>
-            <div class="row row-cols-1 row-cols-md-2">
-              {% for pet in pets%}
-              <div class="col mb-4">
-                {{ im.petCard(pet) }} </div>
-              {% endfor %}
-            </div>
-          </div> 
-        </div>
+        <div class="tab-pane fade show active" id="v-pills-posts" role="tabpanel" aria-labelledby="v-pills-posts-tab"> 
+          {{ tmp.viewProfilePostCards(posts)}}
+        </div> 
+        <div class="tab-pane fade" id="v-pills-pets" role="tabpanel" aria-labelledby="v-pills-pets-tab"> 
+            {{ tmp.viewProfilePetCards(pets) }}
+          </div>
+        <div class="tab-pane fade" id="v-pills-favorites" role="tabpanel" aria-labelledby="v-pills-favorites-tab">Cooming Soon</div>
+        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">Cooming Soon</div>
       </div>
 
     </div>
   </div>
-{% endblock %}
+  {% endblock %}
+
+

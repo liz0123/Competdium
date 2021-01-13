@@ -5,6 +5,7 @@ from flask import current_app as app
 from .models import db, User
 from .forms import LoginForm, RegisterForm
 
+
 @app.route("/login", methods=["POST","GET"])
 def login():
 	form = LoginForm()

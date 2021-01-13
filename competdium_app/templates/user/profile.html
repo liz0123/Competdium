@@ -1,117 +1,180 @@
-{% extends "index_template.html" %}
-{% import "macros/input_macros.html" as im %}
-{% import "macros/temp_macros.html" as tmp %}
+{% extends "user/profile_temp.html" %}
+{% import "macros/message_macro.html" as msg %}
 
-{% block title%} Profile {% endblock%}
-
-{% block main %}
-<div class="container">
-  <div class="row" id="userInfo">
-    <div class="col-1" id="profileImag">
-    	<div class="text-center container">
-        {% if user.image_file == "default_profile.png"%}
-        <img src="{{url_for('static', filename='/img/' ~ user.image_file )}}" alt="..." class="rounded mx-auto d-block">
-        {% else %}
-        <img src="{{url_for('static', filename='/img/profiles/' ~ user.image_file )}}" alt="..." class="rounded mx-auto d-block">
-        {% endif %}
-    	</div>
-    </div>
-    <div class="col-4">
-      <div class="container">
-        <h4> <b> {{user.username}}</b> </h4>
-        <h5> {{ user.bio }}</h5> 
-        <form action="{{ url_for('my_profile') }}" method="POST" enctype="multipart/form-data">
-          {{ form.csrf_token }}
-          {{ im.modal(icon="fa fa-edit ", title=('My ',"profile ")|join(), form=form , user=user)}} 
-        </form>
-      </div>
-    </div>
-  </div>
+{% block title %} MyProfile {% endblock %}
+{% block tabs%}
   <br>
-  <!--- USER POSTS, PETS, and SETTINGS --->
+  <h1 class="profileTitle">My Posts</h1>
+  <hr>
+  
+  <!--- USER POSTS, PETS, and SETTINGS -->
   <div class="row">
     <div class="col-2">
-      <div class="d-flex align-items-start">
-        <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-          <a class="nav-link active" id="v-pills-posts-tab" data-bs-toggle="pill" href="#v-pills-posts" role="tab" aria-controls="v-pills-posts" aria-selected="true">Posts</a>
-          <a class="nav-link" id="v-pills-pets-tab" data-bs-toggle="pill" href="#v-pills-pets" role="tab" aria-controls="v-pills-pets" aria-selected="false">Pets</a>
-          <a class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Messages</a>
-          <a class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</a>
-        </div>
-        <div class="tab-content" id="v-pills-tabContent">
-          <div class="tab-pane fade show active" id="v-pills-posts" role="tabpanel" aria-labelledby="v-pills-posts-tab"> {{ tmp.profilePostCards(posts) }}</div>
-          <div class="tab-pane fade" id="v-pills-pets" role="tabpanel" aria-labelledby="v-pills-pets-tab">...</div>
-          <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">...</div>
-          <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">...</div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-
-
-
-  <!-- <div class="row">
-    <div class="col-2">
       <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-       
-        <a class="nav-link " id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Posts</a>
-        <a class="nav-link active" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Pets</a>
+
+        <a class="nav-link active profileTitleBtn"  title="My Posts" id="v-pills-posts-tab" data-toggle="pill" href="#v-pills-posts" role="tab" aria-controls="v-pills-posts" aria-selected="false"><i class="fa fa-edit"></i> Posts</a>
+        <a class="nav-link profileTitleBtn"  title="My Pets" id="v-pills-pets-tab" data-toggle="pill" href="#v-pills-pets" role="tab" aria-controls="v-pills-pets" aria-selected="true"><i class="fas fa-paw"></i> Pets</a>
+        <a class="nav-link profileTitleBtn"  title="My Favorites" id="v-pills-favorites-tab" data-toggle="pill" href="#v-pills-favorites" role="tab" aria-controls="v-pills-favorites" aria-selected="true"><i class="fas fa-heart"></i> Favorites</a>
+        <a class="nav-link profileTitleBtn"  title="My Messages" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="true"><i class="fas fa-comment-alt"></i> Messages</a>
+        <a class="nav-link profileTitleBtn" title="My Settings" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="true"> <i class="fa fa-user"></i> Settings</a>
         
       </div>
     </div>
     <div class="col">
       <div class="tab-content" id="v-pills-tabContent">
-
-        <div class="tab-pane fade " id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+        <div class="tab-pane fade show active" id="v-pills-posts" role="tabpanel" aria-labelledby="v-pills-posts-tab">
           <div class="container">
-            <h3> My Post</h3>
-            <div class="row row-cols-1 row-cols-md-2">
-              {% for post in posts %}
-              <div class=" col mb-4"> 
-                {{ im.postCard(post ) }} 
-                <a href="/myprofile/delete:POST_UPLOADS_{{post.id}}" class="btn-delete">
-                  <button type="button" class="close" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </a>
-              </div>
-              {% endfor %}
-            </div>
+          <br> {{tmp.myprofilePostCards(posts)}} </div>
+        </div> 
+        <div class="tab-pane fade" id="v-pills-pets" role="tabpanel" aria-labelledby="v-pills-pets-tab">
+          <div class="container">
+            <br> {{tmp.myprofilePetCards(pets)}} 
           </div> 
         </div>
-        
-        <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-          <div class="container">
-            <h3> My Pets</h3>
-            <div class="row row-cols-1 row-cols-md-2">
-              {% for pet in pets%}
-              <div class="col mb-4">
-                <div class="user-pet card-body" id="module" >
-                {{ im.petCard(pet) }} 
-                <a href="/myprofile/delete:PET_UPLOADS_{{pet.id}}" class="btn-delete">
-                  <button type="button" class="close" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </a>
-                </div>
-                </div>
-              {% endfor %}
-            </div>
-          </div> 
+        <div class="tab-pane fade" id="v-pills-favorites" role="tabpanel" aria-labelledby="v-pills-favorites-tab">Cooming Soon</div>
+        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+          {{ msg.message() }}
+        </div>
+        <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" >
+
+          <form  id="uploadProfileImage">
+            {{ frm.fileInput("profileSettingsNewImg", name="/img/profiles/"~user.image_file ) }}
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </form>
+
+          <hr>
+          <form id="uploadProfileBio">
+            {{ frm.settingDisplayForm("profileSettingsCurrBio", "Current About", user.bio )}}
+            {{ frm.settingTextAreaForm("profileSettingsNewBio", "text", "New About") }}
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </form>
+          
+          <hr>
+          <form id="uploadProfileUsername">
+            {{ frm.settingDisplayForm("profileSettingsCurrUsername", "Current Username", user.username )}}
+            {{ frm.settingInputForm("profileSettingsNewUsername", "text", "New Username") }}
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </form>
+
+          <hr>
+          <form id="uploadProfileEmail">
+            {{ frm.settingDisplayForm("profileSettingsCurrEmail", "Current Email", user.email )}}
+            {{ frm.settingInputForm("profileSettingsNewEmail", "text", "New Email") }}
+            {{ frm.settingInputForm("profileSettingsEmailPassword", "password", "Current Password") }}
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </form>
+          <hr>
+          <form id="uploadProfilePassword">
+            
+            {{ frm.settingInputForm("profileSettingsCurrPassword", "password", "Current Password") }}
+            {{ frm.settingInputForm("profileSettingsNewPassword", "password", "New Password") }}
+            {{ frm.settingInputForm("profileSettingsConPassword", "password", "Confirm  Password") }}
+
+              <div class="col-md-3 offset-md-3">
+                <span id="conMsg"></span>
+              </div>
+  
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </form>
+
         </div>
       </div>
 
     </div>
-  </div>-->
+  </div>
+  {% endblock %}
 
 
+  {% block script %}
+  <script>
+    const uploadProfileImage = document.getElementById("uploadProfileImage");
+    const uploadProfileBio = document.getElementById("uploadProfileBio");
+    const uploadProfileUsername = document.getElementById("uploadProfileUsername");
+    const uploadProfileEmail = document.getElementById("uploadProfileEmail");
+    const uploadProfilePassword = document.getElementById("uploadProfilePassword");
+
+    uploadProfileImage.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const inputFile = document.getElementById("profileSettingsNewImg");
+      const path = "/myprofile/setting/updateProfileImg";
+      const formData = new FormData();
+
+      formData.append('img', inputFile.files[0] );
+      console.log("img ", formData);      
+      sendtoServer(path,"PUT", formData, []);
+
+    });
+
+    uploadProfileBio.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const input = document.getElementById("profileSettingsNewBio");
+      const path = "/myprofile/setting/updateBio";
+      const ids =["#profileSettingsCurrBio", "#profileBio"];
+      const formData = new FormData();
+
+      formData.append('bio', input.value);     
+      sendtoServer(path,"POST", formData, ids);
+
+    });
+
+    uploadProfileUsername.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const input = document.getElementById("profileSettingsNewUsername");
+      const path ="/myprofile/setting/updateUsername";
+      const ids =["#profileSettingsCurrUsername","#profileUsername"];
+      const formData = new FormData();
+
+      formData.append('username', input.value);
+     
+      sendtoServer(path,"POST", formData, ids);
+    });
+
+    uploadProfileEmail.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const input = document.getElementById("profileSettingsNewEmail");
+      const pass = document.getElementById("profileSettingsEmailPassword");
+
+      const path ="/myprofile/setting/updateEmail";
+      const ids = ["#profileSettingsCurrEmail"];
+      const formData = new FormData();
+
+      formData.append('email', input.value);
+      formData.append('password', pass.value);
+     
+      sendtoServer(path,"POST", formData, ids);
+      pass.value = "";
+    });
+
+    
+    uploadProfilePassword.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const newPass = document.getElementById("profileSettingsNewPassword");
+      const conPass = document.getElementById("profileSettingsConPassword");
+
+      if (newPass.value == conPass.value){
+        const curPass = document.getElementById("profileSettingsCurrPassword");
+
+        const path ="/myprofile/setting/updatePassword";
+        const formData = new FormData();
+        formData.append('curPass', curPass.value);
+        formData.append('newPass', newPass.value);
+        sendtoServer(path,"POST", formData, []);
+
+        curPass.value = "";
+        $('#conMsg').html('');
+      }else{
+        
+        $('#conMsg').html('Not Matching').css('color', 'red');
+      }
+      newPass.value = "" ;
+      conPass.value = "" ;
+    });
 
 
-
-
-  
-</div>
-{% endblock %}
-
+  </script>
+  {% endblock %}

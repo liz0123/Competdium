@@ -1,0 +1,57 @@
+<!-- LChat room html and css: https://www.youtube.com/watch?v=f8el0g_rXbY -->
+{% macro message() -%}
+
+<div id="chat-container">
+    <div id="search-container">
+        <div class="input-group">
+            <input type="text" id="form1" class="form-control" placeholder="Search" />
+        </div>
+        
+    </div>
+
+    <div id="conversation-list">
+        {{ conversation("conversation active", "../static/img/profile.jpg","Ms Cata", "May 2019", "Hi there! can i buy you cat?") }}
+        {{ conversation("conversation", "../static/img/profile.jpg","Ms Cata", "May 2019", "Hi there! can i buy you cat?") }}
+        {{ conversation("conversation active", "../static/img/profile.jpg","Ms Cata", "May 2019", "Hi there! can i buy you cat?") }}
+        {{ conversation("conversation active", "../static/img/profile.jpg","Ms Cata", "May 2019", "Hi there! can i buy you cat?") }}
+        {{ conversation("conversation active", "../static/img/profile.jpg","Ms Cata", "May 2019", "Hi there! can i buy you cat?") }}
+        {{ conversation("conversation active", "../static/img/profile.jpg","Ms Cata", "May 2019", "Hi there! can i buy you cat?") }}
+        {{ conversation("conversation active", "../static/img/profile.jpg","Ms Cata", "May 2019", "Hi there! can i buy you cat?") }}
+        {{ conversation("conversation active", "../static/img/profile.jpg","Ms Cata", "May 2019", "Hi there! can i buy you cat?") }}
+        {{ conversation("conversation active", "../static/img/profile.jpg","Ms Cata", "May 2019", "Hi there! can i buy you cat?") }}
+        {{ conversation("conversation active", "../static/img/profile.jpg","Ms Cata", "May 2019", "Hi there! can i buy you cat?") }}
+        {{ conversation("conversation active", "../static/img/profile.jpg","Ms Cata", "May 2019", "Hi there! can i buy you cat?") }}
+
+
+     </div>
+    <div id="new-message-container"> 
+        <a href="#" id='add' class="w3-button w3-xlarge w3-circle w3-white float-right">+</a>
+    </div>
+    <div id="chat-title"> 
+    </div>
+    <div id="chat-message-list"> </div>
+    <div id="chat-form">
+        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Type a message">
+    </div>
+
+
+</div>
+
+{%- endmacro %}
+
+{% macro conversation(active, img, title, date, message) -%}
+<div class="{{ active }}">
+    <img src="{{ img }} "/>
+    <div class="title-text">
+        {{ title }}
+    </div>
+    <div class="created-date">
+        {{ date }}
+    </div>
+    <div class="conversation-message">
+        {{ message }}
+    </div>
+
+</div>
+
+{%- endmacro%}

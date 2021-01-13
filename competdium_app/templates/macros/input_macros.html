@@ -32,7 +32,7 @@
 		<h5  class="card-title font-weight-bold"> {{ post.title }} </h5> 
 		<p class="card-text">{{ post.content }}</p>
 		{% if post.original_image != "default.jpg" %}
-		<img src="{{ url_for('static', filename="img/posts/" ~ post.thumbnail) }}" class="rounded mx-auto d-block" alt="..."></img>
+		<img src="{{ url_for('static', filename='img/posts/'~ post.thumbnail) }}" class="rounded mx-auto d-block" alt="..."></img>
 		{% endif %}
 		<p class="card-text"></p><small class="text-muted">Uploaded: {{ post.date_created }}</small></p>
 	</div>
@@ -40,7 +40,6 @@
 {%- endmacro%}
 
 {% macro petCard(pet) -%}
-<div class="container">
 	<div class="card">
 		<img src="{{url_for('static',filename= 'img/pets/'~ pet.thumbnail) }}" class="card-img-top" alt="...">
 		<div class="card-body">
@@ -49,7 +48,7 @@
 			<a href="/searchPets/info_petID={{pet.id}}" class="stretched-link"></a>
 		</div>
 	</div>
-</div>
+
 {%- endmacro%}
 
 {% macro petForm(form) -%}
@@ -86,18 +85,11 @@
   </form>
 {%- endmacro %}
 
-{% macro editProfile(user, form) -%}
-<div class="form-field"> {{ form.img.label}} {{ form.img(class ="form-control", id="profileImagInput"~user.id) }} </div>
-<div class="form-field"> {{ form.username.label}} {{ form.username(class ="form-control", id="profileUsernameInput"~user.id ,value=user.username,) }} </div>
-<div class="form-field"> {{ form.email.label }} 	{{ form.email(class ="form-control", id="profileEmailInput"~user.id ,value=user.email ) 	}} </div>
-<div class="form-field"> {{ form.bio.label }} 	{{ form.bio(class ="form-control", id="profileBioInput"~user.id ,value=user.bio) }} </div>
-
-{%- endmacro %}
-
 {% macro modal(icon, title, form, user) -%}
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-	<i class='{{ icon }}'></i>
+	
+
 </button>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

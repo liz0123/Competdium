@@ -1,41 +1,246 @@
-{% import "input_macros.html" as im %}
-
-{% macro profilePostCards(posts) -%}
+{% import "macros/input_macros.html" as im %}
+{% macro viewProfilePostCards(posts) -%}
 <div class="container">
-    <h3>My Posts </h3>
-    <div class="row row-cols-1 row-cols-md-2">
-      {% for post in posts %}
-      <div class=" col mb-4"> 
-        {{ im.postCard(post ) }} 
-        <a href="/myprofile/delete:POST_UPLOADS_{{post.id}}" class="btn-delete">
-          <button type="button" class="close" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </a>
-      </div>
-      {% endfor %}
-    </div>
-  </div> 
+  <br>
+<div class="row row-cols-1 row-cols-md-1">
+  {% for post in posts %}
+  <div class=" col mb-1"> 
+    {{ im.postCard(post ) }} 
+  </div>
+  {% endfor %}
+</div>
+</div>
+
 {%- endmacro %}
 
-{% macro profilePetCards(Pets) -%}
+
+{% macro viewProfilePetCards(pets) -%}
 <div class="container">
-    <h3> My Pets</h3>
-    <div class="row row-cols-1 row-cols-md-2">
-      {% for pet in pets%}
-      <div class="col mb-4">
-        <div class="user-pet card-body" id="module" >
-        {{ im.petCard(pet) }} 
-        <a href="/myprofile/delete:PET_UPLOADS_{{pet.id}}" class="btn-delete">
-          <button type="button" class="close" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </a>
-        </div>
-        </div>
-      {% endfor %}
+  <br>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+  {% for pet in pets%}
+  <div class="col mb-4 lg-6">
+    <div class="pet-card card-body" id="module" >
+      {{ im.petCard(pet) }} 
     </div>
   </div>
+  {% endfor %}
+</div>
+</div>
+{%- endmacro %}
+
+{% macro myprofilePostCards(posts) -%}
+<div class="container">
+  <br>
+<div class="row row-cols-1 row-cols-md-2">
+  {% for post in posts %}
+  <div class=" col mb-4"> 
+    {{ im.postCard(post ) }} 
+    <a href="/myprofile/posts/edit={{post.title}}_{{post.id}}" class="btn-edit">
+      <button type="button" class="close" aria-label="Close">
+        <i class='fas fa-pen'></i>
+      </button>
+    </a>
+  </div>
+  {% endfor %}
+</div> 
+</div>
+{%- endmacro %}
+
+{% macro myprofilePetCards(pets) -%}
+<div class="container">
+  <br>
+<div class="row row-cols-1 row-cols-md-3">
+  {% for pet in pets%}
+  <div class="col mb-3">
+    <div class="pet-card card-body" id="module" >
+      {{ im.petCard(pet) }} 
+      <a href="/myprofile/pets/edit={{pet.name}}_{{pet.id}}" class="btn-edit">
+        <button type="button" class="close" aria-label="Close">
+          <i class='fas fa-pen'></i>
+        </button>
+      </a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+</div>
 
 {%- endmacro %}
+
+
+
+{% macro editProfile(user, form) -%}
+<div class="container row">
+    <div class="col-3">
+        {% if user.image_file == "default_profile.png"%}
+        <img src="{{url_for('static', filename='/img/' ~ user.image_file )}}" alt="..." class="rounded-circle" id="avatar">
+        {% else %}
+        <img src="{{url_for('static', filename='/img/profiles/' ~ user.image_file )}}" alt="..." class="rounded-circle"  id="avatar" >
+        {% endif %}
+    </div>
+    <div class="col">
+
+      <form id="uploadProfileImage">
+        <input type="file" id="profileSettingsNewImg" accept=".jpg, .jpeg, .png" required>
+        <button type="submit" class="btn btn-primary">Upload</button>
+      </form>
+
+      <script>
+        const uploadProfileImage = document.getElementById("uploadProfileImage")
+        const inputFile = document.getElementById("profileSettingsNewImg");
+
+        uploadProfileImage.addEventListener("submit", (event) => {
+          event.preventDefault();
+
+          const path =  "/myprofile/setting/updateProfileImg";
+          const formData = new FormData();
+
+          formData.append('img', inputFile.files[0] );
+
+          console.log("img ", formData);
+          sendtoServer(path,"PUT", formData,[])
+          // sendtoServer([], formData, path);
+
+        /* fetch(`${window.origin}`+path, {
+            method:"PUT",
+            body :  formData
+          
+          })
+          .then(function (response) {
+            if (response.status !== 200) {
+              console.log(`Looks like there was a problem. Status code: ${response.status}`);
+              return;
+            }
+            response.json().then(function (data) {
+              //$("#avatar").attr("src","{{url_for('static', filename='/img/profiles/' ~ user.image_file )}}?" + );
+              document.getElementById('avatar').src = "{{url_for('static', filename='/img/profiles/' ~ user.image_file )}}?" + new Date().getTime() ;
+              document.getElementById('profileAvatar').src = "{{url_for('static', filename='/img/profiles/' ~ user.image_file )}}?" + new Date().getTime() ;
+            });
+
+          })
+          .catch(console.error); */
+
+        });
+      </script>
+        
+    </div>
+</div>
+<hr>
+<div class="container">
+    <b>Change Your About</b>
+    <div class="form-group">
+    <table class=" table table-borderless">
+        <thead>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </thead>
+        <tbody>
+            <tr>
+                <td > <label class="form-label settingLabels"> Current About </label> </td>
+                <td> <div id="profileSettingsCurrBio">{{ user.bio }}</div> </td>
+            </tr>
+            <tr>
+                <td> <label class="form-label settingLabels">New About</label> </td>
+                <td> 
+                  <div class="mb-3">
+                    <textarea class="form-control" id="profileSettingsNewBio" rows="3"></textarea>
+                  </div>
+                </td>
+            </tr>
+            <tr>
+                <td> <button class="btn btn-primary"  onclick="updateProfileSettingsBio();" member_id= "profileSettingsNewBio "> Upload </button> </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+<hr>
+<div class="container">
+    <b>Change Your Username</b>
+    <table class=" table table-borderless">
+        <thead>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </thead>
+        <tbody>
+            <tr>
+                <td> <label class="form-label  settingLabels">Current Username </label> </td>
+                <td> <div id="profileSettingsCurrUsername">{{ user.username }}</div> </td>
+            </tr>
+            <tr>
+                <td> <label class="form-label settingLabels">New Username</label> </td>
+                <td>
+                  <div class="mb-3">
+                    <input type="text" class="form-control" id="profileSettingsNewUsername">
+                  </div>
+                </td>
+            </tr>
+            <tr>
+                <td> <button class="btn btn-primary" onclick ="updateProfileSettingsUsername();">Upload </button> </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<hr>
+<div class="container">
+    <b>Change Your Email Address</b>
+    <form>
+
+    </form>
+
+
+    <table class=" table table-borderless">
+        <thead>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </thead>
+        <tbody>
+            <tr>
+                <td> <label class="form-label  settingLabels"> Current Email </label> </td>
+                <td> <div id="profileSettingsCurrEmail">{{ user.email }}</div> </td>
+            </tr>
+            <tr>
+              <td> <label class="form-label settingLabels">New Email</label> </td>
+              <td> <input type="email" class="form-control" id="profileSettingsNewEmail" aria-describedby="emailHelp"></td>
+          </tr>
+            <tr>
+              <td> <label class="form-label  settingLabels"> Current Password </label> </td>
+              <td> <input type="password" class="form-control" id="profileSettingsEmailPassword"> </td>
+            </tr>
+            <tr>
+                <td> <button type="submit" class="btn btn-primary" onclick ="updateProfileSettingsEmail();">Upload </button> </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<hr>
+<div class="container">
+    <b>Change Your Password</b>
+    <table class=" table table-borderless">
+        <thead>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </thead>
+        <tbody>
+            <tr>
+              <td> <label class="form-label  settingLabels"> Current Password </label> </td>
+              <td> <input type="password" class="form-control" id="profileSettingsCurrPassword" required> </td>
+            </tr>
+            <tr>
+              <td> <label class="form-label  settingLabels"> New Password </label> </td>
+              <td> <input type="password" class="form-control" id="profileSettingsNewPassword" required> </td>
+            </tr>
+            <tr>
+              <td> <label class="form-label  settingLabels"> Comfirm  Password </label> </td>
+              <td> <input type="password" class="form-control" id="profileSettingsComfPassword" required>  </td>
+            </tr>
+            <tr>
+                <td> <button type="submit" class="btn btn-primary"  onclick ="updateProfileSettingsPassword();">Upload </button> </td>
+            </tr>
+        </tbody>
+      </table>
+</div>
+{%- endmacro %}
+
 

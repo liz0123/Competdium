@@ -4,10 +4,14 @@ from flask import current_app as app
 from flask_login import login_required, current_user
 from flask_mail import Message
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
 from .forms import PostForm, PetForm, SearchPetForm, UserForm
 from .models import db, User, Post, Pet
 from .functions import *
 from . import mail
+
+
+from flask_login import login_user, logout_user, login_required
 
 #app.permanent_session_lifetime = timedelta(hours=1)
 @app.route("/", methods=["POST","GET"])
@@ -88,6 +92,99 @@ def my_profile():
 
 	return render_template("user/profile.html", user=user, posts=posts, pets=pets,form=form)
 
+@app.route("/myprofile/pets/edit=<petName>_<petID>", methods=["POST","GET"])
+@login_required
+def editPet(petName, petID):
+	pet = Pet.query.filter_by(user_id=current_user.get_id(), id=petID).first()
+	if not pet:
+		flash("Pet not found")
+		return redirect(url_for("my_profile"))
+
+	return render_template("pet/edit_pet.html", pet=pet)
+
+# -- profile/setting
+@app.route("/myprofile/setting/updateBio", methods=["POST"])
+@login_required
+def updateBio():
+	req = request.form.get('bio')
+	user = User.query.filter_by(id=current_user.get_id()).first()
+	user.bio = req
+	db.session.commit()
+	
+	return make_response(jsonify({"update": "SAVED: About has been saved!","value":user.bio}), 200)
+
+@app.route("/myprofile/setting/updateUsername", methods=["POST","GET"])
+@login_required
+def updateUsername():
+	req = request.form.get('username')
+	userWithname = User.query.filter_by(username=req).first()
+
+	if userWithname:
+		return make_response(jsonify( {"error": "USERNAME ALREADY IN USE!" } ), 200)
+
+	user = User.query.filter_by(id=current_user.get_id()).first()
+	user.username = req
+	db.session.commit()
+	res = make_response(jsonify({"update": "SAVED! Username has neen saved!", "value":user.username }), 200)
+	
+	return res
+
+@app.route("/myprofile/setting/updateEmail", methods=["POST"])
+@login_required
+def updateEmail():
+	email = request.form.get("email")
+	password = request.form.get("password")
+	userWithEmail = User.query.filter_by(email=email).first()
+
+	if userWithEmail:
+		return make_response(jsonify({ "error": "EMAIL ALREADY IN USE!" }), 200)
+
+	user = User.query.filter_by(id=current_user.get_id()).first()
+
+	if not (check_password_hash(user.password, password)):
+		return make_response(jsonify({"error": "INVAILED PASSWORD" }),200)
+	user.email = email
+	db.session.commit()
+	
+	return make_response(jsonify({"update": "SAVED! Email has been saved!","value":user.email}),200)
+
+@app.route("/myprofile/setting/updatePassword", methods=["POST"])
+@login_required
+def updatePassword():
+	curPass = request.form.get("curPass")
+	newPass = request.form.get("newPass")
+
+	user = User.query.filter_by(id=current_user.get_id()).first()
+
+	if not(check_password_hash(user.password, curPass)):
+		return make_response(jsonify({"error": "INVAILED PASSWORD" }),200)
+
+	user.password = generate_password_hash(newPass, method='sha256') 
+	db.session.commit()
+
+	return make_response(jsonify({"update":"SAVED! Password has been saved!" }), 200)
+
+@app.route("/myprofile/setting/updateProfileImg", methods=["PUT"])
+@login_required
+def updateProfileImage():
+	req = request.files['img']
+
+	user = User.query.filter_by(id=current_user.get_id()).first()
+	org_img = user.image_file
+
+	if "default" in org_img:
+		org_img = generateFileName([current_user.get_id()], "profile")
+		user.image_file = org_img
+		db.session.commit()
+	
+	img_path = os.path.join(app.config["PROFILE_UPLOADS"], org_img)
+	req.save(img_path)
+	
+	resizeImage(fromURL=img_path, toURL= img_path, size=(150,150))
+
+
+	return make_response(jsonify({"update":"SAVED! Image was saved!","img":img_path}), 200)
+
 
 @app.route("/myprofile/delete:<UPLOAD>_<ID>")
 @login_required
@@ -125,23 +222,42 @@ def searchPets():
 	form = PetForm()
 	searchForm = SearchPetForm()
 	if form.validate_on_submit():
-		path = form.img.data.save(os.path.join(app.config['PET_UPLOADS'], form.img.data.filename))
 		birth = datetime(int(form.year.data), int(form.month.data),1)
-		
-		pet = Pet(petType="OTHER", user_id=current_user.get_id(), status="ADOPTION", gender=form.gender.data, name=form.name.data,birth =birth, description=form.description.data, original_image=form.img.data.filename, weight=form.weight.data)
+		# Create pet object in Database
+		pet = Pet(
+			petType = "OTHER", 
+			user_id = current_user.get_id(), 
+			status = "ADOPTION", 
+			gender = form.gender.data, 
+			name = form.name.data,
+			birth = birth, 
+			description = form.description.data, 
+			original_image ="default.jpg", 
+			weight = form.weight.data
+			)
 		db.session.add(pet)
 		db.session.commit()
 
-		#update pet info
-		img_names = formateImage(current_user.get_id(), pet, 200, uploads="PET_UPLOADS")
-		pet.petType = img_names[2]
-		pet.original_image = img_names[0]
-		pet.thumbnail = img_names[1]
+		# Update pet info
+		original, thumbnail = saveImage(pet_id=pet.id, user_id=pet.user_id, form_img=form.img, saveToFolder=app.config['PET_UPLOADS'], size=(400,500) )
+		pet.original_image = original
+		pet.thumbnail = thumbnail
 		db.session.commit()
+
 		return redirect(url_for("searchPets"))
 
 	pets = Pet.query.order_by(Pet.id.desc()).all()
-	return render_template("public/searchPets.html", pets=pets, form=form, searchForm=searchForm)
+	return render_template("public/searchPets.html", pets=pets, form=form, searchForm=searchForm )
+
+@app.route("/searchPets/search", methods=["POST"])
+def search():
+	petType = request.form.get("type")
+	petSize = request.form.get("size")
+	petAge = request.form.get("age")
+	distance = request.form.get("distance")
+	pets = Pets.query.order_by( type=petType, size=petSize, age=petAge ).first()
+
+	
 
 @app.route("/searchPets/info_petID=<petID>")
 def showPet(petID):

@@ -1,61 +1,103 @@
 {% extends "index_template.html" %}
 
 {% import "macros/input_macros.html" as im %}
-
+{% import "macros/temp_pet.html" as pt %}
 {% block title%} Search Pets {% endblock%}
 
 {% block main %}
-<div class="container">
-    <div class="row">
-        <div class="col">
-            {{ im.searchPetForm(searchForm) }}
+<div id="searchPetsPage">
+    <h1> Search Pets </h1>
+
+<br>
+<div class="row ">
+    <div class="col-3">
+        <div class="container" id="searchForm">
+            <form id="searchPet">
+            {{ pt.searchPetForm() }}
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary float-right"> Search</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#postModal">Add Pet</button>
+            </div>
+        </form>
         </div>
     </div>
-    <br>
-</div>
-
-
-<div class = "container" id="searchpets_page">
-    <div class="row">
-            <div class="container scroll">
-            <div class="row row-cols-1 row-cols-md-3">
-                {% for pet in pets %}
-                <div class="col mb-4">
-                 {{ im.petCard(pet) }}
-                </div>	
-                {% endfor %}
+    <div class="col">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+            {% for pet in pets %}
+            <div class="col mb-4 lg-6">
+                <div class="pet-card card-body" id="module" >
+                    {{ im.petCard(pet) }}
+                    <a href="#" class="like">
+                        <i class="fa fa-heart" aria-hidden="true"></i>
+                    </a>
                 </div>
-            </div>
+            </div>	
+            {% endfor %}
         </div>
+        
 
         {% if current_user.is_authenticated %}
             <!-- Button trigger modal -->
-            <button type="button" id="addPet" class="w3-button w3-xlarge w3-circle w3-teal" data-toggle="modal" data-target="#postModal">+</button>
-            <div id="postModal" class="modal fade">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <form action="{{ url_for('searchPets') }}" method="POST" enctype="multipart/form-data">
-                            {{ form.csrf_token }}
-                            <div class="modal-header">
-                                <h5 class="modal-title"> Pet </h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                {{ im.petForm(form)}}
-                            </div>
-                            
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                        </form>
-                    </div>
+        <button type="button" id="addPet" class="w3-button w3-xlarge w3-circle w3-teal" data-toggle="modal" data-target="#postModal">+</button>
+        <div id="postModal" class="modal fade">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form action="{{ url_for('searchPets') }}" method="POST" enctype="multipart/form-data">
+                        {{ form.csrf_token }}
+                        <div class="modal-header">
+                            <h5 class="modal-title"> Pet </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            {{ im.petForm(form)}}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
+
+        {% else %}
         {% endif %}
     </div>
 </div>
+</div>
+
+{% endblock %}
+{% block script %}
+<script>
+    const searchPet = document.getElementById("searchPet");
+
+    searchPet.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const type = document.getElementById("type");
+      const size = document.getElementById("size");
+      const age = document.getElementById("age");
+      const distance = document.getElementById("distance");
+
+      const path ="searchPets/search";
+      const formData = new FormData();
+
+      formData.append('type', type.value);
+      formData.append('size', size.value);
+      formData.append('age', age.value);
+      formData.append('distance', distance.value);
+
+
+
+      sendtoServer(path,"POST", formData, []);
+      
+    
+    
+      
+    });
+</script>
+
 
 {% endblock %}

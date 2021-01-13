@@ -1,6 +1,6 @@
 
 body{
-	background-color: whitesmoke
+  background-color: white;
 }
 
 .header {
@@ -11,26 +11,31 @@ body{
 }
 
 /* Increase the font size of the heading */
-.header h1 {
-  font-size: 40px;
+
+.btn-primary,.btn-primary:active, .btn-primary:visited {
+  background-color: #1abc9c !important;
+  border: #1abc9c;
 }
+.btn-primary:hover{
+  background-color: #24a38a !important;
+
+}
+.table {
+  width: 70%;
+}
+
 /* Post container */
-.col-6 {
-  background-color: white;
-}
+
 .signup_page{
   padding-bottom: 300px;
 }
 
 .scroll{
-  height:90%; 
+  height: 1000px; 
   overflow:hidden; 
   overflow-y:scroll;
 }
-::-webkit-scrollbar {
-  width: 0px;
-  background: transparent; /* make scrollbar transparent */
-}
+
 
 /* 
 --- HOME Page --------------
@@ -39,32 +44,64 @@ body{
   position: fixed;
   bottom: 10px;
   right: 23%;
-
  }
 
  /* 
 --- SEARCH PET Page --------------
  */
+ #searchPetsPage{
+   padding-left: 5%;
+   padding-right: 10%;
+ }
  #addPet{
    position: fixed;
    bottom:10px;
    right:5%;
  }
 
- .btn-like{
-   background-color: #ffffff;
+ #searchForm{
+  border-radius: 10px;
+   background-color: whitesmoke;
+   border: thick solid whitesmoke;
+   padding: 5% 5% 5% 5%;
  }
 
+ .like{
+  color: #00000030;
+  z-index:1;
+  position: absolute;
+  top: -0.2em;
+  right: 0.5em;
+  font-size: 3.2em;
+}
+.heart i.fa-heart{
+  color: red;
+  
+}
+.heart i.fa-heart:hover,
+i.fa-heart:hover{
+  color:#f44336;
+}
+
+ /* 
+ --- Sign Up Page ---
+ */
+ .signUp{
+  top: 20%;
+  border-radius: 15px;
+  background-color: whitesmoke;
+  padding: 10px 20px 20px 20px;
+ }
 
 /* 
 ---- LOGIN Page --------------
  */
 .login{
   top: 30%;
-  border-radius: 25px;
-  background-color: white;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  border-radius: 15px;
+  background-color: whitesmoke;
+  padding: 10px 15px 10px 15px;
+
 }
 .underline{
   text-decoration: underline;
@@ -77,12 +114,12 @@ body{
 
 /* visited link */
 .underline:visited {
-  color:rgb(72, 72, 253);
+  color: rgb(0, 140, 255);
 }
 
 /* mouse over link */
 .underline:hover {
-  color:rgb(43, 233, 43);
+  color:#1abc9c;
 }
 
 /* selected link */
@@ -93,12 +130,167 @@ body{
 /* 
 ----PROFILE Page --------------
  */
-
-.btn-delete{
+.btn-edit{
+  z-index:1;
   position: absolute;
   top: 10px;
   right: 25px;
 }
-.user-pet{
+.pet-card{
+  background-color: whitesmoke;
+  border-radius: 10px;
+}
+
+#v-pills-posts{
+  background-color:whitesmoke;
+}
+#v-pills-pets{
+  background-color:whites;
+
+}
+#v-pills-settings{
   background-color: white;
+}
+#userInfo{
+  padding-top: 25px;
+}
+#v-pills-tab{
+  background-color: whitesmoke;
+}
+
+#v-pills-pets-tab:visited,
+#v-pills-posts-tab:visited, 
+#v-pills-favorites-tab:visited,
+#v-pills-messages-tab:visited,
+#v-pills-settings-tab:visited {
+  background-color: #1abc9c !important ;
+}
+.profileTitleBtn:visited{
+  background-color: #1abc9c !important ;
+}
+.profileTitle{
+  font-weight: 700;
+}
+.settingLabels{
+  color: gray;
+}
+#profileUsername{
+  font-weight: bold;
+}
+
+/*
+ ---------- Message ------
+*/
+
+#chat-container{
+  display: grid;
+  grid:
+    'search-container chat-title' 10% 
+    'conversation-list chat-message-list' 80% 
+    'new-message-container chat-form' auto 
+    / auto 75%; 
+  width: 100%;
+  height: 95vh;
+  background: whitesmoke;
+  border-radius: 10px;
+}
+
+#search-container, 
+#conversation-list, 
+#new-message-container{
+  background-color: #1abc9c;
+}
+#search-container{
+  display: grid;
+  align-items: center;
+  padding: 0 15px;
+  grid-area: search-container;
+  border-radius: 10px, 0 0 0;
+  box-shadow: 0 1px 3px -1px rgba(0,0,0,0.75);
+  z-index: 1;
+}
+
+#conversation-list{
+  grid-area: conversation-list;
+  overflow-y: scroll;
+}
+.conversation{
+  display: grid;
+  grid-template-columns: 40px 1fr max-content;
+  padding: 10px;
+  color: #ddd;
+  font-size: 1.3rem;
+  border-bottom: 1px solid #008369;
+}
+.conversation:active,
+.conversation:hover{
+  background: #008369;
+}
+.conversation:hover{
+  cursor: pointer;
+}
+.conversation > img{
+  grid-row: span 2;
+  height: 40px;
+  border-radius: 100%;
+}
+.title-text{
+  font-weight: bold;
+  color: #eee;
+  padding-left: 5px;
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+.created-date{
+  color: #ddd;
+  font-size: 1rem;
+}
+.conversation-message{
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+#new-message-container{
+  grid-area: new-message-container;
+  border-top: 1px solid rgba(0,0,0,0.25);
+  border-radius: 0 0 0 10px;
+}
+
+#chat-title,
+#chat-form{
+  background: #eee;
+}
+
+#chat-title{
+  grid-area: chat-title;
+  color: #1abc9c;
+  font-weight: bold;
+  font-size: 2rem;
+  border-radius: 0 10px 0 0;
+  box-shadow: 0 1px 3px -1px rgba(0,0,0,0.75);
+}
+
+#chat-message-list{
+  grid-area:chat-message-list;
+}
+
+#chat-form{
+  display: grid;
+  align-items: center;
+  grid-area: chat-form;
+  padding-left: 10px;
+  padding-right: 30px;
+  border-radius: 0 0 10px 0;
+  border-top: 1px solid rgba(0,0,0,0.25); 
+}
+
+input[type=text]:focus{
+  outline: none;
+  box-shadow: 0 0 0 1px gray;
+  border: none;
+}
+::-webkit-scrollbar {
+  display: none;
 }
