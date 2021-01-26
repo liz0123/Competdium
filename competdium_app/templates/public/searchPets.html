@@ -16,7 +16,7 @@
             {{ pt.searchPetForm() }}
             <div class="form-group">
                 <button type="submit" class="btn btn-primary float-right"> Search</button>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#postModal">Add Pet</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#petModal">Add Pet</button>
             </div>
         </form>
         </div>
@@ -37,30 +37,7 @@
         
 
         {% if current_user.is_authenticated %}
-            <!-- Button trigger modal -->
-        <button type="button" id="addPet" class="w3-button w3-xlarge w3-circle w3-teal" data-toggle="modal" data-target="#postModal">+</button>
-        <div id="postModal" class="modal fade">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <form action="{{ url_for('searchPets') }}" method="POST" enctype="multipart/form-data">
-                        {{ form.csrf_token }}
-                        <div class="modal-header">
-                            <h5 class="modal-title"> Pet </h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            {{ im.petForm(form)}}
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+         {{pt.addPet()}}
 
         {% else %}
         {% endif %}

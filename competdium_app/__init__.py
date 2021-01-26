@@ -1,6 +1,7 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+
 from flask_login import LoginManager
 from flask_mail import Mail
 
@@ -33,7 +34,11 @@ def create_app():
 	with app.app_context():
 		# Include Routes
 		from . import routes
-		from . import auth
+		from . import routes_auth
+		from . import routes_feed
+		from . import routes_pet
+		from . import routes_user
+		from . import routes_view
 		from .models import User
 		
 		@login_manager.user_loader
@@ -41,5 +46,4 @@ def create_app():
 			return User.query.get(int(user_id))
 		
 		db.create_all()
-
 		return app 

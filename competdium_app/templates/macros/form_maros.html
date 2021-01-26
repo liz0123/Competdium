@@ -27,12 +27,18 @@
 
 {% macro fileInput(id="", name="" ) -%}
 <div class="row mb-3">
-    <img src="{{url_for('static', filename= '' ~ name )}}" alt="..." class="rounded-circle"  id="avatar" >
+    <img src="{{url_for('static',filename= 'databases/img/profiles/'~name) }}" alt="..." class="rounded-circle"  id="avatar" >
     <div class="col-sm-5" >
         <input type="file" id="{{ id }}" accept=".jpg, .jpeg, .png" required>
     </div>
 </div>
 {%- endmacro%}
+
+{% macro login() -%}
+
+{%- endmacro %}
+
+
 
 
 

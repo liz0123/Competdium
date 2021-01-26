@@ -100,27 +100,6 @@
 
           console.log("img ", formData);
           sendtoServer(path,"PUT", formData,[])
-          // sendtoServer([], formData, path);
-
-        /* fetch(`${window.origin}`+path, {
-            method:"PUT",
-            body :  formData
-          
-          })
-          .then(function (response) {
-            if (response.status !== 200) {
-              console.log(`Looks like there was a problem. Status code: ${response.status}`);
-              return;
-            }
-            response.json().then(function (data) {
-              //$("#avatar").attr("src","{{url_for('static', filename='/img/profiles/' ~ user.image_file )}}?" + );
-              document.getElementById('avatar').src = "{{url_for('static', filename='/img/profiles/' ~ user.image_file )}}?" + new Date().getTime() ;
-              document.getElementById('profileAvatar').src = "{{url_for('static', filename='/img/profiles/' ~ user.image_file )}}?" + new Date().getTime() ;
-            });
-
-          })
-          .catch(console.error); */
-
         });
       </script>
         

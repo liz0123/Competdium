@@ -32,7 +32,7 @@
 		<h5  class="card-title font-weight-bold"> {{ post.title }} </h5> 
 		<p class="card-text">{{ post.content }}</p>
 		{% if post.original_image != "default.jpg" %}
-		<img src="{{ url_for('static', filename='img/posts/'~ post.thumbnail) }}" class="rounded mx-auto d-block" alt="..."></img>
+		<img src="{{url_for('static',filename= 'databases/img/posts/'~post.thumbnail) }}" class="rounded mx-auto d-block" alt="..."></img>
 		{% endif %}
 		<p class="card-text"></p><small class="text-muted">Uploaded: {{ post.date_created }}</small></p>
 	</div>
@@ -41,7 +41,7 @@
 
 {% macro petCard(pet) -%}
 	<div class="card">
-		<img src="{{url_for('static',filename= 'img/pets/'~ pet.thumbnail) }}" class="card-img-top" alt="...">
+		<img src="{{url_for('static',filename= 'databases/img/pets/'~pet.thumbnail) }}" class="card-img-top" alt="...">
 		<div class="card-body">
 			<h5 class="card-title"> {{ pet.name }} </h5>
 			<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
@@ -121,3 +121,5 @@
 	</div>
 </div>
 {%- endmacro %}
+
+

@@ -1,6 +1,7 @@
 {% extends "index_template.html" %}
 
 {% import "macros/temp_pet.html" as pt %}
+{% import "macros/message_macro.html" as msg %}
 
 {% block title%} Feed {% endblock%}
 
@@ -13,6 +14,7 @@
     </div>
     <div class="col-5">
       {{pt.viewPet(pet, owner)}}
+      {{ msg.messageFromPetPage("Message") }}
     </div>
   </div>
   <div class="row">
@@ -24,4 +26,16 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+  $("#petPageMessageBtn").on("click", function(){
+    let message = $("#petPageMessage").val();
+    let reciever = `{{ owner }}`;
+    $.post("/isPetPal",{"reciever": reciever});
+  })
+
+</script>
+
 {% endblock %}

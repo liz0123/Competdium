@@ -3,8 +3,8 @@ from flask import current_app as app
 from PIL import Image
 import os
 import cv2 as cv
-import numpy as np
 from datetime import datetime, timedelta
+PROFILE_SIZE = (200,200)
 
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
 
@@ -29,7 +29,7 @@ def generateThumbName(filename):
     thmbnail = filename.replace("original","thumbnail")
     return thmbnail
 
-def resizeImage (fromURL, toURL, size):
+def resizeImage(fromURL, toURL, size):
     img = cv.imread(fromURL, cv.IMREAD_UNCHANGED )
     height, width, channels = img.shape
 
@@ -116,10 +116,52 @@ def saveThumbnail(user, filename, maxsize, uploads):
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+DAY = 1
+MONTH=30
+TWO_MONTH = 60
+YEAR_DAYS = 365
+TWO_YEARS_DAYS = 730
+MINUTE_IN_SECONDS = 60
+TWO_MINUTE_IN_SECONDS = 120
+HOUR_IN_SECONDS = 3600
+TWO_HOUR_IN_SECONDS = 7200
+DAY_IN_SECONDS = 86400
 
 
+def convertTime(dt):
+    time_dif =  datetime.utcnow()-dt
 
+    if time_dif.days <0:
+        return("Time created is in the futuer.")
 
-
+    if time_dif.days > 0:
+        if time_dif.days < MONTH:
+            if time_dif.days == DAY:
+                return("1 day ago")
+            else:
+                return("%s days ago" % (time_dif.days))
+        elif time_dif.days < YEAR_DAYS:
+            if time_dif.days < TWO_MONTH:
+                return("1 month ago")
+            else:
+                return("%s months ago" %(int(time_dif.days/MONTH)) )
+        else:
+            if time_dif.days < TWO_YEARS_DAYS:
+                return("1 year ago")
+            else:
+               return("%s/%s/%s" %(dt.month, dt.day, dt.year))
+    else:
+        if time_dif.seconds < MINUTE_IN_SECONDS:
+            return("Now")
+        elif time_dif.seconds < HOUR_IN_SECONDS:
+            if time_dif.seconds < TWO_MINUTE_IN_SECONDS:
+                return("1 min ago")
+            else:
+                return("%s mins ago" %(int(time_dif.seconds/MINUTE_IN_SECONDS)))
+        elif time_dif.seconds < DAY_IN_SECONDS:
+            if time_dif.seconds < TWO_HOUR_IN_SECONDS:
+                return("1 hour ago")
+            else:
+                return("%s hours ago" %(int(time_dif.seconds/HOUR_IN_SECONDS)))
 
 

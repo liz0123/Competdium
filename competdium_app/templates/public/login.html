@@ -5,27 +5,31 @@
 {% block main %} 
 <div class ="login_page">
 	<div class ="row">
-		<div class ="col">
-		</div>
-		<div class="col-8">
-			<div class="container login col-5">
-				<h2> Login </h2>
-				<form action="{{ url_for('login') }}" method="POST" enctype="multipart/form-data">
-					{{ form.csrf_token }}
-					<div class="form-group"> {{ form.username.label }} {{ form.username(class ="form-control")}} </div>
 
-					<div class="form-group"> {{ form.password.label }} {{ form.password(class ="form-control") }}</div>
-					<div class="form-group"> {{ form.remember() }} {{ form.remember.label}}</div>
+		<div class="col">
+			<div class="container login col-3">
+				<h2> Login </h2>
+				<form id="login" action="{{ url_for('login')}}" method="POST" enctype="multipart/form-data">
+					<div class="form-group">
+					  <label for="exampleInputEmail1" class="form-label">Username or Email address </label>
+					  <input type="text" class="form-control" name="email" aria-describedby="emailHelp">
+					</div>
+					<div class="form-group">
+					  <label for="exampleInputPassword1" class="form-label">Password</label>
+					  <input type="password" class="form-control" name="password">
+					</div>
+					<div class="form-group form-check">
+					  <input type="checkbox" class="form-check-input" name="remember">
+					  <label class="form-check-label" for="exampleCheck1">Remember Me</label>
+					</div>
+
 					<div class="form-group"> 
 						<a class="nav-link underline" href="#forgotPassword" style="float: right;">Forgot Password</a> 
-						<a class="nav-link underline" href="/register" style="float: right;">Sign Up</a> 
-						<button type="submit" class="btn btn-primary">Login</button>
+						<a class="nav-link underline" href="/register" style="float: right;">Register</a> 
+						<button type="submit" class="btn btn-primary"> Login </button>
 					</div>
-				</form>
+				  </form>			
 			</div>
-		</div>
-
-		<div class ="col">
 		</div>
 
 	</div>

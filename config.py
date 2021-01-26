@@ -31,18 +31,20 @@ class ProductionConfig(Config):
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    #POST_UPLOADS = "./competdium_app/static/img/posts/"
+    #PET_UPLOADS = "./competdium_app/static/img/pets/"
+    #PROFILE_UPLOADS = "./competdium_app/static/img/profiles/"
+    #PROFILE_IMAGES_UPLOADS = "/static/img/users/"
 
-    DB_NAME = "development-db"
-
-    POST_UPLOADS = "./competdium_app/static/img/posts/"
-    PET_UPLOADS = "./competdium_app/static/img/pets/"
-    PROFILE_UPLOADS = "./competdium_app/static/img/profiles/"
-    PROFILE_IMAGES_UPLOADS = "/static/img/users/"
+    POST_UPLOADS = "./competdium_app/static/databases/img/posts/"
+    PET_UPLOADS = "./competdium_app/static/databases/img/pets/"
+    PROFILE_UPLOADS = "./competdium_app/static/databases/img/profiles/"
+    #PROFILE_IMAGES_UPLOADS = "/static/img/users/"
 
     SESSION_COOKIE_SECURE = False
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI ="sqlite:///./db.sqlite3"
+    SQLALCHEMY_DATABASE_URI ="sqlite:///./static/databases/db.sqlite3"
     SQLALCHEMY_ECHO = False
 
 
