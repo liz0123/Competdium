@@ -1,0 +1,67 @@
+{% macro render_field( field ) %}
+<div class="form-group">
+    <label class="form-label"> {{ field.label }} </label>
+    <dd>{{ field( class="form-control")|safe }}
+        {% if field.errors %}
+        <ul class=errors>
+            {% for error in field.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </dd>
+</div>
+{% endmacro %}
+
+{% macro render_field1( field, class ) %}
+<div class="row mb-3">
+    <label class="col-sm-3 col-form-label"> {{ field.label }} </label>
+    <div class="col-sm-9">
+        <dd>{{ field( class=class)|safe }}
+            {% if field.errors %}
+            <ul class=errors>
+                {% for error in field.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </dd>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro render_field2( label, fields ) %}
+<div class="row mb-3">
+    <label class="col-sm-3 col-form-label"> {{ label }} </label>
+    {% for field in fields %}
+        <div class="col-sm-4">
+            <dd>{{ field( class="form-control")|safe }}
+                <ul class=errors>
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </dd>
+        </div>
+    {% endfor %}
+</div>
+{% endmacro %}
+
+{% macro render_field3( label,fields ) %}
+<div class="row g-3">
+    <label class="col-sm-3 col-form-label"> {{ label }} </label>
+    {% for field in fields %}
+        <div class="col-sm-3">
+            <dd>{{ field( class="form-control", placeholder=field.label.name)|safe }}
+                {% if field.errors %}
+                <ul class=errors>
+                    {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </dd>
+        </div>
+    {% endfor %}
+</div>
+{% endmacro %}

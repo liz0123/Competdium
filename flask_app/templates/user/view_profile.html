@@ -1,0 +1,76 @@
+{% extends "user/profile_temp.html" %}
+{% block title %} {{user.username}} {% endblock %}
+
+
+{% block tabs%}
+  <br>
+  <h1 class="profileTitle">Posts</h1>
+  <hr>
+  
+  <!--- USER POSTS, PETS, and SETTINGS -->
+  <div class="row">
+    <div class="col-2">
+      <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+        <!-- <a class="nav-link active profileTitleBtn"  title="Posts" id="v-pills-posts-tab" data-toggle="pill" href="#v-pills-posts" role="tab" aria-controls="v-pills-posts" aria-selected="true"><i class="fa fa-edit"></i> Posts</a> -->
+        <a class="nav-link active profileTitleBtn"  title="Pets" id="v-pills-pets-tab" data-toggle="pill" href="#v-pills-pets" role="tab" aria-controls="v-pills-pets" aria-selected="false"><i class="fas fa-paw"></i> Pets</a>
+        <a class="nav-link profileTitleBtn"  title="Message" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="fas fa-comment-alt"></i> Message</a>
+
+      </div>
+    </div>
+    <div class="col">
+      <div class="tab-content" id="v-pills-tabContent">
+        <div class="tab-pane fade " id="v-pills-posts" role="tabpanel" aria-labelledby="v-pills-posts-tab"> 
+          {{ tmp.viewProfilePostCards(posts)}}
+        </div> 
+        <div class="tab-pane fade show active" id="v-pills-pets" role="tabpanel" aria-labelledby="v-pills-pets-tab"> 
+            {{ tmp.viewProfilePetCards(pets) }}
+          </div>
+        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+          <div class="container col-9">
+            <form id="sendMessageView">
+              <h3> Message: {{user.username}}</h3>
+              <div class="form-group"><textarea class="form-control" name="msg" rows="3"></textarea></div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary profileTitleBtn float-right">Sent</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  {% endblock %}
+  {% block script %}
+  <script>
+    $("#sendMessageView").submit(function(event){
+      let formData = new FormData(document.querySelector('form'));
+      formData.append("reciever", `{{ user.username }}` );
+      formData.append("sender",`{{ current_user.username }}` );
+
+      // check for message link
+      sendData("/isPetPal", {"reciever": `{{user.username}}`})
+      .then(data =>{
+        console.log(data.update);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+      // send message
+      sendForm("/sendMessage", formData)
+      .then(data => {
+        console.log(data.update);
+        alert(data.update);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+
+    });
+    
+  </script>
+
+  {% endblock %}
+
+

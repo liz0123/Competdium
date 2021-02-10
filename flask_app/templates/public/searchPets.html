@@ -1,0 +1,168 @@
+{% extends "index_template.html" %}
+
+{% from "macros/form_macro.html" import render_field %}
+{% from "macros/form_macro.html" import render_field1 %}
+{% from "macros/form_macro.html" import render_field2 %}
+{% from "macros/form_macro.html" import render_field3 %}
+
+{% import "macros/input_macros.html" as im %}
+{% import "macros/temp_pet.html" as pt %}
+{% import "macros/form_maros.html" as frm %}
+{% block title%} Search Pets {% endblock%}
+
+{% block main %}
+<div id="searchPetsPage">
+    <h1> Search Pets </h1>
+
+<br>
+<div class="row ">
+    <div class="col-3">
+        <div class="container" id="searchForm">
+            <hr>
+            <form method=post enctype="multipart/form-data">
+                <dl>
+                    {{ render_field1(searchForm.type, "form-control") }}
+                    {{ render_field1(searchForm.size,"form-control") }}
+                    {{ render_field1(searchForm.age, "form-control") }}
+                    {{ render_field1(searchForm.gender, "form-control") }}
+                    <hr>
+                </dl>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary float-right"> Search</button>
+                    {% if current_user.is_authenticated %}
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#petModal">Add Pet</button>
+                    {% else %}
+                    <button type="button" class="btn btn-primary" onclick="location.href = '/register';">Add Pet</button>
+                    {% endif %}
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+            {% for pet in pets %}
+            <div class="col mb-4 lg-6">
+                <div class="pet-card card-body" id="module" >
+                    {{ im.petCard(pet) }}
+                    {% if pet in likes %}
+                        <a href="#" class="like active" pet_id="{{ pet.id }}" > <i class="fa fa-heart" aria-hidden="true"> </i></a>
+                    {% else %}
+                        <a href="#" class="like" pet_id="{{ pet.id }}" > <i class="fa fa-heart" aria-hidden="true"> </i></a>
+                    {% endif %}
+                    <!-- <a href="#" class="like" pet_id="{{ pet.id }}" > <i class="fa fa-heart" aria-hidden="true"> </i></a> -->
+                </div>
+            </div>	
+            {% endfor %}
+        </div>
+        
+        {% if current_user.is_authenticated %}
+         <!-- Button trigger modal -->
+        <button type="button" id="addPet" class="w3-button w3-xlarge w3-circle w3-teal" data-toggle="modal" data-target="#petModal">+</button>
+        {% endif %}
+
+        <!-- Modal -->
+        <div class="modal fade" id="petModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	        <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form method=post enctype="multipart/form-data">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Add Pet</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <dl>
+                                {{ render_field(form.image) }}
+                                <hr>
+                                {{ render_field1(form.name, "form-control") }}
+                                {{ render_field2("Birthday", [form.month, form.year]) }}
+                                {{ render_field1(form.type, "form-control") }}
+                                {{ render_field1(form.gender, "form-control") }}
+                                {{ render_field1(form.size, "form-control") }}
+                                {{ render_field1(form.age, "form-control") }}
+                                <hr>
+                                {{ render_field1(form.city, "form-control") }}
+                                {{ render_field1(form.state, "form-control") }}
+                                {{ render_field1(form.zip, "form-control") }}
+                                <hr>
+                                {{ render_field(form.description) }}
+                            </dl>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                    <!-- <form id="addPetForm" action="{{ url_for('addPet')}}" method="POST" enctype="multipart/form-data">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Add Pet</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <input class="" type="file" name="image" required>
+                            </div>
+                            <div class="form-group row">
+                                {{ frm.inputForm(name="name", type="text", label="Name", size="8", placeholder="", lablesize="3") }}
+                            </div>
+                            <div class="form-group row">
+                                {{ frm.selectForm(label="Birthday (MM/YY)", name="month", data=pt.months, size="4", lablesize="3")}}
+                                <div class="col-4">
+                                    <input type="text" class="form-control" min=2000 max=2012 name="year" name="year" id ="addPetYear"placeholder="year" required >
+                                </div>
+                            </div>
+                            <span id="birthday"></span>
+
+                            <div class="form-group row">
+                                {{ frm.selectForm(label="Type", name="type", data={"dog":"Dog", "cat":"Cat","bird":"Bird", "reptile":"Reptile", "other":"Other"}, size="4", lablesize="3")}}
+                            </div>
+                            <span id="type"></span>
+
+                            <div class="form-group row">
+                                {{ frm.selectForm(label="Gender", name="gender", data={"female":"Female", "male":"Male"}, size="4", lablesize="3")}}
+                            </div>
+                            <span id="gender"></span>
+                            
+                            <div class="form-group row">
+                                {{ frm.selectForm(label="Size", name="size", data={"small":"Small", "medium":"Medium", "large":"Large"}, size="4", lablesize="3") }}
+                            </div>
+                            <span id="weigth"></span>
+                            <div class="form-group row">
+                                
+                                    <label for="inputCity" class="form-label col-1">City</label>
+                                <div class="col-md-3">
+                                    <input type="text" class="form-control" name="city" required>
+                                </div>
+                                    {{ frm.selectForm(label="State", name="state", data={"al":"AL","ak":"AK", "az":"AZ", "ar":"AR", "ca":"CA", "co":"CO", "ct":"CT", "dc":"DC", "de":"DE", "fl":"FL", "ga":"GA", "hi":"HI", "id":"ID", "il":"IL", "in":"IN", "ia":"IA", "ks":"KS", "ky":"KY", "la":"LA", "me":"ME", "md":"MD", "ma":"MA", "mi":"MI", "mn":"MN", "ms":"MS", "mo":"MO", "mt":"MT", "ne":"NE", "nv":"NV", "nh":"NH", "nj":"NJ", "nm":"NM", "ny":"NY", "nc":"NC", "nd":"ND", "oh":"OH", "ok":"OK", "or":"OR", "pa":"PA", "ri":"RI", "sc":"SC", "sd":"SD", "tn":"TN", "tx":"TX", "ut":"UT", "vt":"VT", "va":"VA", "wa":"WA", "wv":"WV", "wi":"WI", "wy":"WY"}, size="3", lablesize="1") }}
+                                <label for="inputZip" class="form-label col-1">Zip</label>
+                                <div class="col-md-3">
+                                    <input type="text" class="form-control" name="zip" required>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group ">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" name="description" rows="3"></textarea>
+                            </div>
+                            <span id="description"></span>
+                        </div>
+                    
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form> 
+                -->
+                </div>
+	        </div>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends "index_template.html" %}
+
+{% import "macros/temp_pet.html" as pt %}
+{% import "macros/message_macro.html" as msg %}
+
+{% block title%} View {{ pet.name}} {% endblock%}
+
+{% block main %}
+<br>
+<div class="container">
+  <div class="row">
+    <div class="col">
+        <img src="{{ url_for('static',filename= 'img/pets/'~ pet.original_image )}}?{{range(1,100)|random()}}" class="card-img-top" alt="petImage">
+    </div>
+    <div class="col-5">
+      {{pt.viewPet(pet, owner)}}
+
+      <div class="form-group row">
+        <label class="col-sm-3 col-form-label settingLabels">From </label>
+        <div class="col-sm-5">
+            {% if current_user.username == owner %} 
+              {% if current_user.confirmed %}
+              <a href="/myprofile" class="stretched-link" id="petOwner">{{owner}}</a>
+              {% else %} 
+              <a class="nav-link" href="{{ url_for('unconfirmed') }}"> {{owner}} </a>
+              {% endif %}
+            {% else %}
+            <a href="/profiles/user={{ owner }}" class="stretched-link" id="petOwner">{{owner}}</a>
+            {% endif %}
+        </div>
+      </div> 
+
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Message
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group row">
+      <label class="col-sm-3 col-form-label settingLabels">Description </label>
+      <div class="col-sm-12">
+          <p>{{pet.description}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Message: {{ owner }}</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+      {% if current_user.is_authenticated %}
+        {% if current_user.username == owner %}
+        <label class="form-label"> Sorry, you can't message yourself.</label>
+        {% else %}
+        <div class="form-group"> <textarea class="form-control" id="petPageMessage" rows="3"></textarea></div>
+        {% endif %}
+      {% else %}
+      <div class="form-group"> Please <a href="/register" style="color:#1abc9c">Register</a></div>
+      {% endif %}
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      {% if current_user.is_authenticated and current_user.username != owner %}
+		  <button type="button" class="btn btn-primary" id="petPageMessageBtn">Send</button>
+      {% endif %}
+		</div>
+	  </div>
+	</div>
+  </div>
+{% endblock %}
+
+{% block script %}
+<script>
+  $("#petPageMessageBtn").on("click", function(){
+    let formData = new FormData();
+    formData.append("msg",$("#petPageMessage").val() );
+    formData.append("reciever", `{{ owner }}` );
+    formData.append("sender",`{{ current_user.username }}` );
+
+    // check for message link
+    sendData("/isPetPal", {"reciever": `{{owner}}`})
+    .then(data =>{
+      console.log(data.update);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+    // send message
+    sendForm("/sendMessage", formData)
+    .then(data => {
+      console.log(data.update)
+      alert(data.update)
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+    
+    $("#exampleModal .close").click()
+  })
+
+</script>
+
+{% endblock %}

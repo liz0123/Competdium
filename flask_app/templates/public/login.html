@@ -1,0 +1,58 @@
+{% extends "index_template.html" %}
+{% from "macros/form_macro.html" import render_field %}
+
+{% block title%} Login {% endblock%}
+
+{% block main %} 
+<div class ="login_page">
+	<div class ="row">
+		<div class ="col"></div>
+
+		<div class="col-8">
+			<div class="container login col-4">
+				<h2> Login </h2>
+				<form method=post>
+					<dl>
+						{{ render_field(form.username) }}
+						{{ render_field(form.password) }}
+						<div class="form-group form-check">
+							{{ form.remember(class="form-check-input")}}
+							<label class="form-check-label" for="exampleCheck1">{{form.remember.label}}</label>
+						  </div>
+					</dl>
+					<div class="form-group"> 
+						<a class="nav-link underline" href="{{url_for('resetPassword')}}" style="float: right;">Forgot Password</a> 
+						<a class="nav-link underline" href="/register" style="float: right;">Register</a> 
+						<button type="submit" class="btn btn-primary"> Login </button>
+					</div>
+					</form>
+				<!-- <form id="login" action="{{ url_for('login')}}" method="POST" enctype="multipart/form-data">
+					<div class="form-group">
+					  <label for="exampleInputEmail1" class="form-label">Username or Email address </label>
+					  <input type="text" class="form-control" name="email" aria-describedby="emailHelp">
+					</div>
+					<div class="form-group">
+					  <label for="exampleInputPassword1" class="form-label">Password</label>
+					  <input type="password" class="form-control" name="password">
+					</div>
+					<div class="form-group form-check">
+					  <input type="checkbox" class="form-check-input" name="remember">
+					  <label class="form-check-label" for="exampleCheck1">Remember Me</label>
+					</div>
+
+					<div class="form-group"> 
+						<a class="nav-link underline" href="{{url_for('resetPassword')}}" style="float: right;">Forgot Password</a> 
+						<a class="nav-link underline" href="/register" style="float: right;">Register</a> 
+						<button type="submit" class="btn btn-primary"> Login </button>
+					</div>
+				  </form>
+				-->			
+			</div>
+		</div>
+
+		<div class ="col"></div>
+	</div>
+</div>
+
+
+{% endblock %}

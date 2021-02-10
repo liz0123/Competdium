@@ -1,0 +1,54 @@
+<!-- LChat room html and css: https://www.youtube.com/watch?v=f8el0g_rXbY -->
+{% macro chat(friends) -%}
+<div id="chat-container">
+    <div id="search-container">
+        <!-- <div class="input-group"> <input type="text" id="form1" class="form-control" placeholder="Search" /></div> -->
+    </div>
+    <div id="conversation-list">
+        {% for friend in friends %}
+            {{ conversation("", friend) }}
+        {% endfor %}
+    </div>
+    <div id="new-message-container"> 
+        <!-- <a href="#" id='add' class="w3-button w3-xlarge w3-circle w3-white float-right">+</a>-->
+    </div>
+    <div id="chat-title"> 
+        {{  title("") }}
+        <!-- <i class="fa fa-trash" id="deleteConversation"></i> --> 
+    </div>
+    <div id="chat-message-list"></div>
+    <div id="chat-form">
+        <input type="text" class="form-control" id="message_text" placeholder="Type a message">
+    </div>
+</div>
+
+{%- endmacro %}
+
+{% macro conversation(alert, data) -%}
+<div class="conversation">
+    <img src="../static/img/profiles/{{ data.image_file }}"/>
+    <div class="title-text" >{{ data.username }}</div>
+    <div class="created-date">{{ data.date }}</div>
+    <div class="conversation-message">{{ data.message }}</div>
+    <span class="conversation-alert {{alert}}" id={{data.username}}><i class='fas fa-exclamation'></i></span>
+</div>
+{%- endmacro%}
+
+{% macro title(name) -%}
+<span id=toUsername>{{ name }}</span>
+{%- endmacro%}
+
+
+{% macro message(msg) -%}
+<div class="message-row {{ msg.sender}}">
+    <div class="message-content">
+        <img src="../static/img/profiles/{{ msg.img }}"/>
+        <div class="message-text">
+            {{ msg.message }}
+        </div>
+        <div class="message-time">
+            {{ msg.date}}
+        </div>
+    </div>  
+</div>
+{%- endmacro%}

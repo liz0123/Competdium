@@ -1,6 +1,6 @@
 @echo off
 
-set "VIRTUAL_ENV=C:\Users\Work\Documents\Projects\Competdium\env"
+set "VIRTUAL_ENV=C:\Users\Work\OneDrive\Documents\Projects\Competdium\env"
 
 if defined _OLD_VIRTUAL_PROMPT (
     set "PROMPT=%_OLD_VIRTUAL_PROMPT%"

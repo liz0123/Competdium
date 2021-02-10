@@ -1,0 +1,70 @@
+{% macro settingDisplayForm(id="", label="", data="" ) -%}
+<div class="row mb-3">
+    <label class ="col-sm-3 col-form-label settingLabels">{{ label }}</label>
+    <div class="col-sm-5" >
+        <div id="{{ id }}">{{ data }}</div> 
+    </div>
+</div>
+{%- endmacro%}
+
+{% macro settingInputForm(id="", type="text", label="" ) -%}
+<div class="row mb-3">
+    <label class ="col-sm-3 col-form-label settingLabels">{{ label }}</label>
+    <div class="col-sm-5" >
+        <input type= "{{ type }}" class="form-control" id= "{{ id }}" required> 
+    </div>
+</div>
+{%- endmacro%}
+
+{% macro inputForm(name="", type="text", label="", size="",lablesize="", placeholder="") -%}
+
+    <label class ="col-{{lablesize}} col-form-label">{{ label }}</label>
+    <div class="col-{{size}}" >
+        <input type= "{{ type }}" class="form-control" name= "{{ name }}" placeholder="{{ placeholder }}" required> 
+    </div>
+
+{%- endmacro%}
+{% macro selectForm(label="", name="", data={}, size="",lablesize="" ) -%}
+
+    <label class ="col-form-label col-{{lablesize}}">{{ label }}</label>
+    <div class="col-{{size}}" >
+        <select class="custom-select form-select" aria-label="Default select example" name="{{ name }}">
+            {% for key, value in data.items() %}
+                <option value="{{ key }}"> {{value}} </option>
+            {% endfor %}
+        </select>
+    </div>
+
+{%- endmacro%}
+
+{% macro settingTextAreaForm(id="", type="text", label="" ) -%}
+    <label class ="col-col-form-label settingLabels">{{ label }}</label>
+    <div class="col-5" >
+        <textarea class="form-control" id="{{ id }}" rows="3" required></textarea>
+    </div>
+
+{%- endmacro%}
+
+{% macro settingTextAreaForm(id="", type="text", label="" ) -%}
+<div class="row mb-3">
+    <label class ="col-sm-3 col-form-label settingLabels">{{ label }}</label>
+    <div class="col-sm-5" >
+        <textarea class="form-control" id="{{ id }}" rows="3" required></textarea>
+    </div>
+</div>
+{%- endmacro%}
+
+{% macro fileInput(id="", name="" ) -%}
+<div class="row mb-3">
+    <img src="{{url_for('static',filename= '/img/profiles/'~name) }}?{{range(1,100)|random()}}" alt="..." class="rounded-circle"  id="avatar" >
+    <div class="col-sm-5" >
+        <input type="file" id="{{ id }}" accept=".jpg, .jpeg, .png" required>
+    </div>
+</div>
+{%- endmacro%}
+
+
+
+
+
+

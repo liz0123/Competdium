@@ -1,0 +1,307 @@
+{% extends "user/profile_temp.html" %}
+{% import "macros/message_macro.html" as msg %}
+
+{% block title %} MyProfile {% endblock %}
+{% block tabs%}
+  <br>
+  <h1 class="profileTitle">My Posts</h1>
+  <hr>
+  
+  <!--- USER POSTS, PETS, and SETTINGS -->
+  <div class="row">
+    <div class="col-2">
+      <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+        <!-- <a class="nav-link active profileTitleBtn"  title="My Posts" id="v-pills-posts-tab" data-toggle="pill" href="#v-pills-posts" role="tab" aria-controls="v-pills-posts" aria-selected="false"><i class="fa fa-edit"></i> Posts</a> -->
+        <a class="nav-link active profileTitleBtn"  title="My Pets" id="v-pills-pets-tab" data-toggle="pill" href="#v-pills-pets" role="tab" aria-controls="v-pills-pets" aria-selected="true"><i class="fas fa-paw"></i> Pets</a>
+        <a class="nav-link profileTitleBtn"  title="My Favorites" id="v-pills-favorites-tab" data-toggle="pill" href="#v-pills-favorites" role="tab" aria-controls="v-pills-favorites" aria-selected="true"><i class="fas fa-heart"></i> Favorites</a>
+        <a class="nav-link profileTitleBtn"  title="My Messages" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="true"><i class="fas fa-comment-alt"></i> Messages</a>
+        <a class="nav-link profileTitleBtn" title="My Settings" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="true"> <i class="fa fa-user"></i> Settings</a>
+        
+      </div>
+    </div>
+    <div class="col size">
+      <div class="tab-content" id="v-pills-tabContent">
+        <div class="tab-pane fade " id="v-pills-posts" role="tabpanel" aria-labelledby="v-pills-posts-tab">
+          <div class="container">
+          <br> {{tmp.myprofilePostCards(posts)}} </div>
+        </div> 
+        <div class="tab-pane fade show active" id="v-pills-pets" role="tabpanel" aria-labelledby="v-pills-pets-tab">
+          <div class="container">
+            <br> {{tmp.myprofilePetCards(pets)}} 
+          </div> 
+        </div>
+        <div class="tab-pane fade" id="v-pills-favorites" role="tabpanel" aria-labelledby="v-pills-favorites-tab">
+          {{ tmp. viewProfileLikedPet(liked) }}
+        </div>
+        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+          {{ msg.chat(friends) }}
+        </div>
+        <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" >
+
+          <form  id="uploadProfileImage">
+            {{ frm.fileInput("profileSettingsNewImg",user.original_image ) }}
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </form>
+
+          <hr>
+          <form id="uploadProfileBio">
+            {{ frm.settingDisplayForm("profileSettingsCurrBio", "Current About", user.bio )}}
+            {{ frm.settingTextAreaForm("profileSettingsNewBio", "text", "New About") }}
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </form>
+          
+          <hr>
+          <form id="uploadProfileUsername">
+            {{ frm.settingDisplayForm("profileSettingsCurrUsername", "Current Username", user.username )}}
+            {{ frm.settingInputForm("profileSettingsNewUsername", "text", "New Username") }}
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </form>
+
+          <hr>
+          <form id="uploadProfileEmail">
+            {{ frm.settingDisplayForm("profileSettingsCurrEmail", "Current Email", user.email )}}
+            {{ frm.settingInputForm("profileSettingsNewEmail", "text", "New Email") }}
+            {{ frm.settingInputForm("profileSettingsEmailPassword", "password", "Current Password") }}
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </form>
+
+          <hr>
+          <form id="uploadProfilePassword">
+            {{ frm.settingInputForm("profileSettingsCurrPassword", "password", "Current Password") }}
+            {{ frm.settingInputForm("profileSettingsNewPassword", "password", "New Password") }}
+            {{ frm.settingInputForm("profileSettingsConPassword", "password", "Confirm  Password") }}
+              <div class="col-md-3 offset-md-3">
+                <span id="conMsg"></span>
+              </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </form>
+
+          <hr>
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">Delete Account</button>
+
+          <form id="deleteAccountForm" action="{{ url_for('deleteAccount')}}" method="POST" enctype="multipart/form-data"> 
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabel">Delete Account</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <label>Are you sure you want to delete your account? All pets and other associated items will be permanently removed.</label>
+                  </div>
+                  
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <hr>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+  {% endblock %}
+
+
+  {% block script %}
+  <script>
+    // MESSAGING
+    setInterval(function()
+    {
+      let entry = { "currUser": `{{ user.username|safe}}`, "otherUser": $(".conversation.active").find(".title-text").text() };
+      getMessagesFromServer(entry);
+    }, 35000);
+    
+    $(function() {
+    $('.conversation').bind('click', function() {
+        // remove the active class from all elements with active class
+        $('.conversation.active').removeClass('active');
+        // add active class to clicked element
+        $(this).addClass('active');
+        $(this).find(".conversation-alert").removeClass("active");
+        // load messages
+        let entry = { "currUser": `{{ user.username|safe}}`, "otherUser": $(".conversation.active").find(".title-text").text() };
+        getMessagesFromServer(entry);
+        // display messages on window
+        //send request for seen messages
+    });
+    
+    $("#message_text").on('keyup', function(event) {
+        if (event.key =="Enter" || event.keyCode === 13 ){
+            let msg = $("#message_text").val();
+            let sender = '{{ user.username|safe}}';
+           // let img = `{{ user.image_file|safe }}`;
+            sessionStorage.reciever = $(".conversation.active").find(".title-text").text();
+            $.post("/sendMessage",{"msg":msg,"sender":sender,"reciever":sessionStorage.getItem("reciever")}, function(){
+
+                ($("#message_text").val(""));
+                $(".conversation.active").find(".conversation-alert").removeClass("active");
+            });
+        }
+    });
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+    var pusher = new Pusher('c7fa9a824f00223cea96', {
+        cluster: 'us2'
+    });
+    
+    var channel = pusher.subscribe('chat-channel');
+
+    channel.bind('new-message', function(data) {
+        let sender = data.sender;
+        let reciever = data.reciever;
+        let message_template = ``;
+        sessionStorage.reciever = $(".conversation.active").find(".title-text").text();
+
+        if((sender === `{{user.username|safe}}`) && (reciever === sessionStorage.getItem("reciever"))){
+            message_template = `<div class="message-row your-message">
+                                            <div class="message-content">
+                                                <img src=''/>
+                                                <div class="message-text">
+                                                    ${data.message}
+                                                </div>
+                                                <div class="message-time">
+                                                    ${data.date}
+                                                </div>
+                                            </div>  
+                                        </div>` ;
+        }
+        else if (reciever === `{{user.username|safe}}`)
+        {
+            console.log("sender "+ sessionStorage.getItem("reciever") );
+            $("#"+sender).addClass("active");
+            if ( sender === sessionStorage.getItem("reciever") )
+            {
+                message_template = `<div class="message-row other-message">
+                                                <div class="message-content">
+                                                    <img src='../static/img/profiles/${data.img}'/>
+                                                    <div class="message-text">
+                                                        ${data.message}
+                                                    </div>
+                                                    <div class="message-time">
+                                                        ${data.date}
+                                                    </div>
+                                                </div>  
+                                            </div>` ;
+            }
+        }
+        ($("#chat-message-list").prepend(message_template));         
+        });
+  
+    });
+
+
+    // PROFILE INFO UPDATE
+    const uploadProfileImage = document.getElementById("uploadProfileImage");
+    const uploadProfileBio = document.getElementById("uploadProfileBio");
+    const uploadProfileUsername = document.getElementById("uploadProfileUsername");
+    const uploadProfileEmail = document.getElementById("uploadProfileEmail");
+    const uploadProfilePassword = document.getElementById("uploadProfilePassword");
+
+    uploadProfileImage.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const inputFile = document.getElementById("profileSettingsNewImg");
+      const path = "/myprofile/setting/updateProfileImg";
+      const formData = new FormData();
+
+      formData.append('img', inputFile.files[0] );
+      console.log("img ", formData);      
+      sendtoServer(path,"PUT", formData, []);
+
+    });
+
+    uploadProfileBio.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const input = document.getElementById("profileSettingsNewBio");
+      const path = "/myprofile/setting/updateBio";
+      const ids = ["#profileSettingsCurrBio", "#profileBio"];
+      const formData = new FormData();
+
+      formData.append('bio', input.value);     
+      sendtoServer(path,"POST", formData, ids);
+
+    });
+
+    uploadProfileUsername.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const input = document.getElementById("profileSettingsNewUsername");
+      const path ="/myprofile/setting/updateUsername";
+      const ids =["#profileSettingsCurrUsername","#profileUsername"];
+      const formData = new FormData();
+
+      formData.append('username', input.value);
+     
+      sendtoServer(path,"POST", formData, ids);
+    });
+
+    uploadProfileEmail.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const input = document.getElementById("profileSettingsNewEmail");
+      const pass = document.getElementById("profileSettingsEmailPassword");
+
+      const path ="/myprofile/setting/updateEmail";
+      const ids = ["#profileSettingsCurrEmail"];
+      const formData = new FormData();
+
+      formData.append('email', input.value);
+      formData.append('password', pass.value);
+     
+      sendtoServer(path,"POST", formData, ids);
+      pass.value = "";
+    });
+
+    
+    uploadProfilePassword.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const newPass = document.getElementById("profileSettingsNewPassword");
+      const conPass = document.getElementById("profileSettingsConPassword");
+
+      if (newPass.value == conPass.value){
+        const curPass = document.getElementById("profileSettingsCurrPassword");
+
+        const path ="/myprofile/setting/updatePassword";
+        const formData = new FormData();
+        formData.append('curPass', curPass.value);
+        formData.append('newPass', newPass.value);
+        
+        sendForm(path, formData)
+        .then(data =>{
+          alert(data.update);
+          curPass.value="";
+          newPass.value ="";
+          conPass.value ="";
+        })
+        .catch(
+          console.log("error", error)
+        );
+
+        curPass.value = "";
+        $('#conMsg').html('');
+      }else{
+        
+        $('#conMsg').html('Not Matching').css('color', 'red');
+      }
+      newPass.value = "" ;
+      conPass.value = "" ;
+    });
+
+
+  </script>
+  {% endblock %}

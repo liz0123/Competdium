@@ -2,6 +2,7 @@ class Config(object):
     DEBUG = False
     TESTING = False
     SECRET_KEY = "don't tell anyone"
+    SECURITY_PASSWORD_SALT = 'my_precious_two'
 
     DB_NAME = "production-db"
     DB_USERNAME = "admin"
@@ -15,13 +16,18 @@ class Config(object):
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI ="mysql://user:''@localhost:3306/competdium" 
-
+    
+    # mail settings
     MAIL_SERVER ='smtp.gmail.com'
     MAIL_PORT = 465
-    MAIL_USERNAME = 'valdezi1997@gmail.com'
-    MAIL_PASSWORD = "Awsedrf0192!"
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
+    # gmail authentication
+    MAIL_USERNAME = 'ComPetdium'
+    MAIL_PASSWORD = "Asdf0987!"
+
+    # main accounts
+    MAIL_DEFAULT_SENDER = 'competdium@gmail.com'
 
 
     
@@ -36,15 +42,16 @@ class DevelopmentConfig(Config):
     #PROFILE_UPLOADS = "./competdium_app/static/img/profiles/"
     #PROFILE_IMAGES_UPLOADS = "/static/img/users/"
 
-    POST_UPLOADS = "./competdium_app/static/databases/img/posts/"
-    PET_UPLOADS = "./competdium_app/static/databases/img/pets/"
-    PROFILE_UPLOADS = "./competdium_app/static/databases/img/profiles/"
+    POST_UPLOADS = "./competdium_app/static/img/posts/"
+    PET_UPLOADS = "./competdium_app/static/img/pets/"
+    #PROFILE_UPLOADS = "../static/img/profiles/"
+    PROFILE_UPLOADS = "./competdium_app/static/img/profiles/"
     #PROFILE_IMAGES_UPLOADS = "/static/img/users/"
 
     SESSION_COOKIE_SECURE = False
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI ="sqlite:///./static/databases/db.sqlite3"
+    SQLALCHEMY_DATABASE_URI ="sqlite:///./dbs/db.sqlite3"
     SQLALCHEMY_ECHO = False
 
 
