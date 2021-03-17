@@ -7,34 +7,30 @@ from .forms import RegisterForm, LoginForm
 from .models import db, User
 from .util import *
 
-def clearLogin():
-	if session["username"]:
-		session.pop("username")
-	logout_user()
 
-@app.route("/login", methods=["POST","GET"])
+
+@app.route("/login/", methods=["POST","GET"])
 def login():
 	form = LoginForm(request.form)
 	if request.method == 'POST' and form.validate():
-		email = request.form.get("username")
+		email = request.form.get("username").lower()
 		password = request.form.get("password")
-		remember = True if request.form.get("remember") else False 
+		remember = True if request.form.get("remember") else False
 		user = db.session.query(User).filter( or_(User.email==email, User.username==email )).first()
-		
+
 		if user and check_password_hash(user.password, password):
 			login_user(user, remember=remember)
-			session["username"]= user.username
 			return redirect(url_for("unconfirmed"))
-		
+
 		flash('Please check your login details and try again.')
 	return render_template("public/login.html", form=form)
 
-@app.route('/register', methods=['POST', 'GET'])
+@app.route('/register/', methods=['POST', 'GET'])
 def register():
 	form = RegisterForm(request.form)
 	if request.method == 'POST' and form.validate():
 		username = request.form.get("username")
-		email = request.form.get("email")
+		email = request.form.get("email").lower()
 		password = request.form.get("password")
 		#check database
 		db_user = db.session.query(User).filter( or_(User.email==email, User.username==username)).first()
@@ -44,15 +40,16 @@ def register():
 			new_user = User(email=email, username=username, password=generate_password_hash(password, method="sha256"))
 			db.session.add(new_user)
 			db.session.commit()
-			
+
 			#create user avatar
-			imgName= generateFileName([new_user.id], "profile")
-			resizeImage(app.config["PROFILE_UPLOADS"]+new_user.original_image, app.config["PROFILE_UPLOADS"]+imgName, PROFILE_SIZE)
-			new_user.original_image = imgName
+			imgName = generateFileName([new_user.id], "profile")
+			relocateImage(app.config["PROFILE_UPLOADS"]+new_user.image, app.config["PROFILE_UPLOADS"]+imgName)
+			#resizeImage(app.config["PROFILE_UPLOADS"]+imgName)
+			new_user.image = imgName
 			db.session.commit()
 			session["username"]= new_user.username
 			flash("Thanks for registering")
-			
+
 			# Email Confirmation
 			token = generate_confirmation_token(new_user.email)
 			confirm_url = url_for('confirm_email', token=token, _external=True)
@@ -67,7 +64,7 @@ def register():
 
 	return render_template('public/signup.html', form=form)
 
-@app.route("/reset", methods=["POST","GET"])
+@app.route("/reset/", methods=["POST","GET"])
 def resetPassword():
 	if request.method == "POST":
 		user = User.query.filter_by(email= request.form.get("email")).first()
@@ -81,7 +78,7 @@ def resetPassword():
 		subject = "Password reset requested"
 		send_email(user.email, subject, html)
 		flash('Check you email for link!', "warning")
-	
+
 	return render_template("public/reset_password.html")
 
 @app.route('/reset/<token>', methods=["GET", "POST"])
@@ -124,14 +121,14 @@ def confirm_email(token):
 @login_required
 def unconfirmed():
 	if current_user.confirmed:
-		return redirect("searchPets")
+		return redirect("feed")
 	flash('Please confirm your account!', "warning")
 	return render_template('user/unconfirmed.html')
 
 @app.route("/logout")
 @login_required
 def logout():
-	clearLogin()
+	logout_user()
 	flash("Logout successful!")
 	return redirect(url_for("searchPets"))
 
@@ -145,7 +142,6 @@ def deleteAccount():
 
 	db.session.delete(current_user)
 	db.session.commit()
-	clearLogin()
 	flash("Account was deleted")
 	return render_template("public/signup.html")
 

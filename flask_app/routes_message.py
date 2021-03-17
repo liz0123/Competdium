@@ -9,22 +9,14 @@ from .models import db, Post, Pet, User, Message
 from datetime import datetime, date
 from .util import *
 
-import pusher
 import os
 
-pusher_client = pusher.Pusher(
-  app_id='1138510',
-  key='c7fa9a824f00223cea96',
-  secret='b315fc5f8cad057f8aed',
-  cluster='us2',
-  ssl=True
-)
 # 
 # --- profile/messages ---
 #
 
 
-@app.route("/myprofile/messages")
+@app.route("/myprofile/messages/")
 @login_required
 def chat():
 	currUser = User.query.filter_by(id=current_user.get_id()).first()
@@ -58,7 +50,7 @@ def sendMessage():
 
 	sender = User.query.filter_by(username=request.form.get("sender")).first()
 	reciever  = User.query.filter_by(username=request.form.get("reciever")).first()
-	img = sender.original_image
+	img = sender.image
 	
 	message = Msg(message=msg, sender_id=sender.id, reciever_id=reciever.id)
 	db.session.add(message)

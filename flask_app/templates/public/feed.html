@@ -1,38 +1,196 @@
 {% extends "index_template.html" %}
 
-{% import "macros/input_macros.html" as im %}
-
+{% from "macros/form_macro.html" import render_field %}
+{% from "macros/form_macro.html" import render_postCard as postCard %}
+{% from "macros/form_macro.html" import render_postCard2%}
 {% block title%} Feed {% endblock%}
 
 {% block main %}
 <div class ="home_page">
+	<br>
 	<div class ="row">
-		<div class ="col"></div>
+		<div class="col"></div>
+		<div class="col">
+		<div class="nav flex-column">
+			<a class="nav-link tab" id="recent" href="{{url_for('feedTabs', tab='recent')}}"> Recent</a>
+			<a class="nav-link tab" id="adopted" href="{{url_for('feedTabs', tab='adopted')}}"> Adopted</a>
+			<a class="nav-link tab" id="newpet" href="{{url_for('feedTabs', tab='newpet')}}"> New Pets</a>
+			<a class="nav-link tab" id="mostliked" href="{{url_for('feedTabs', tab='mostliked')}}"> Most Liked</a>
+		</div>
+		</div>
 
-		<div class="col-7">
+		<div class="col-7 post-list" >
 		<!--- Display all user's posst -->
-			<div class="container scroll">
+			<div class="scroll">
 				{% for post in posts %}
-				{{ im.postCard(post) }}
+				<div class="card">
+					<div class="card-body" id="module">
+						<div class="auther_content row">
+							{% if current_user.username == post.writer[0].username %}
+							<a class="nav-link" href="{{ url_for('my_profile') }}">
+								<img src="{{url_for('static',filename= '/img/profiles/'~post.writer[0].image) }}?{{datetime}}" class="rounded-circle card-img-top" ></img>
+								{{current_user.username}}
+							</a>
+							{% else %}
+							<a class="nav-link" href="{{ url_for('profile',username=post.writer[0].username) }}">
+								<img src="{{url_for('static',filename= '/img/profiles/'~post.writer[0].image) }}?{{datetime}}" class="rounded-circle card-img-top"></img>
+								{{post.writer[0].username}}
+							</a>
+							{% endif %}
+						</div>
+						<div class="text-muted float-right vertical-center">{{ post.date_created|convertTime }}</div>
+						<hr>
+						{% if post.category =="newpet" %}
+						<a href="{{url_for('viewPet',pet_id= post.id_pet)}}" class="plain">
+						{% else %}
+						<a href="{{url_for('viewPost', post_id=post.id)}}" class="plain">
+						{% endif %}
+						<h4  class="card-title font-weight-bold">{{ post.title }}</h4>
+						<p class="card-text">{{ post.content }}</p>
+						{% if post.image != "default.jpg" %}
+						<img src="{{url_for('static',filename= '/img/posts/'~post.image) }}?{{datetime}}" class="rounded card-img-top mx-auto d-block col-8" alt="..."></img>
+						{% endif %}
+						</a>
+
+						<hr>
+						<!-- check if user liked-->
+						{% if post in current_user.liked_posts %}
+						<button class="btn like active" saveType="like" item_id='{{post.id}}' onclick="save(this);"><i class="bi bi-hand-thumbs-up-fill"></i> <span>{{post.likes}}</span> </button>
+						{% else %}
+						<button class="btn like" saveType="like" item_id='{{post.id}}' onclick="save(this);"><i class="bi bi-hand-thumbs-up"></i> <span>{{post.likes}}</span> </button>
+						{% endif %}
+						<!-- check if user saved -->
+						{% if post in current_user.saved_posts %}
+						<button class="btn save active" saveType="save" item_id='{{post.id}}' onclick="save(this);"><i class="bi bi-bookmark-fill"></i> <span>Saved</span> </button>
+						{% else %}
+						<button class="btn save" saveType="save" item_id='{{post.id}}' onclick="save(this);"><i class="bi bi-bookmark"></i> <span>Save</span> </button>
+						{% endif %}
+						
+						<button class="btn collapsible " id="viewComments{{post.id}}" onclick="collapsible('{{post.id}}')"><i class="bi bi-chat-right-text"></i> Comments </button>
+						<div class="content">
+							<hr>
+							<div class="container">
+								{% if current_user.is_authenticated %}
+								<div class="input-group mb-4">
+									<input type="text" class="form-control" id="post_{{post.id}}" placeholder="Add a comment...">
+									<button class="btn btn-primary" id="comment{{post_id}}" onclick="addComment('{{post.id}}')">Comment</button>
+								</div>
+								{% else %}
+								<div class="form-group"> Please <a href="/register" style="color:#1abc9c">Register</a> or  <a href="/login" style="color:#1abc9c">Login</a> to leave a comment. </div>
+								{% endif %}
+								<div class="comment-list" id="comment-list{{post.id}}">
+									{% for comment in post.comments|reverse %}
+									<div class="comment">
+										<img id ="comment_img" src="{{url_for('static',filename= '/img/profiles/'~comment.auther[0].image) }}?{{datetime}}" class="rounded-circle" style="height: 50px;" alt="..."></img>
+										<div id="comment_username">
+											{% if current_user.username == comment.auther[0].username %}
+											<a href="{{ url_for('my_profile') }}">
+											{% else %}
+											<a href="{{ url_for('profile',username=comment.auther[0].username) }}">
+											{% endif %}
+												{{ comment.auther[0].username }}
+											</a>
+										</div>
+										<div id="comment_date">{{ comment.date_created|convertTime() }}</div>
+										<div id="comment_content">{{ comment.content }}</div>
+										<a href="#">Reply</a>
+									</div>
+									{% endfor %}
+								</div>
+							</div>
+						</div> 
+					</div>
+				</div>
+				<br>
 				{% endfor %}
-			</div>
+			</div> 
 		</div>
 
 		<div class ="col" >
 			{% if current_user.is_authenticated %}
 			<!-- Button trigger modal -->
-			<button type="button" id="addPost" class="w3-button w3-xlarge w3-circle w3-teal" data-toggle="modal" data-target="#postModal">+</button>
-
-			<div id="postModal" class="modal fade">
-				<div class="modal-dialog modal-dialog-centered">
-					<div class="modal-content">
-					  <!-- Call for form-->
-					</div>
-				</div>
-			</div>
+			<button type="button" id="addPost" class="btn" data-toggle="modal" data-target="#postModal"><i class="bi bi-plus-circle-fill"></i></button>
 			{% endif %}
 		</div>
 	</div>
 </div>
 
+<!--Post Modal -->
+<div class="modal fade" id="postModal" tabindex="-1" data-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Add a Post</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form action="{{url_for('addPost')}}" method="POST" enctype="multipart/form-data">
+				<div class="modal-body">
+					{{render_postCard2(form)}}
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Save</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
 {% endblock %}
+{% block script %}
+<script>
+	$("#"+`{{tab}}`).addClass("active");
+	let coll = document.getElementsByClassName("collapsible");
+	var i;
+	for (i = 0; i < coll.length; i++) {
+		coll[i].addEventListener("click", function() {
+			this.classList.toggle("active");
+			var content = this.nextElementSibling;
+			if (content.style.maxHeight){
+				content.style.maxHeight = null;
+			} else {
+				content.style.maxHeight = content.scrollHeight + "px";
+			} 
+		});
+	}
+	function collapsible(post_id){
+		let elmt= document.getElementById("viewComments"+post_id);
+		elmt.scrollIntoView({behavior: "smooth"});
+	}
+	
+	$("#addPostForm").submit(function(event){
+		let formData = new FormData(document.querySelector('form'));
+
+		sendForm('/feed/addPost/', formData)
+		.then(data => {
+			window.location.reload(true);
+			console.log("update: "+data);
+		})
+		.catch(function (error) {
+        console.log("Fetch error: " + error);
+		});
+	});
+
+	function addComment (post_id){
+		let content = $("#post_"+post_id).val();
+		let data = {from_id:`{{current_user.get_id()}}`, post_id:post_id, comment:content}
+
+		sendData("/feed/addComment/", data)
+		.then(data =>{
+			$("#post_"+post_id).val("");
+		})
+		.catch(error =>{
+			console.log("Error "+ error);
+		});
+	}
+
+	function getPost(item){
+		//alert("here "+item.getAttribute("id"));
+		// make fetch call
+
+	}
+</script>
+{% endblock %}
+

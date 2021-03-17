@@ -4,68 +4,129 @@
 {% from "macros/form_macro.html" import render_field1 %}
 {% from "macros/form_macro.html" import render_field2 %}
 {% from "macros/form_macro.html" import render_field3 %}
+{% from "macros/form_macro.html" import render_field4 %}
+{% from "macros/form_macro.html" import render_field5 %}
+{% from "macros/form_macro.html" import render_petCard as petCard %}
 
-{% import "macros/input_macros.html" as im %}
-{% import "macros/temp_pet.html" as pt %}
-{% import "macros/form_maros.html" as frm %}
 {% block title%} Search Pets {% endblock%}
 
 {% block main %}
 <div id="searchPetsPage">
     <h1> Search Pets </h1>
 
-<br>
-<div class="row ">
-    <div class="col-3">
-        <div class="container" id="searchForm">
-            <hr>
-            <form method=post enctype="multipart/form-data">
-                <dl>
-                    {{ render_field1(searchForm.type, "form-control") }}
-                    {{ render_field1(searchForm.size,"form-control") }}
-                    {{ render_field1(searchForm.age, "form-control") }}
-                    {{ render_field1(searchForm.gender, "form-control") }}
-                    <hr>
-                </dl>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary float-right"> Search</button>
+    <br>
+    <div class="row ">
+        <div class="col-12 col-sm-6 col-md-5 col-lg-3">
+            <div class="container">
+                <form  method=post enctype="multipart/form-data" id="searchForm">
+                   <!--<div class="row">
+                        <div class="col-1">
+                            <dd>{{ searchForm.petfinder( class="form-control")|safe }}
+                                {% if searchForm.petfinder.errors %}
+                                <ul class=errors>
+                                    {% for error in searchForm.petfinder.errors %}
+                                    <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </dd>
+                        </div> 
+                        <div class="col">
+                            <label class="form-label"> {{ searchForm.petfinder.label }} </label>
+                        </div>
+                    </div>
+                    <hr>--> 
+                    
+                    <span id='selectSearchPet'></span>
+                    {{render_field4( searchForm.type, "w-100","false" )}}
+                    <div class="searchPets">
+                        {{render_field4( searchForm.breed, "w-100","true" )}}
+                        {{render_field4( searchForm.age, "w-100","false" )}}
+                        {{render_field4( searchForm.size, "w-100","false" )}}
+                        {{render_field4( searchForm.gender, "w-100","false" )}}
+                        {{render_field4( searchForm.goodwith, "w-100","false" )}}
+                        {{render_field4( searchForm.coat, "w-100","false" )}}
+                        {{render_field4( searchForm.color, "w-100","true" )}}
+                        {{render_field4( searchForm.care, "w-100","false" )}}
+                        {{render_field4( searchForm.days, "w-100","false" )}}
+                        {{render_field( searchForm.name, "form-control" )}}
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-warning float-right searchPets-btn">Search</button>
+                    </div>
+            </div>
+        </div>
+        <br>
+        <div class="col">
+            <div class="container location-search">
+                <span id ='location'></span>
+                <div class="location-container ">
+                    {{ render_field1(searchForm.city, "form-control","col-sm-3 col-lg-4 col-xl-2 col-form-label") }}
+                    {{ render_field1(searchForm.state, "form-control") }}
+                    <button type="submit" class="btn btn-warning float-right searchPets-btn">Search</button>
                     {% if current_user.is_authenticated %}
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#petModal">Add Pet</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#petModal">Add
+                                Pet</button>
                     {% else %}
-                    <button type="button" class="btn btn-primary" onclick="location.href = '/register';">Add Pet</button>
+                        <button type="button" class="btn btn-primary" onclick="location.href = '/register';">Add
+                                Pet</button>
                     {% endif %}
+                    
+                </div>
+            </div>
+            </form>       
+            <br>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2  row-cols-xl-3" id="petCard">
+                {% if 1 > pets|length and finder_pets is none %}
+                <h2>None Found</h2>
+                {% endif %}
+                {% for pet in pets %}
+                <div class="col mb-4 lg-4 lx-6">
+                    <div class="pet-card card-body" id="module">
+                        {{ petCard(pet) }}
+                        {% if current_user.is_authenticated %}
+                        {% if pet in current_user.liked_pets %}
+                        <a href="" class="favorite active" item_id="{{ pet.id }}" saveType="heart" onclick="save(this);"> <i class="bi bi-suit-heart-fill"></i>
+                        </a>
+                        {% else %}
+                        <a href="" class="favorite" item_id="{{ pet.id }}" saveType="heart" onclick="save(this);"> <i class="bi bi-suit-heart-fill"></i> </a>
+                        {% endif %}
+                        {% else %}
+                        <a href="/register" class="favorite"> <i class="bi bi-suit-heart-fill"></i> </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                <br>
+                {% if finder_pets is not none %}
+                {% for find in finder_pets %}
+                <div class="col mb-4 lg-4 lx-6">
+                    <div class="pet-card card-body" id="module">
+                        <div class="card">
+                            <img src="{{ find.image }}" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title text-center" style="font-weight: bold;"> {{ find.name }} </h5>
+                                <p class="card-text text-center">{{ find.age }} - {{ find.location }} </p>
+                                <a href="{{url_for('viewPetFinder', petID=find.id)}}" class="stretched-link"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
 
-                </div>
-            </form>
-        </div>
-    </div>
-    <div class="col">
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
-            {% for pet in pets %}
-            <div class="col mb-4 lg-6">
-                <div class="pet-card card-body" id="module" >
-                    {{ im.petCard(pet) }}
-                    {% if pet in likes %}
-                        <a href="#" class="like active" pet_id="{{ pet.id }}" > <i class="fa fa-heart" aria-hidden="true"> </i></a>
-                    {% else %}
-                        <a href="#" class="like" pet_id="{{ pet.id }}" > <i class="fa fa-heart" aria-hidden="true"> </i></a>
-                    {% endif %}
-                    <!-- <a href="#" class="like" pet_id="{{ pet.id }}" > <i class="fa fa-heart" aria-hidden="true"> </i></a> -->
-                </div>
-            </div>	
-            {% endfor %}
-        </div>
-        
         {% if current_user.is_authenticated %}
-         <!-- Button trigger modal -->
-        <button type="button" id="addPet" class="w3-button w3-xlarge w3-circle w3-teal" data-toggle="modal" data-target="#petModal">+</button>
+        <!-- Button trigger modal -->
+        <button type="button" id="addPet" class="btn" data-toggle="modal" data-target="#petModal"><i class="bi bi-plus-circle-fill"></i></button>
         {% endif %}
 
         <!-- Modal -->
         <div class="modal fade" id="petModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog  modal-scrollable modal-dialog-centered">
                 <div class="modal-content">
-                    <form method=post enctype="multipart/form-data">
+                    <form action="{{url_for('addPet')}}" method=post enctype="multipart/form-data" id="addPetForm">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Add Pet</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -74,95 +135,196 @@
                         </div>
                         <div class="modal-body">
                             <dl>
-                                {{ render_field(form.image) }}
-                                <hr>
+                                <div class="col-12">
+                                    <img src="" class="card-img-top" id="display">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="formFile" class="form-label">Pet Image</label></label>
+                                    <input class="form-control" type="file" id="image" accept=".jpg, .png" name="image" required>
+                                </div>
                                 {{ render_field1(form.name, "form-control") }}
-                                {{ render_field2("Birthday", [form.month, form.year]) }}
-                                {{ render_field1(form.type, "form-control") }}
-                                {{ render_field1(form.gender, "form-control") }}
-                                {{ render_field1(form.size, "form-control") }}
-                                {{ render_field1(form.age, "form-control") }}
+                                <span id="selectPet"></span>
+                                {{ render_field1(form.type, "form-control petType") }}
+                                <div class="petOption"></div>
+                                
                                 <hr>
                                 {{ render_field1(form.city, "form-control") }}
                                 {{ render_field1(form.state, "form-control") }}
                                 {{ render_field1(form.zip, "form-control") }}
                                 <hr>
-                                {{ render_field(form.description) }}
+                                
+
                             </dl>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary" >Save</button>
                         </div>
                     </form>
-                    <!-- <form id="addPetForm" action="{{ url_for('addPet')}}" method="POST" enctype="multipart/form-data">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Add Pet</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <input class="" type="file" name="image" required>
-                            </div>
-                            <div class="form-group row">
-                                {{ frm.inputForm(name="name", type="text", label="Name", size="8", placeholder="", lablesize="3") }}
-                            </div>
-                            <div class="form-group row">
-                                {{ frm.selectForm(label="Birthday (MM/YY)", name="month", data=pt.months, size="4", lablesize="3")}}
-                                <div class="col-4">
-                                    <input type="text" class="form-control" min=2000 max=2012 name="year" name="year" id ="addPetYear"placeholder="year" required >
-                                </div>
-                            </div>
-                            <span id="birthday"></span>
-
-                            <div class="form-group row">
-                                {{ frm.selectForm(label="Type", name="type", data={"dog":"Dog", "cat":"Cat","bird":"Bird", "reptile":"Reptile", "other":"Other"}, size="4", lablesize="3")}}
-                            </div>
-                            <span id="type"></span>
-
-                            <div class="form-group row">
-                                {{ frm.selectForm(label="Gender", name="gender", data={"female":"Female", "male":"Male"}, size="4", lablesize="3")}}
-                            </div>
-                            <span id="gender"></span>
-                            
-                            <div class="form-group row">
-                                {{ frm.selectForm(label="Size", name="size", data={"small":"Small", "medium":"Medium", "large":"Large"}, size="4", lablesize="3") }}
-                            </div>
-                            <span id="weigth"></span>
-                            <div class="form-group row">
-                                
-                                    <label for="inputCity" class="form-label col-1">City</label>
-                                <div class="col-md-3">
-                                    <input type="text" class="form-control" name="city" required>
-                                </div>
-                                    {{ frm.selectForm(label="State", name="state", data={"al":"AL","ak":"AK", "az":"AZ", "ar":"AR", "ca":"CA", "co":"CO", "ct":"CT", "dc":"DC", "de":"DE", "fl":"FL", "ga":"GA", "hi":"HI", "id":"ID", "il":"IL", "in":"IN", "ia":"IA", "ks":"KS", "ky":"KY", "la":"LA", "me":"ME", "md":"MD", "ma":"MA", "mi":"MI", "mn":"MN", "ms":"MS", "mo":"MO", "mt":"MT", "ne":"NE", "nv":"NV", "nh":"NH", "nj":"NJ", "nm":"NM", "ny":"NY", "nc":"NC", "nd":"ND", "oh":"OH", "ok":"OK", "or":"OR", "pa":"PA", "ri":"RI", "sc":"SC", "sd":"SD", "tn":"TN", "tx":"TX", "ut":"UT", "vt":"VT", "va":"VA", "wa":"WA", "wv":"WV", "wi":"WI", "wy":"WY"}, size="3", lablesize="1") }}
-                                <label for="inputZip" class="form-label col-1">Zip</label>
-                                <div class="col-md-3">
-                                    <input type="text" class="form-control" name="zip" required>
-                                </div>
-
-                            </div>
-
-                            <div class="form-group ">
-                                <label class="form-label">Description</label>
-                                <textarea class="form-control" name="description" rows="3"></textarea>
-                            </div>
-                            <span id="description"></span>
-                        </div>
-                    
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </div>
-                    </form> 
-                -->
                 </div>
-	        </div>
+            </div>
         </div>
     </div>
 </div>
 </div>
+
+{% endblock %}
+{% block script %}
+<style>
+    .bootstrap-select .btn:focus,
+    .bootstrap-select .btn:active,
+    .bootstrap-select .btn {
+        outline: none !important;
+        background-color: white;
+        border: 1px solid lightgray;
+    }
+</style>
+<script>
+    function checkLocation(){
+        let city = $.trim($('#city').val());
+        let state = $('#state').val();
+        if(city != '' && state != 'None'){
+            $('#location').text('');
+            return true
+        }
+        $('#location').text('Select Location');
+        return false
+    }
+    // To style all selects
+    $("#searchForm").submit(function(event){
+        let type = $('#type').val() == 'None';
+        if(type){
+            $('#selectSearchPet').text('Select Pet');
+            event.preventDefault();
+        }
+    });
+    $(".searchPets").change(function (event) {
+        event.preventDefault();
+        //let location = checkLocation();
+        let type = $('#type').val() != 'None';
+        if(!type){
+            $('#selectSearchPet').text('Select Pet');
+        }
+        else if(checkLocation()){
+            const formData = new FormData(document.querySelector('#searchForm'));
+
+            sendForm("/searchPets/filters", formData)
+                .then(data => {
+                    $('#petCard').empty();
+                    let pets = data.pets;
+                    let temp =``;
+                    if( pets.length <1){
+                        temp = `<h2>None Found</h2>`
+                        $('#petCard').append(temp);
+                        return
+                    }
+                    pets.forEach(pet =>{
+                        temp =` <div class="col mb-4 lg-4 lx-6">
+                                <div class="pet-card card-body" id="module">
+                                    <div class="card">
+                                        <img src="../static/img/pets/${pet.image}" class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                            <h5 class="card-title text-center" style="font-weight: bold; text-transform: capitalize;"> ${pet.name} </h5>
+                                            <p class="card-text text-center" style="text-transform: capitalize;">${pet.age} - ${pet.breed} - ${pet.city}, ${pet.state}</p>
+                                            <a href="/searchPets/viewPet=${pet.id}/" class="stretched-link"></a>
+                                        </div>
+                                    </div>
+                                    <div id="link${pet.id}">
+                                        {% if current_user.is_authenticated %}
+                                        <a href="" class="favorite save" item_id="${pet.id}" saveType="heart" onclick="save(this);"> <i class="bi bi-suit-heart-fill"></i> </a>   
+                                        {% else %}
+                                        <a href="/register" class="favorite"> <i class="bi bi-suit-heart-fill"></i> </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                </div>`
+                        $('#petCard').append(temp);
+                        let link =``
+                        if (pet.liked == true){
+                            $('#link'+pet.id).empty();
+                            link = `<a href="" class="favorite active" item_id="${pet.id}" saveType="heart" onclick="save(this);"> <i class="bi bi-suit-heart-fill"></i> </a>`
+                            $('#link'+pet.id).append(link);
+                        }
+                    });
+                    console.log(data.update);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
+    });
+
+$("#addPetForm").submit(function(event){
+    let petType = $('.petType').val();
+    if (petType == 'None'){
+        $('#selectPet').text('Select pet type');
+        event.preventDefault();
+    }
+});
+
+// OPTIONS FORMS
+$('#type').change(function (event) {
+        // check city and state
+        let location = checkLocation();
+        if(location){
+            $("#searchForm").submit();
+        }
+        
+    });
+
+$('.petType').change(function (event) {
+        let type = $(".petType").val()
+        let temp = ``
+        $('.petOption').empty();
+        $('#selectPet').empty();
+        if (type == 'dog') {
+            temp = `{% set form = form|searchOption( "dog" ) %}
+                <hr>
+                {{ render_field5(form.breed, "form-control","true") }}
+                {{ render_field5(form.age, "form-control") }}
+                {{ render_field5(form.gender, "form-control") }}
+                {{ render_field5(form.size, "form-control") }}
+                {{ render_field5(form.coat, "form-control") }}
+                {{ render_field5(form.goodwith, "form-control") }}
+                {{ render_field5(form.color, "form-control selectpicker", "true") }}
+                {{ render_field5(form.care, "form-control") }}
+                {{ render_field(form.description, "form-control") }}`
+            $('.petOption').append(temp);
+            
+        }
+        else if (type == 'cat') {
+            temp = `{% set form = form|searchOption( "cat" ) %}
+                <hr>
+                {{ render_field5(form.breed, "form-control","true") }}
+                {{ render_field5(form.age, "form-control") }}
+                {{ render_field5(form.gender, "form-control") }}
+                {{ render_field5(form.size, "form-control") }}
+                {{ render_field5(form.coat, "form-control") }}
+                {{ render_field5(form.goodwith, "form-control") }}
+                {{ render_field5(form.color, "form-control selectpicker", "true") }}
+                {{ render_field5(form.care, "form-control") }}
+                {{ render_field(form.description, "form-control") }}`
+            $('.petOption').append(temp);
+        }
+        else if (type =='rabbit'){
+            temp = `{% set form = form|searchOption( "rabbit" ) %}
+                <hr>
+                {{ render_field5(form.breed, "form-control","true") }}
+                {{ render_field5(form.age, "form-control") }}
+                {{ render_field5(form.gender, "form-control") }}
+                {{ render_field5(form.size, "form-control") }}
+                {{ render_field5(form.coat, "form-control") }}
+                {{ render_field5(form.goodwith, "form-control") }}
+                {{ render_field5(form.color, "form-control selectpicker", "true") }}
+                {{ render_field5(form.care, "form-control") }}
+                {{ render_field(form.description, "form-control") }}`
+            $('.petOption').append(temp);
+
+        }
+        $('.search_select select').selectpicker();
+        $('.selectpicker').selectpicker();
+    });
+
+</script>
 
 {% endblock %}

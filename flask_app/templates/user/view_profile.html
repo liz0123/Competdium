@@ -4,40 +4,68 @@
 
 {% block tabs%}
   <br>
-  <h1 class="profileTitle">Posts</h1>
+  <h1 class="profileTitle">Pets</h1>
   <hr>
-  
+
   <!--- USER POSTS, PETS, and SETTINGS -->
   <div class="row">
     <div class="col-2">
       <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-
-        <!-- <a class="nav-link active profileTitleBtn"  title="Posts" id="v-pills-posts-tab" data-toggle="pill" href="#v-pills-posts" role="tab" aria-controls="v-pills-posts" aria-selected="true"><i class="fa fa-edit"></i> Posts</a> -->
-        <a class="nav-link active profileTitleBtn"  title="Pets" id="v-pills-pets-tab" data-toggle="pill" href="#v-pills-pets" role="tab" aria-controls="v-pills-pets" aria-selected="false"><i class="fas fa-paw"></i> Pets</a>
-        <a class="nav-link profileTitleBtn"  title="Message" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="fas fa-comment-alt"></i> Message</a>
+        <a class="nav-link pill active"  title="Pets" id="v-pills-pets-tab" data-toggle="pill" href="#v-pills-pets" role="tab" aria-controls="v-pills-pets" aria-selected="false"><i class="fa fa-paw"></i> Pets</a>
+        <a class="nav-link pill"  title="Posts" id="v-pills-posts-tab" data-toggle="pill" href="#v-pills-posts" role="tab" aria-controls="v-pills-posts" aria-selected="true"><i class="bi bi-pencil-square"></i> Posts</a>
+        <a class="nav-link pill"  title="Message" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="true"><i class="bi bi-chat-right-fill"></i> Message</a>
 
       </div>
     </div>
     <div class="col">
       <div class="tab-content" id="v-pills-tabContent">
-        <div class="tab-pane fade " id="v-pills-posts" role="tabpanel" aria-labelledby="v-pills-posts-tab"> 
-          {{ tmp.viewProfilePostCards(posts)}}
-        </div> 
-        <div class="tab-pane fade show active" id="v-pills-pets" role="tabpanel" aria-labelledby="v-pills-pets-tab"> 
-            {{ tmp.viewProfilePetCards(pets) }}
-          </div>
-        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-          <div class="container col-9">
-            <form id="sendMessageView">
-              <h3> Message: {{user.username}}</h3>
-              <div class="form-group"><textarea class="form-control" name="msg" rows="3"></textarea></div>
-              <div class="form-group">
-                <button type="submit" class="btn btn-primary profileTitleBtn float-right">Sent</button>
+        <div class="tab-pane fade " id="v-pills-posts" role="tabpanel" aria-labelledby="v-pills-posts-tab">
+          <div class="container">
+            <br>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2">
+              {% for post in posts %}
+              <div class=" col md-4 lg-4">
+                {{ postCard(post, datetime ) }}
+                <br>
               </div>
-            </form>
+              {% endfor %}
+            <br>
           </div>
         </div>
       </div>
+        <div class="tab-pane fade show active" id="v-pills-pets" role="tabpanel" aria-labelledby="v-pills-pets-tab">
+          <div class="container">
+            <br>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+              {% for pet in pets%}
+              <div class="col mb-4 lg-6">
+                <div class="pet-card card-body" id="module" >
+                  {{ petCard(pet,datetime) }}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          </div>
+        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+           {% if current_user.is_authenticated %}
+            <div class="container col-9">
+                <form id="sendMessageView">
+                  <h3> Message: {{user.username}}</h3>
+                  <div class="form-group"><textarea class="form-control" name="msg" rows="3" placeholder="Enter your message here..."></textarea></div>
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-primary profileTitleBtn float-right">Sent</button>
+                  </div>
+                </form>
+            </div>
+            {% else %}
+                <div class="row">
+                <label class="form-label">To access messaging please: </label>
+                <a class="nav-link underline" href="/login">Login</a>
+                <a class="nav-link underline" href="/register">Register</a>
+                </div>
+            {% endif %}
+        </div>
 
     </div>
   </div>
@@ -45,6 +73,7 @@
   {% block script %}
   <script>
     $("#sendMessageView").submit(function(event){
+      event.preventDefault();
       let formData = new FormData(document.querySelector('form'));
       formData.append("reciever", `{{ user.username }}` );
       formData.append("sender",`{{ current_user.username }}` );
@@ -60,6 +89,7 @@
       // send message
       sendForm("/sendMessage", formData)
       .then(data => {
+        $('#sendMessageView')[0].reset();
         console.log(data.update);
         alert(data.update);
       })
@@ -68,7 +98,7 @@
       });
 
     });
-    
+
   </script>
 
   {% endblock %}

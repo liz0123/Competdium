@@ -1,17 +1,17 @@
 {% macro settingDisplayForm(id="", label="", data="" ) -%}
-<div class="row mb-3">
-    <label class ="col-sm-3 col-form-label settingLabels">{{ label }}</label>
-    <div class="col-sm-5" >
-        <div id="{{ id }}">{{ data }}</div> 
+<div class="row">
+    <label class ="col-5 col-sm-6 col-md-4 col-lg-3 col-form-label settingLabels">{{ label }}</label>
+    <div class="col" >
+        <div id="{{ id }}">{{ data }}</div>
     </div>
 </div>
 {%- endmacro%}
 
 {% macro settingInputForm(id="", type="text", label="" ) -%}
-<div class="row mb-3">
-    <label class ="col-sm-3 col-form-label settingLabels">{{ label }}</label>
-    <div class="col-sm-5" >
-        <input type= "{{ type }}" class="form-control" id= "{{ id }}" required> 
+<div class="row">
+    <label class ="col-5 col-sm-6 col-md-4 col-lg-3 col-form-label settingLabels">{{ label }}</label>
+    <div class="col-7 col-sm-6 col-md-7 col-lg-7" >
+        <input type= "{{ type }}" class="form-control" id= "{{ id }}" required>
     </div>
 </div>
 {%- endmacro%}
@@ -20,7 +20,7 @@
 
     <label class ="col-{{lablesize}} col-form-label">{{ label }}</label>
     <div class="col-{{size}}" >
-        <input type= "{{ type }}" class="form-control" name= "{{ name }}" placeholder="{{ placeholder }}" required> 
+        <input type= "{{ type }}" class="form-control" name= "{{ name }}" placeholder="{{ placeholder }}" required>
     </div>
 
 {%- endmacro%}
@@ -37,27 +37,19 @@
 
 {%- endmacro%}
 
-{% macro settingTextAreaForm(id="", type="text", label="" ) -%}
-    <label class ="col-col-form-label settingLabels">{{ label }}</label>
-    <div class="col-5" >
-        <textarea class="form-control" id="{{ id }}" rows="3" required></textarea>
-    </div>
-
-{%- endmacro%}
-
-{% macro settingTextAreaForm(id="", type="text", label="" ) -%}
-<div class="row mb-3">
-    <label class ="col-sm-3 col-form-label settingLabels">{{ label }}</label>
-    <div class="col-sm-5" >
-        <textarea class="form-control" id="{{ id }}" rows="3" required></textarea>
+{% macro settingTextAreaForm(id="", type="text", label="", name='' ) -%}
+<div class="row">
+    <label class ="col-5 col-sm-6 col-md-4 col-lg-3 col-form-label settingLabels">{{ label }}</label>
+    <div class="col-7 col-sm-6 col-md-7 col-lg-7" >
+        <textarea class="form-control" id="{{ id }}" rows="3" name ='{{name}}'required></textarea>
     </div>
 </div>
 {%- endmacro%}
 
-{% macro fileInput(id="", name="" ) -%}
-<div class="row mb-3">
-    <img src="{{url_for('static',filename= '/img/profiles/'~name) }}?{{range(1,100)|random()}}" alt="..." class="rounded-circle"  id="avatar" >
-    <div class="col-sm-5" >
+{% macro fileInput(id="", name="", datetime="" ) -%}
+<div class="row">
+    <img src="{{url_for('static',filename= '/img/profiles/'~name) }}?{{datetime}}" alt="..." class="rounded-circle col-5 col-sm-6 col-md-4 col-lg-2"  id="avatar" accept=".jpg, .jpeg, .png">
+    <div class="col-7 col-sm-6 col-md-7 col-lg-8" >
         <input type="file" id="{{ id }}" accept=".jpg, .jpeg, .png" required>
     </div>
 </div>

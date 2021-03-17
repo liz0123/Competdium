@@ -9,18 +9,19 @@
 <div class="row">
     <div class="col">
         <input id="imageFile" type="file" hidden/>
-        <img src="{{url_for('static',filename= '/img/pets/'~ pet.original_image )}}?{{range(1,100)|random()}}" class="card-img-top" id="petImage" alt="...">
+        <img src="{{url_for('static',filename= '/img/pets/'~ pet.image )}}?{{datetime}}" class="card-img-top" id="petImage" alt="...">
     </div>
     <div class="col-5">
         <form id="editPet" method="POST" enctype="multipart/form-data">
             {{ pt.editPetForm(pet) }}
-           <!-- <button  class="btn btn-warning">Adopted</button> -->
+           
             <button type="submit" class="btn btn-primary float-right">Update</button>
         </form>
+        <a  class="btn btn-warning" href="{{url_for('adoptedPet',pet_id=pet.id)}}">Adopted</a>
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">Delete</button>
 
-        <form id="deleteAccountForm" action="{{ url_for('removePet',pet_id=pet.id)}}" method="POST" enctype="multipart/form-data"> 
+        <form id="deleteAccountForm" action="{{ url_for('removePet',pet_id=pet.id)}}" method="POST" enctype="multipart/form-data">
           <!-- Modal -->
           <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -34,7 +35,7 @@
                 <div class="modal-body">
                   <label>Are you sure you want to remove, {{pet.name}}? </label>
                 </div>
-                
+
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   <button type="submit" class="btn btn-danger">Delete</button>
@@ -45,7 +46,7 @@
         </form>
     </div>
 </div>
-    
+
 
 </div>
 {% endblock %}
@@ -56,14 +57,14 @@ $(function(){
     $("#imageFile").trigger("click");
   });
 
-  $('#imageFile').on("change", function(){ 
+  $('#imageFile').on("change", function(){
       let path = "/myprofile/pets/updatePetImage/";
       let formData = new FormData();
       formData.append('img', this.files[0] );
       formData.append('pet_id',  `{{ pet.id }}`);
 
       sendForm(path, formData).then(data => {
-         $("#petImage").removeAttr("src").attr("src", `{{url_for('static',filename= '/img/pets/'~ pet.original_image )}}`+"?"+new Date().getTime() );
+         $("#petImage").removeAttr("src").attr("src", `{{url_for('static',filename= '/img/pets/'~ pet.image )}}`+"?"+new Date().getTime() );
         })
         .catch(error => {
             console.error("Error: ", error);
@@ -74,11 +75,12 @@ $(function(){
 $("#editPet").submit( function(event){
     let form_data = new FormData(document.querySelector('form'))
     let path = "/myprofile/pets/updatePet/";
-    form_data.append("pet_id", `{{ pet.id }}`); 
+    form_data.append("pet_id", `{{ pet.id }}`);
 
     sendForm(path, form_data).then(data => {
         console.log(data);
         alert("Saved!");
+        location.reload();
     })
     .catch(error => {
         console.error("Error: ", error);

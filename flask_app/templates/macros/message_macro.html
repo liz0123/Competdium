@@ -5,16 +5,22 @@
         <!-- <div class="input-group"> <input type="text" id="form1" class="form-control" placeholder="Search" /></div> -->
     </div>
     <div id="conversation-list">
-        {% for friend in friends %}
-            {{ conversation("", friend) }}
-        {% endfor %}
+        {% if friends|length %}
+            {% for friend in friends %}
+                {{ conversation("","", friend) }}
+            {% endfor %}
+        {% endif %}
     </div>
-    <div id="new-message-container"> 
+    <div id="new-message-container">
         <!-- <a href="#" id='add' class="w3-button w3-xlarge w3-circle w3-white float-right">+</a>-->
     </div>
-    <div id="chat-title"> 
-        {{  title("") }}
-        <!-- <i class="fa fa-trash" id="deleteConversation"></i> --> 
+    <div id="chat-title">
+        {% if firstFriend is defined %}
+            {{  title(firstFriend.username) }}
+        {% else %}
+            {{  title("") }}
+        {% endif %}
+        <!-- <i class="fa fa-trash" id="deleteConversation"></i> -->
     </div>
     <div id="chat-message-list"></div>
     <div id="chat-form">
@@ -24,8 +30,8 @@
 
 {%- endmacro %}
 
-{% macro conversation(alert, data) -%}
-<div class="conversation">
+{% macro conversation(active,alert, data) -%}
+<div class="conversation {{active}}">
     <img src="../static/img/profiles/{{ data.image_file }}"/>
     <div class="title-text" >{{ data.username }}</div>
     <div class="created-date">{{ data.date }}</div>
@@ -49,6 +55,6 @@
         <div class="message-time">
             {{ msg.date}}
         </div>
-    </div>  
+    </div>
 </div>
 {%- endmacro%}

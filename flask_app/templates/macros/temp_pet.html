@@ -1,8 +1,9 @@
 {% set states= {"al":"AL","ak":"AK", "az":"AZ", "ar":"AR", "ca":"CA", "co":"CO", "ct":"CT", "dc":"DC", "de":"DE", "fl":"FL", "ga":"GA", "hi":"HI", "id":"ID", "il":"IL", "in":"IN", "ia":"IA", "ks":"KS", "ky":"KY", "la":"LA", "me":"ME", "md":"MD", "ma":"MA", "mi":"MI", "mn":"MN", "ms":"MS", "mo":"MO", "mt":"MT", "ne":"NE", "nv":"NV", "nh":"NH", "nj":"NJ", "nm":"NM", "ny":"NY", "nc":"NC", "nd":"ND", "oh":"OH", "ok":"OK", "or":"OR", "pa":"PA", "ri":"RI", "sc":"SC", "sd":"SD", "tn":"TN", "tx":"TX", "ut":"UT", "vt":"VT", "va":"VA", "wa":"WA", "wv":"WV", "wi":"WI", "wy":"WY"} %}
 {% set months = {1:"Jan" , 2:"Feb", 3:"Mar", 4:"Apr", 5:"May", 6:"Jun", 7:"Jul", 8:"Aug", 9:"Sep", 10:"Oct", 11:"Nov", 12:"Dec" }  %}
-{% set types = {"dog":"Dog", "cat":"Cat","bird":"Bird", "reptile":"Reptile", "other":"Other"} %}
+{% set types = {'dog':'Dog', 'cat':'Cat',"barnyard":"Barnyard",'bird':'Bird',"horse":"Horse","rabbit":"Rabbit","small-furry":"Small-Furry", "scales-fins-other":"Scales-Fins-Other"} %}
 {% set sizes = {"small":"Small", "medium":"Medium", "large":"Large"} %}
-{% set genders = {"female":"Female", "male":"Male" } %}
+{% set age = {"baby":"Baby", "young":"Young", "adult":"Adult", "senior":"Senior"}%}
+{% set genders = {"female":"Female", "male":"Male","unknown":"Unknown"} %}
 {% import "macros/form_maros.html" as frm %}
 
 {% macro editPetForm(pet) -%}
@@ -12,22 +13,6 @@
         <input type="text" class="form-control" id="inputPassword" value ="{{pet.name}}" name="name">
     </div>
 </div>
-<div class="form-group row">
-    <label class="col-sm-2 col-form-label">Birthday</label>
-    <div class="col-sm-5">
-            <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="month">
-                <option value="{{ pet.birth_date.month }}" selected>{{months[pet.birth_date.month]}}</option>
-                {% for key, value in months.items() %}
-                    {% if key != pet.birth_date.month %}
-                    <option value="{{ key }}"> {{ value }} </option>
-                    {% endif %}
-                {% endfor %}
-              </select>
-        </div>
-        <div class="col-sm-5">
-            <input type="number" class="form-control" id="inputPassword" value="{{ pet.birth_date.year }}" name="year">
-        </div>
-    </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Size</label>
         <div class="col-sm-5">
@@ -70,95 +55,10 @@
     <div class="form-group row">
         <label class="col-sm-3 col-form-label">Description </label>
         <div class="col-sm-12">
-            <textarea class="form-control" rows="3" name="description" >{{pet.description}}</textarea>
+            <textarea class="form-control" rows="5" name="description" >{{pet.description}}</textarea>
         </div>
     </div>
 {%- endmacro %}
 
-{% macro viewPet(pet, owner) -%}
-<div class="form-group row">
-    <label class="col-sm-3 col-form-label settingLabels">Name</label>
-    <div class="col-sm-5">
-        <p>{{ pet.name }} </p>
-    </div>
-</div>
-<div class="form-group row">
-    <label class="col-sm-3 col-form-label settingLabels">Type</label>
-    <div class="col-sm-5">
-        <p>{{ types[pet.type] }} </p>
-    </div>
-</div>
-<div class="form-group row">
-    <label class="col-sm-3 col-form-label settingLabels">Gender</label>
-    <div class="col-sm-5">
-        <p> {{ genders[pet.gender] }} </p> 
-    </div>
-</div>
-<div class="form-group row">
-    <label class="col-sm-3 col-form-label settingLabels">Size</label>
-    <div class="col-sm-5">
-        <p> {{ sizes[pet.size] }} </p>
-    </div>
-</div>
-<div class="form-group row">
-    <label class="col-sm-3 col-form-label settingLabels">Birthday</label>
-    <div class="col-sm-5">
-        <p>{{ months[pet.birth_date.month] }}. {{ pet.birth_date.year }}</p>
-    </div>
-</div>
-{%- endmacro %}
 
-{% macro searchPetForm() -%}
-<div class="form-group">
-    <label class="col-form-label">Pet Type</label>
-    <select class="custom-select form-select" aria-label="Default select example" name="type">
-        <option value="any" selected>Any</option>
-        <option value="bird">Bird</option>
-        <option value="cat">Cat</option>
-        <option value="dog">Dog</option>
-        <option value="reptile">Reptile</option>
-        <option value="other">Other</option>
-      </select>
-
-    <label class="col-form-label">Size</label>
-    <select class="custom-select form-select" aria-label="Default select example" name="size">
-        <option value="any" selected>Any</option>
-        <option value="small">Small</option>
-        <option value="medium">Medium</option>
-        <option value="large">Large</option>
-      </select>
-
-    <label class="col-form-label">Age</label>
-    <select class="custom-select form-select" aria-label="Default select example" name="age">
-        <option value="any" selected>Any</option>
-        <option value="young">Young</option>
-        <option value="adult">Adult</option>
-        <option value="senior">Senior</option>
-    </select>
-
-    <label for="inputCity" class="form-label">City</label>
-    <input type="text" class="form-control" name="city">
-
-    <label for="inputState" class="form-label">State</label>
-    <select class="custom-select form-select" aria-label="Default select example" name="state">
-        {% for state in states %}
-            <option value="{{ state }}"> {{ states[state] }} </option>
-        {% endfor %}
-    </select>
-
-    <label for="inputZip" class="form-label">Zip</label>
-    <input type="text" class="form-control" name="zip" >
-
-
-    <label class="col-form-label">Distance</label>
-    <select class="custom-select form-select" aria-label="Default select example" name="distance">
-        <option value="any" selected >Any</option>
-        <option value="5">5 Miles</option>
-        <option value="10">10 Miles</option>
-        <option value="25">25 Miles</option>
-        <option value="50">50 Miles</option>
-    </select>
-</div>
-
-{%- endmacro %}
 

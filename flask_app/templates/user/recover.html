@@ -4,21 +4,24 @@
 {% block title %}Reset Password{% endblock %}
 {% block main %}
 <div class="container">
-
+    <br>
+    <h2> Change Password </h2>
     <form action="{{ url_for('reset_with_token', token=token) }}" method="POST">
         <div class="row mb-3">
             <label class ="col-sm-3 col-form-label settingLabels">New Password</label>
             <div class="col-sm-5" >
-                <input type= "password" class="form-control" name="password" required> 
+                <input type= "password" class="form-control" name="password" required>
             </div>
         </div>
         <div class="row mb-3">
             <label class ="col-sm-3 col-form-label settingLabels">Confirm Password</label>
             <div class="col-sm-5" >
-                <input type= "password" class="form-control" name="confirm" required> 
+                <input type= "password" class="form-control" name="confirm" required>
             </div>
         </div>
+        <div class="row mb-3">
         <button type="submit" class="btn btn-primary">Change my password </button>
+        </div>
     </form>
 </div>
 
