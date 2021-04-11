@@ -62,4 +62,4 @@ visit [ComPETdium](https://www.competdium.com/about/) for the live website.
 
 ## Authors
 
-* **Isabel Valdez** - *Initial work* - [liz0123](https://github.com/liz0123)
+* **Isabel Valdez** - [liz0123](https://github.com/liz0123)
