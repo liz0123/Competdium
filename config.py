@@ -13,17 +13,15 @@ class Config(object):
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
     # gmail authentication
-    MAIL_USERNAME = 'ComPetdium'
-    MAIL_PASSWORD = "Asdf0987!"
+    MAIL_USERNAME = ""
+    MAIL_PASSWORD = ""
     # main accounts
-    MAIL_DEFAULT_SENDER = 'competdium@gmail.com'
-    KEY ="fCigkfFdqeBy2mTPNLcAF3S8JSvFc2w6DiKfitnDk2hND6ruMP"
-    SECRET ="DS3SdWOzKwBSlEIrBUVfZcjoP8wz6Gg7kmZLE7Ob"
+    MAIL_DEFAULT_SENDER = ""
+    #Petfinder
+    KEY =""
+    SECRET =""
 
 class ProductionConfig(Config):
-    # Petfinder
-    KEY ="fCigkfFdqeBy2mTPNLcAF3S8JSvFc2w6DiKfitnDk2hND6ruMP"
-    SECRET ="DS3SdWOzKwBSlEIrBUVfZcjoP8wz6Gg7kmZLE7Ob"
     # Database
     SESSION_COOKIE_SECURE = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -44,7 +42,7 @@ class DevelopmentConfig(Config):
     SESSION_COOKIE_SECURE = False
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI ="sqlite:///./dbs/db.sqlite3"
+    SQLALCHEMY_DATABASE_URI ="sqlite:///./dbs/development.sqlite3"
     SQLALCHEMY_ECHO = False
     EXTEND_EXISTING = True
 
@@ -52,7 +50,7 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     TESTING = True
 
-    DB_NAME = "development-db"
+    DB_NAME = "test-db"
     DB_USERNAME = "admin"
     DB_PASSWORD = "example"
 
