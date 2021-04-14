@@ -1,0 +1,62 @@
+{% macro settingDisplayForm(id="", label="", data="" ) -%}
+<div class="row">
+    <label class ="col-5 col-sm-6 col-md-4 col-lg-3 col-form-label settingLabels">{{ label }}</label>
+    <div class="col" >
+        <div id="{{ id }}">{{ data }}</div>
+    </div>
+</div>
+{%- endmacro%}
+
+{% macro settingInputForm(id="", type="text", label="" ) -%}
+<div class="row">
+    <label class ="col-5 col-sm-6 col-md-4 col-lg-3 col-form-label settingLabels">{{ label }}</label>
+    <div class="col-7 col-sm-6 col-md-7 col-lg-7" >
+        <input type= "{{ type }}" class="form-control" id= "{{ id }}" required>
+    </div>
+</div>
+{%- endmacro%}
+
+{% macro inputForm(name="", type="text", label="", size="",lablesize="", placeholder="") -%}
+
+    <label class ="col-{{lablesize}} col-form-label">{{ label }}</label>
+    <div class="col-{{size}}" >
+        <input type= "{{ type }}" class="form-control" name= "{{ name }}" placeholder="{{ placeholder }}" required>
+    </div>
+
+{%- endmacro%}
+{% macro selectForm(label="", name="", data={}, size="",lablesize="" ) -%}
+
+    <label class ="col-form-label col-{{lablesize}}">{{ label }}</label>
+    <div class="col-{{size}}" >
+        <select class="custom-select form-select" aria-label="Default select example" name="{{ name }}">
+            {% for key, value in data.items() %}
+                <option value="{{ key }}"> {{value}} </option>
+            {% endfor %}
+        </select>
+    </div>
+
+{%- endmacro%}
+
+{% macro settingTextAreaForm(id="", type="text", label="", name='' ) -%}
+<div class="row">
+    <label class ="col-5 col-sm-6 col-md-4 col-lg-3 col-form-label settingLabels">{{ label }}</label>
+    <div class="col-7 col-sm-6 col-md-7 col-lg-7" >
+        <textarea class="form-control" id="{{ id }}" rows="3" name ='{{name}}'required></textarea>
+    </div>
+</div>
+{%- endmacro%}
+
+{% macro fileInput(id="", name="", datetime="" ) -%}
+<div class="row">
+    <img src="{{url_for('static',filename= '/img/profiles/'~name) }}?{{datetime}}" alt="..." class="rounded-circle col-5 col-sm-6 col-md-4 col-lg-2"  id="avatar" accept=".jpg, .jpeg, .png">
+    <div class="col-7 col-sm-6 col-md-7 col-lg-8" >
+        <input type="file" id="{{ id }}" accept=".jpg, .jpeg, .png" required>
+    </div>
+</div>
+{%- endmacro%}
+
+
+
+
+
+

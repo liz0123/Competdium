@@ -1,0 +1,86 @@
+{% extends "index_template.html" %}
+{% block main %}
+<br>
+<div class="container" style="border: 2px solid lightgray; border-radius: 5px;">
+    {% if current_user.username == post.writer[0].username %}
+    <a class="nav-link" href="{{ url_for('my_profile') }}">
+        <img src="{{url_for('static',filename= '/img/profiles/'~post.writer[0].image) }}?{{datetime}}" class="rounded-circle" style="height: 50px;" alt="..."></img>
+        {{post.writer[0].username}}
+    </a>
+    {% else %}
+    <a class="nav-link" href="{{ url_for('my_profile',username=post.writer[0].username) }}">
+        <img src="{{url_for('static',filename= '/img/profiles/'~post.writer[0].image) }}?{{datetime}}" class="rounded-circle" style="height: 50px;" alt="..."></img>
+        {{post.writer[0].username}}
+    </a>
+    {% endif %}
+    <span class="text-muted float-right">{{ post.date_created|convertTime }}</span>
+
+    <hr>
+    <h4  class="card-title font-weight-bold">{{ post.title }}</h4>
+    <p class="card-text">{{ post.content }}</p>
+    {% if post.image != "default.jpg" %}
+    <img src="{{url_for('static',filename= '/img/posts/'~post.image) }}?{{datetime}}" class="rounded card-img-top mx-auto d-block col-8" alt="..."></img>
+    {% endif %}
+    <hr>
+    <button class="btn collapsible active "><i class="bi bi-chat-right-text"></i> {{post.comments|length}} </button>
+    <!-- check if user liked-->
+    {% if post in current_user.liked_posts %}
+    <button class="btn like active" post_id="{{post.id}}"><i class="bi bi-hand-thumbs-up-fill"></i> <span>{{post.likes}}</span> </button>
+    {% else %}
+    <button class="btn like" post_id="{{post.id}}"><i class="bi bi-hand-thumbs-up"></i> <span>{{post.likes}}</span> </button>
+    {% endif %}
+    <!-- check if user saved -->
+    {% if post in current_user.saved_posts %}
+    <button class="btn save active" post_id="{{post.id}}"><i class="bi bi-bookmark-fill"></i> <span>Saved</span> </button>
+    {% else %}
+    <button class="btn save" post_id="{{post.id}}"><i class="bi bi-bookmark"></i> <span>Save</span> </button>
+    {% endif %}
+    <hr>
+        <div class="container">
+            {% if current_user.is_authenticated %}
+            <div class="input-group mb-4">
+                <input type="text" class="form-control" id="post_{{post.id}}" placeholder="Add a comment...">
+                <button class="btn btn-primary" id="comment{{post_id}}" onclick="addComment1('{{post.id}}')">Comment</button>
+            </div>
+            {% else %}
+            <div class="form-group"> Please <a href="/register" style="color:#1abc9c">Register</a> or  <a href="/login" style="color:#1abc9c">Login</a> to leave a comment. </div>
+            {% endif %}
+            <div class="comment-list" id="comment-list{{post.id}}">
+                {% for comment in post.comments|reverse %}
+                <div class="comment">
+                    <img id ="comment_img" src="{{url_for('static',filename= '/img/profiles/'~comment.auther[0].image) }}?{{datetime}}" class="rounded-circle" style="height: 50px;" alt="..."></img>
+                    <div id="comment_username">
+                        {% if current_user.username == comment.auther[0].username %}
+                        <a href="{{ url_for('my_profile') }}">
+                        {% else %}
+                        <a href="{{ url_for('profile',username=comment.auther[0].username) }}">
+                        {% endif %}
+                            {{ comment.auther[0].username }}
+                        </a>
+                    </div>
+                    <div id="comment_date">{{ comment.date_created|convertTime() }}</div>
+                    <div id="comment_content">{{ comment.content }}</div>
+                    <a href="#">Reply</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+</div>
+{% endblock %}
+
+{% block script %}
+  <script>
+    function addComment1 (post_id){
+        let content = $("#post_"+post_id).val();
+        let data = {from_id:`{{current_user.get_id()}}`, post_id:post_id, comment:content}
+
+        sendData("/community/addComment", data)
+        .then(result =>{
+            $("#post_"+post_id).val("");
+        })
+        .catch(error =>{
+            console.log("Error "+ error);
+        });
+    }
+</script>
+{% endblock %}

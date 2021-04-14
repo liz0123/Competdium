@@ -1,0 +1,70 @@
+{% extends "index_template.html" %}
+
+{% import "macros/temp_pet.html" as pt %}
+{% import "macros/message_macro.html" as msg %}
+
+{% block title%} View {{ pet.name}} {% endblock%}
+
+{% block main %}
+<br>
+<div class="container">
+  <div class="row">
+       <div class="col">
+            <img src="{{ pet.image }}" class="card-img-top" alt="petImage">
+        </div>
+
+        <div class="col-5">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label settingLabels">Name</label>
+                <div class="col-sm-5">
+                    <p>{{ pet.name }} </p>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label settingLabels">Type</label>
+                <div class="col-sm-5">
+                    <p>{{pet.type }} </p>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label settingLabels">Age</label>
+                <div class="col-sm-5">
+                    <p>{{pet.age }} </p>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label settingLabels">Gender</label>
+                <div class="col-sm-5">
+                    <p> {{ pet.gender }} </p>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label settingLabels">Email</label>
+                <div class="col-sm-5">
+                    <p>{{pet.contact.email }}</p>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label settingLabels">Phone</label>
+                <div class="col-sm-5">
+                    <p>{{pet.contact.phone }}</p>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label settingLabels">More Info.</label>
+                <div class="col-sm-5">
+                      <a href="{{pet.url}}" class="stretched-link linked"> petfinder/{{pet.name}}</a>
+                </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label settingLabels">Description </label>
+              <div class="col-sm-12">
+                  <p>{{pet.description}}</p>
+              </div>
+            </div>
+        </div>
+  </div>
+</div>
+
+{% endblock %}
+
