@@ -57,9 +57,6 @@ Windows Powershell
 ## Versioning 
 Version 1.0. For the versions available, see the [Competdium](https://github.com/liz0123/Competdium). 
 
-## Website
-visit [ComPETdium](https://www.competdium.com/about/) for the live website.
-
 ## Authors
 
 * **Isabel Valdez** - [liz0123](https://github.com/liz0123)
