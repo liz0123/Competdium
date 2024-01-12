@@ -1,0 +1,179 @@
+{% macro render_field( field, class ) %}
+<div class="form-group">
+    <label class="form-label"> {{ field.label }} </label>
+    <dd>{{ field( class=class)|safe }}
+        {% if field.errors %}
+        <ul class=errors>
+            {% for error in field.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </dd>
+</div>
+{% endmacro %}
+
+{% macro render_field1( field, class, labelClass="col-sm-3 col-lg-4 col-xl-3 col-form-label" ) %}
+<div class="row mb-3">
+    <label class="{{labelClass}}"> {{ field.label }} </label>
+    <div class="col-sm-9 col-lg-8">
+        <dd>{{ field( class=class)|safe }}
+            {% if field.errors %}
+            <ul class=errors>
+                {% for error in field.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </dd>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro render_field2( label, fields ) %}
+<div class="row mb-3">
+    <label class="col-sm-3 col-form-label"> {{ label }} </label>
+    {% for field in fields %}
+        <div class="col-sm-4">
+            <dd>{{ field( class="form-control")|safe }}
+                <ul class=errors>
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </dd>
+        </div>
+    {% endfor %}
+</div>
+{% endmacro %}
+
+{% macro render_field3( label,fields ) %}
+<div class="row g-3">
+    <label class="col-sm-3 col-form-label"> {{ label }} </label>
+    {% for field in fields %}
+        <div class="col-sm-3">
+            <dd>{{ field( class="form-control", placeholder=field.label.name)|safe }}
+                {% if field.errors %}
+                <ul class=errors>
+                    {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </dd>
+        </div>
+    {% endfor %}
+</div>
+{% endmacro %}
+
+{% macro render_field4( field, class, bool='false' ) %}
+<div class="search_select">
+<label class="form-label text-center w-100"> {{ field.label }} </label>
+    <dd>{{ field(class=class,**{'data-live-search':bool})|safe }}
+        {% if field.errors %}
+        <ul class=errors>
+            {% for error in field.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </dd>
+</div>
+{% endmacro %}
+
+{% macro render_field5( field, class, bool='false' ) %}
+<div class="search_select">
+    <div class="col-3">
+        <label class="form-label"> {{ field.label }} </label>
+    </div>
+    <div class="col">
+        <dd>{{ field( class=class,**{'data-live-search':bool})|safe }}
+            {% if field.errors %}
+            <ul class=errors>
+                {% for error in field.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </dd>
+    </div>  
+</div>
+
+{% endmacro %}
+
+{% macro render_field6( field, class, bool='false' ) %}
+<div class="row search_select">
+    <div class="col-3">
+        <label class="form-label"> {{ field.label }} </label>
+    </div>
+    <div class="col">
+        <select class="selectpicker" data-live-search="true" data-container="body" multiple>
+            <option>Mustard</option>
+            <option>Ketchup</option>
+            <option>Relish</option>
+        </select>
+    </div>  
+</div>
+{% endmacro %}
+
+{% macro render_temp1( label, data ) %}
+<div class="form-group row">
+    <label class="col-sm-3 col-form-label settingLabels">{{ label }}</label>
+    <div class="col-sm-5">
+        <p> {{ data }} </p>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro render_petCard(pet, datetime) -%}
+	<div class="card">
+		<img src="{{url_for('static',filename= '/img/pets/'~pet.image) }}?{{datetime}}" class="card-img-top" alt="...">
+		<div class="card-body">
+			<h5 class="card-title text-center" style="font-weight: bold;"> {{ pet.name[0]|upper}}{{pet.name[1:]}} </h5>
+            <p class="card-text text-center">{{ pet.age[0]|upper }}{{pet.age[1:]}} - {{pet.city[0]|upper }}{{pet.city[1:]}}, {{pet.state|upper}}</p>
+			<a href="{{url_for('viewPet', pet_id=pet.id )}}" class="stretched-link"></a>
+		</div>
+	</div>
+
+{%- endmacro%}
+
+{% macro render_postCard(post, datetime) -%}
+<div class="card post-card">
+	<div class="card-body" id="module">
+        <span class="text-muted">{{ post.date_created|convertTime }}</span>
+        <hr>
+		<h4  class="card-title font-weight-bold">{{ post.title }}</h4>
+        <p class="card-text">{{ post.content }}</p>
+		{% if post.image != "default.jpg" %}
+		<img src="{{url_for('static',filename= '/img/posts/'~post.image) }}?{{datetime}}" class="card-img-top" ></img>
+		{% endif %}
+        <hr>
+        <div class="row">
+            <div class="col-3 ">
+                <i class="bi bi-hand-thumbs-up "></i> <span>{{post.likes}}</span>
+            </div>
+            <div class="col">
+                <i class="bi bi-chat-right-text"></i> <span>{{post.comments|length}}</span> 
+            </div>
+        </div>
+        <a href="{{url_for('viewPost', post_id=post.id)}}" class="stretched-link"></a>
+	</div>
+</div>
+{%- endmacro%}
+
+{% macro render_postCard2(form) %}
+<div class="mb-12">
+    <div class="col-12">
+        <img src="" class="card-img-top" id="display">
+    </div>
+    <label for="formFile" class="form-label">Select an Image (optional)</label>
+        {{ form.image(class="form-control") }}
+</div>
+{{ render_field(form.title, "form-control") }}
+<div class="form-group row">
+    <label class="col-sm-3 col-form-label">content (optional)</label>
+    <div class="col-sm-12">
+        {{ form.content(class="form-control")}}
+    </div>
+</div>
+{%- endmacro%}

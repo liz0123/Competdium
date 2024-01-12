@@ -1,0 +1,506 @@
+{% extends "user/profile_temp.html" %}
+{% import "macros/message_macro.html" as msg %}
+{% from "macros/form_macro.html" import render_field %}
+{% from "macros/form_macro.html" import render_postCard2 %}
+{% block title %} MyProfile {% endblock %}
+{% block tabs%}
+  <br>
+  <h1 class="profileTitle"></h1>
+  <hr>
+
+  <!--- USER POSTS, PETS, and SETTINGS -->
+  <div class="row">
+    <div class="col-4 col-sm-3 col-md-3 col-lg-2">
+      <ul class="nav nav-tabs flex-column" id="myTab" role="tablist">
+        <li> <a href="#favorites" title="My Favorites" class="pill nav-link tab" data-toggle="tab" role="tab"><i class="bi bi-suit-heart-fill"></i> Favorites</a></li>
+        <li> <a href="#messages"title="My Messages" class="pill nav-link tab" data-toggle="tab" role="tab"><i class="bi bi-chat-right-fill"></i> Messages</a></li>
+        <li> <a href="#mypets" title="My Pets"class="pill nav-link tab"  data-toggle="tab" role="tab"><i class="fa fa-paw"></i> Pets</a></li>
+        <li> <a href="#mypost" title="My Post" class="pill nav-link tab"  data-toggle="tab" role="tab"><i class="bi bi-pencil-square"></i> Posts</a></li>
+        <li> <a href="#savedposts"title="Saved Posts" class="pill nav-link tab"  data-toggle="tab" role="tab"><i class="bi bi-bookmark-fill"></i> Saved Posts</a></li>
+        <li> <a href="#settings" title="My Settings" class="pill nav-link tab"  data-toggle="tab" role="tab"><i class="bi bi-gear-fill"></i> Settings</a></a></li>
+      </ul>
+
+    </div>
+    <div class="col-10 col-sm-9 col-md-9 col-lg-10">
+      <div class="tab-content">
+        <div class="tab-pane active" id="favorites">
+          <div class="container">
+            <br>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+            {% for pet in current_user.liked_pets %}
+            <div class="col mb-4 lg-6">
+              <div class="pet-card card-body" id="module" >
+                {{ petCard(pet, datetime) }}
+                <a href="#" class="favorite active" pet_id="{{ pet.id }}" > <i class="bi bi-suit-heart-fill"></i> </a>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="messages">
+          <br>
+          {{ msg.chat(friends) }}
+        </div>
+        <div class="tab-pane" id="mypets">
+          <div class="container">
+            <br>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+              {% for pet in pets%}
+              <div class="col sm-1 md-4 lg-6">
+                <div class="pet-card card-body" id="module" >
+                  {{ petCard(pet, datetime) }}
+                  <a href="/myprofile/pets/edit_{{pet.id}}" class="btn-edit">
+                    <button type="button" class="close" aria-label="Close">
+                      <i class="bi bi-pencil-fill" style="font-size: 2rem"></i>
+                    </button>
+                  </a>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="mypost">
+          <div class="container">
+            <br>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+              {% for post in posts %}
+              <div class=" col md-4 lg-6">
+                {{ postCard(post, datetime) }}
+                <button type="button" class="close btn btn-edit" id="editPost" post_id="{{post.id}}" post_title="{{post.title}}" post_content="{{post.content}}" post_img="{{url_for('static',filename= '/img/posts/'~post.image) }}?{{datetime}}" data-toggle="modal" data-target="#editPostModal">
+                  <i class="bi bi-pencil-fill" style="font-size: 2rem"></i>
+                </button>
+                <br>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="savedposts">
+          <div class="container">
+            <br>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+              {% for post in current_user.saved_posts %}
+              <div class=" col md-4 lg-6">
+                {{ postCard(post, datetime) }}
+                <br>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="settings">
+          <br>
+          <form  id="uploadProfileImage">
+              <div class="row">
+                <div class="col-5 col-sm-6 col-md-4 col-lg-2">
+                  <img src="{{url_for('static',filename= '/img/profiles/'~user.image) }}?{{datetime}}" alt="..." class="card-img-top rounded-circle"  id="avatar" accept=".jpg, .jpeg, .png">
+                </div>
+                  <div class="col-7 col-sm-6 col-md-7 col-lg-8" >
+                    <input type="file" id="profileSettingsNewImg" name='image' accept=".jpg, .jpeg, .png" required>
+                </div>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </form>
+
+          <hr>
+          <form id="uploadProfileBio">
+            {{ frm.settingDisplayForm("profileSettingsCurrBio", "Current About", user.bio )}}
+            <br>
+            {{ frm.settingTextAreaForm("profileSettingsNewBio", "text", "New About","bio") }}
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </form>
+
+          <hr>
+          <form id="uploadProfileUsername">
+            {{ frm.settingDisplayForm("profileSettingsCurrUsername", "Current Username", user.username )}}
+            <br>
+            {{ frm.settingInputForm("profileSettingsNewUsername", "text", "New Username") }}
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </form>
+
+          <hr>
+          <form id="uploadProfileEmail">
+            {{ frm.settingDisplayForm("profileSettingsCurrEmail", "Current Email", user.email )}}
+            <br>
+            {{ frm.settingInputForm("profileSettingsNewEmail", "text", "New Email") }}
+            <br>
+            {{ frm.settingInputForm("profileSettingsEmailPassword", "password", "Current Password") }}
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </form>
+
+          <hr>
+          <form id="uploadProfilePassword">
+            {{ frm.settingInputForm("profileSettingsCurrPassword", "password", "Current Password") }}
+            <br>
+            {{ frm.settingInputForm("profileSettingsNewPassword", "password", "New Password") }}
+            <span class="col-md-3 offset-md-3" id="conMsg"></span>
+            {{ frm.settingInputForm("profileSettingsConPassword", "password", "Confirm  Password") }}
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </form>
+
+          <hr>
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">Delete Account</button>
+          <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- edit Post Modal -->
+<form id="editPostForm" method="POST" enctype="multipart/form-data" post_id="">
+  <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editPostModalLabel">Edit Post</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          {{render_postCard2(form)}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger float-left" id="deletePost" post_id="">Delete</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<!-- Delete Account Modal -->
+<form id="deleteAccountForm" action="{{ url_for('deleteAccount')}}" method="POST" enctype="multipart/form-data">
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="exampleModalLabel">Delete Account</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label>Are you sure you want to delete your account? All pets and other associated items will be permanently removed.</label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+  {% endblock %}
+
+
+  {% block script %}
+  <script>
+    if ( window.history.replaceState ) {
+      window.history.replaceState( null, null, window.location.href );
+    }
+    $('#myTab a').click(function(e) {
+      e.preventDefault();
+      $(this).tab('show');
+    });
+
+    // store the currently selected tab in the hash value
+    $("ul.nav-tabs > li > a").on("shown.bs.tab", function(e) {
+      var id = $(e.target).attr("href").substr(1);
+      window.location.hash = id;
+    });
+
+    // on load of the page: switch to the currently selected tab
+    var hash = window.location.hash;
+    if(hash==""){
+      hash ="#favorites";
+    }
+    $('#myTab a[href="' + hash + '"]').tab('show');
+    $('#myTab a[href="' + hash + '"]').addClass('active');
+    let title = $('#myTab a[href="' + hash + '"]').attr('title');
+    $('.profileTitle').replaceWith("<h1 class='profileTitle'>"+title+"</h1>");
+    //
+    $('.tabs a').on('click', function(){
+      $('.tab .active').removeClass('active');
+      $(this).addClass('active');
+    });
+    //
+    // POST
+    //
+    $(deletePost).on("click", function(){
+     let post_id = $(this).attr("post_id");
+     $.post("/myprofile/removePost", {"post_id":post_id});
+     window.location.reload();
+    });
+
+    $(document).on("click","#editPost", function(){
+      let post_id = $(this).attr("post_id");
+      let title = $(this).attr("post_title");
+      let content = $(this).attr("post_content");
+      let img = $(this).attr("post_img");
+    
+      $("#title").val(title);
+      $("#content").val(content);
+      $("#display").attr("src", img);
+      $("#editPostForm").attr("post_id", post_id);
+      $("#deletePost").attr("post_id", post_id);
+
+    });
+
+    $("#editPostForm").submit(function(event){
+      let formData = new FormData(document.querySelector('#editPostForm'));
+      let post_id = $(this).attr("post_id");
+      formData.append("post_id", post_id);
+      sendForm("/myprofile/editPost", formData)
+      .then(data=>{
+        console.log("Update", data);
+      })
+      .catch(error =>{
+        console.log("Error ", error);
+      });
+      window.location.reload(true);
+    });
+    //
+    // MESSAGING
+    //
+    setInterval(function()
+    {
+      let entry = { "currUser": `{{ user.username|safe}}`, "otherUser": $(".conversation.active").find(".title-text").text() };
+      getMessagesFromServer(entry);
+    }, 35000);
+
+    $(function() {
+        $('.conversation').bind('click', function() {
+            // remove the active class from all elements with active class
+            $('.conversation.active').removeClass('active');
+            // add active class to clicked element
+            $(this).addClass('active');
+            $(this).find(".conversation-alert").removeClass("active");
+            // load messages
+            let entry = { "currUser": `{{ user.username|safe}}`, "otherUser": $(".conversation.active").find(".title-text").text() };
+            getMessagesFromServer(entry);
+            // display messages on window
+            //send request for seen messages
+        });
+
+        $("#message_text").on('keyup', function(event) {
+            if (event.key =="Enter" || event.keyCode === 13 ){
+                let msg = $("#message_text").val();
+                let sender = '{{ user.username|safe}}';
+               // let img = `{{ user.image_file|safe }}`;
+                sessionStorage.reciever = $(".conversation.active").find(".title-text").text();
+                $.post("/sendMessage",{"msg":msg,"sender":sender,"reciever":sessionStorage.getItem("reciever")}, function(){
+
+                    ($("#message_text").val(""));
+                    $(".conversation.active").find(".conversation-alert").removeClass("active");
+                });
+            }
+        });
+        $('#profileSettingsNewImg').on("change", function(event){
+            $("#avatar").removeAttr("src").attr("src",URL.createObjectURL(event.target.files[0]) );
+        });
+        
+    // Enable pusher logging - don't include this in production
+    //Pusher.logToConsole = true;
+    var pusher = new Pusher('c7fa9a824f00223cea96', {
+        cluster: 'us2'
+    });
+
+    var channel = pusher.subscribe('chat-channel');
+
+    channel.bind('new-message', function(data) {
+        let sender = data.sender;
+        let reciever = data.reciever;
+        let message_template = ``;
+        sessionStorage.reciever = $(".conversation.active").find(".title-text").text();
+
+        if((sender === `{{user.username|safe}}`) && (reciever === sessionStorage.getItem("reciever"))){
+            message_template = `<div class="message-row your-message">
+                                            <div class="message-content">
+                                                <img src=''/>
+                                                <div class="message-text">
+                                                    ${data.message}
+                                                </div>
+                                                <div class="message-time">
+                                                    ${data.date}
+                                                </div>
+                                            </div>
+                                        </div>` ;
+        }
+        else if (reciever === `{{user.username|safe}}`)
+        {
+            console.log("sender "+ sessionStorage.getItem("reciever") );
+            $("#"+sender).addClass("active");
+            if ( sender === sessionStorage.getItem("reciever") )
+            {
+                message_template = `<div class="message-row other-message">
+                                                <div class="message-content">
+                                                    <img src='../static/img/profiles/${data.img}'/>
+                                                    <div class="message-text">
+                                                        ${data.message}
+                                                    </div>
+                                                    <div class="message-time">
+                                                        ${data.date}
+                                                    </div>
+                                                </div>
+                                            </div>` ;
+            }
+        }
+        ($("#chat-message-list").prepend(message_template));
+        });
+
+    });
+    
+
+
+    // PROFILE INFO UPDATE
+    const uploadProfileImage = document.getElementById("uploadProfileImage");
+    const uploadProfileBio = document.getElementById("uploadProfileBio");
+    const uploadProfileUsername = document.getElementById("uploadProfileUsername");
+    const uploadProfileEmail = document.getElementById("uploadProfileEmail");
+    const uploadProfilePassword = document.getElementById("uploadProfilePassword");
+
+   /* uploadProfileImage.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const inputFile = document.getElementById("profileSettingsNewImg");
+      const path = "/myprofile/setting/updateProfileImg";
+      const formData = new FormData();
+
+      formData.append('img', inputFile.files[0] );
+      console.log("img ", formData);
+      sendtoServer(path,"PUT", formData, []);
+
+    });
+
+    uploadProfileBio.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const input = document.getElementById("profileSettingsNewBio");
+      const path = "/myprofile/setting/updateBio";
+      const ids = ["#profileSettingsCurrBio", "#profileBio"];
+      const formData = new FormData();
+      formData.append('bio', input.value);
+
+      sendForm(path, formData)
+      .then(data=>{
+        let id;
+        for(id of ids){
+          $(id).html(data.value).fadeOut('slow').fadeIn( "slow" );
+        }
+        //$("#profileBio").text("hey you me to");
+
+      })
+      .catch(error=>{
+        console.log(error); 
+      });
+
+    }); */
+
+    uploadProfileUsername.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const input = document.getElementById("profileSettingsNewUsername");
+      const path ="/myprofile/setting/updateUsername";
+      const ids =["#profileSettingsCurrUsername","#profileUsername"];
+      const formData = new FormData();
+
+      formData.append('username', input.value);
+
+      sendForm(path, formData)
+      .then(data=>{
+        if(data.error){
+          alert(data.error);
+          
+        }
+        let id;
+        for(id of ids){
+          $(id).html(data.value);
+        }
+        $('#profileSettingsNewUsername').val('');
+
+      })
+      .catch(error=>{
+        console.log(error); 
+      });
+    });
+
+    uploadProfileEmail.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const input = document.getElementById("profileSettingsNewEmail");
+      const pass = document.getElementById("profileSettingsEmailPassword");
+
+      const path ="/myprofile/setting/updateEmail";
+      const ids = ["#profileSettingsCurrEmail"];
+      const formData = new FormData();
+
+      formData.append('email', input.value);
+      formData.append('password', pass.value);
+
+      sendForm(path, formData)
+      .then(data=>{
+        pass.value = "";
+        if(data.error){
+          alert(data.error);
+          return;
+        }
+        let id;
+        for(id of ids){
+          $(id).html(data.value);
+        }
+        $('#profileSettingsNewEmail').val('');
+      })
+      .catch(error=>{
+        console.log(error); 
+      });
+      
+    });
+
+
+    uploadProfilePassword.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const newPass = document.getElementById("profileSettingsNewPassword");
+      const conPass = document.getElementById("profileSettingsConPassword");
+
+      if (newPass.value == conPass.value){
+        const curPass = document.getElementById("profileSettingsCurrPassword");
+
+        const path ="/myprofile/setting/updatePassword";
+        const formData = new FormData();
+        formData.append('curPass', curPass.value);
+        formData.append('newPass', newPass.value);
+
+        sendForm(path, formData)
+        .then(data=>{
+          curPass.value="";
+          newPass.value ="";
+          conPass.value ="";
+
+          if(data.error){
+            alert(data.error);
+            return;
+          }
+          alert(data.update);  
+        })
+        .catch(error=>{
+          console.log(error); 
+        });
+        $('#conMsg').html('');
+      }else{
+
+        $('#conMsg').html('Not Matching').css('color', 'red');
+      }
+      newPass.value = "" ;
+      conPass.value = "" ;
+    });
+
+  </script>
+  {% endblock %}
